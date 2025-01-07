@@ -1,0 +1,12 @@
+        1.5. Por que len não é um método?
+
+    Em Seção 1.3, descrevi como len(x) roda muito rápido quando x é uma instância de um tipo
+embutido. Nenhum método é chamado para os objetos embutidos do CPython: o tamanho é simplesmente
+lido de um campo em uma struct C. Obter o número de itens em uma coleção é uma operação comum,
+e precisa funcionar de forma eficiente para tipos tão básicos e diferentes como str, list,
+memoryview, e assim por diante.
+
+    Em outras palavras, len não é chamado como um método porque recebe um tratamento especial como
+parte do Modelo de Dados do Python. Mas graças ao método especial __len__, também é possível
+fazer len funcionar com nossos objetos personalizados. Isso é um compromisso justo entre a
+necessidade de objetos embutidos eficientes e a consistência da linguagem.
