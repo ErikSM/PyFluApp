@@ -1,4 +1,5 @@
 from tkinter import *
+
 from app.config import font, colr, width, height
 from data.summary import python_books
 from structure.Book import Book
@@ -7,7 +8,10 @@ from structure.Book import Book
 class AppMain:
 
     def __init__(self):
+
         self.__window = Tk()
+
+        self.__pybook_selected = None
 
         self.__head = Frame(self.__window, bg=colr['purple'], width=100, height=100)
         self.__container_u = Frame(self.__head, bg=colr['purple'])
@@ -16,14 +20,13 @@ class AppMain:
 
         self.__container_l = Frame(self.__body, bg=colr['purple'], width=30)
         self.__opt_menu_str = StringVar()
-        self.__opt_menu_tuple = ('I- Estruturas de dados', 'II- Funções como objetos',
-                                 'III- Classes e protocolos', 'IV- Controle de fluxo', 'V- Metaprogramação')
+        self.__opt_menu_tuple = python_books.keys()
         self.__opt_menu = OptionMenu(self.__container_l, self.__opt_menu_str, *self.__opt_menu_tuple,
                                      command=lambda opt_str=self.__opt_menu_str: self._active_opt_menu(opt_str))
         self.__listbox = Listbox(self.__container_l)
 
         self.__container_c = Frame(self.__body, bg=colr['purple'], width=30)
-        self.__buts = self._set_buts()
+        self.__buts = self._set_buts(self.__container_c)
 
         self.__container_r = Frame(self.__body, bg=colr['purple'], width=30)
         self.__entry_text_str = StringVar()
@@ -66,10 +69,9 @@ class AppMain:
     def _active_opt_menu(self, selected):
         self.__listbox.delete(0, END)
 
-        book = Book(selected)
-        print(book)
-        self.__listbox.insert(END, *book.summary())
+        self.__pybook_selected = Book(selected)
 
+        self.__listbox.insert(END, *self.__pybook_selected.summary())
 
     def _config_container_c(self):
         for i in self.__buts:
@@ -77,23 +79,34 @@ class AppMain:
 
         self.__container_c.grid(row=0, column=1)
 
-    def _set_buts(self):
+    def _set_buts(self, container):
         buts = list()
 
-        many = 11
+        how_many = 11
         cont = 1
-        while cont <= many:
-            buts.append(Button(self.__container_c, width=5, height=-5, bd=3, state=DISABLED,
+        while cont <= how_many:
+            buts.append(Button(container, width=5, height=-5, bd=3, state=DISABLED,
                                bg=colr['grey'], fg=colr['purple']))
             cont += 1
+
         buts[0].config(bg=colr['purple'], bd=0)
-        buts[2].config(text='play =>', command=self._do_play, state=NORMAL)
+        buts[2].config(text='play =>', command=self._click_but_play, state=NORMAL)
 
         return buts
 
-    def _do_play(self):
+    def _click_but_play(self):
         self.__text.delete(1.0, END)
-        self.__text.insert(END, self.__listbox.get(ANCHOR))
+
+        selected = self.__listbox.get(ANCHOR)
+
+        parentheses = selected.find(')')
+        file_name = selected[:parentheses]
+        file_name = file_name.replace(' ', '')
+        file_name = file_name.replace('.', '')
+
+        file = self.__pybook_selected[file_name]
+
+        self.__text.insert(END, file)
 
     def _config_container_r(self):
         self.__entry_local.config(font=font['search'], textvariable=self.__entry_text_str)
@@ -116,6 +129,7 @@ class AppMain:
 
     def _config_container_d(self):
         self.__note.config(font=font['Principal'],
+                           selectforeground='black', selectbackground='white', insertbackground='white',
                            bg=colr['purple'], fg=colr['white'], bd=2, height=height['not'], width=width['not'])
         self.__note.grid(row=0, column=1)
 
@@ -142,4 +156,3 @@ class AppMain:
 
         self._config_window()
         self.__window.mainloop()
-
