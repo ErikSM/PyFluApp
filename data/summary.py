@@ -82,6 +82,7 @@ python_books = {
 }
 
 def open_file(file_name, directory='data/papers'):
+    # 'io.open': necessario para leitura em  utf8 (obs: nao funcionava da maneira tradicional)
     file = io.open(f'{directory}/{file_name}.txt', 'r', encoding="utf8")
 
     text = file.read()

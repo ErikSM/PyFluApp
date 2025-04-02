@@ -70,7 +70,7 @@ class AppMain:
         self.__listbox.delete(0, END)
 
         self.__pybook_selected = Book(selected)
-        print(self.__pybook_selected.all_titles())
+
         self.__listbox.insert(END, *self.__pybook_selected.summary())
 
     def _config_container_c(self):
