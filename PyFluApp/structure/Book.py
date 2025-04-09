@@ -18,13 +18,23 @@ class Book:
     def __len__(self):
         return len(self.__chapters)
 
-    def __getitem__(self, item):
-        return self.__contents[item]
+    def __getitem__(self, item='item'):
+        try:
+            return self.__contents[item]
+        except KeyError:
+            return (f'    [ Chapter not found ]\n\n\n'
+                        f'Acesse:\n'
+                        f'          https://pythonfluente.com/')
+
 
     def _generating_titles(self):
-        for i in self.__chapters:
-            for j in self.__chapters[i]:
-                yield j
+        try:
+            for i in self.__chapters:
+                for j in self.__chapters[i]:
+                    yield j
+        except TypeError:
+            pass
+
 
     def _dict_contents(self):
         titles = dict()
@@ -35,7 +45,7 @@ class Book:
             try:
                 text = open_file(key)
             except FileNotFoundError:
-                text = (f'    [ File not found ]\n\n\n'
+                text = (f'    [ file not found ]\n\n\n'
                         f'Acesse:\n'
                         f'          https://pythonfluente.com/')
 
@@ -68,5 +78,3 @@ class Book:
             summary.append(string)
 
         return summary
-
-

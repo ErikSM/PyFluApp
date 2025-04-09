@@ -18,7 +18,7 @@ ou não ter alguma importância, dependendo do contexto. Mas quando usamos uma t
 número de itens em geral é fixo e sua ordem é sempre importante.
 
 
-Tuplas como listas imutáveis
+Tuplas como listas imutáveis:
     O interpretador Python e a biblioteca padrão fazem uso extensivo das tuplas como listas imutáveis, e você deveria
 seguir o exemplo.
 

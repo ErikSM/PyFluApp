@@ -5,19 +5,19 @@
 
     A biblioteca padrão oferece uma boa seleção de tipos de sequências, implementadas em C:
     ---------------------------------------------------------------------------------------------------------
-		- Sequências contêiner
-			    Podem armazenar itens de tipos diferentes, incluindo contêineres
-			aninhados e objetos de qualquer tipo.
+- Sequências contêiner
+        Podem armazenar itens de tipos diferentes, incluindo contêineres
+    aninhados e objetos de qualquer tipo.
 
-			                    Ex: (list, tuple, e collections.deque)
+                        Ex: (list, tuple, e collections.deque)
 
 
 
-		- Sequências planas
-			    Armazenam itens de algum tipo simples, mas não outras coleções ou
-            referências a objetos.
+- Sequências planas
+        Armazenam itens de algum tipo simples, mas não outras coleções ou
+    referências a objetos.
 
-			                    Ex: (str, bytes, e array.array)
+                        Ex: (str, bytes, e array.array)
     ---------------------------------------------------------------------------------------------------------
 
 
