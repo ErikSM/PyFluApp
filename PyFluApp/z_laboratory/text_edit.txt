@@ -1,0 +1,41 @@
+    def _set_buts(self, container, type_buts, font=letter):
+
+        buts = list()
+        values = tuple()
+        temporaty_container = Frame(container)
+
+        if type_buts == 'act_buts':
+            values = 11, font['but_act'], 10, 5, 3, DISABLED, colr['grey'], colr['purple'], temporaty_container
+        elif type_buts == 'others':
+            temporaty_container = Frame(container)
+            values = 7, font['but_other'], 40, 0, 0, NORMAL, colr['purple'], colr['white'], temporaty_container
+
+        how_many, font = values[0], values[1]
+        width, height, bd = values[2], values[3], values[4]
+        state, bg, fg =  values[5], values[6] ,values[7]
+        local = values[8]
+
+        cont = 1
+        while cont <= how_many:
+            buts.append(Button(local, font=font,
+                               width=width, height=-height, bd=bd,
+                               state=state, bg=bg, fg=fg))
+            cont += 1
+
+        if type_buts == 'act_buts':
+            buts[0].config(bg=colr['purple'], bd=0)
+            buts[2].config(text='play      >', command=self._click_but_play,
+                           font=font, width=width, height=-height, bd=bd, state=NORMAL, bg=bg, fg=fg)
+
+            return buts, temporaty_container
+
+        elif type_buts == 'others':
+            all_names = ('Acesse o Site Oficial', 'Sobre o Autor do Livro', 'Sobre o Aplicativo',
+                            '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo',  ' ')
+            cont = 0
+            for i in buts:
+                name = all_names[cont]
+                i.config(text=f'{name}', command=lambda selected=(name, all_names): self._click_ohters_but(selected))
+                cont += 1
+
+            return buts, temporaty_container

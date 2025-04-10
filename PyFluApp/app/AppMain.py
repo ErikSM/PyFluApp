@@ -1,6 +1,6 @@
 from tkinter import *
 
-from app.config import font, colr, width, height
+from app.config import letter, colr, width, height
 from data.summary import python_books
 from structure.Book import Book
 from app.web_actions import access_website
@@ -30,7 +30,7 @@ class AppMain:
         self.__list_summary = Listbox(self.__container_l)
 
         self.__container_c = Frame(self.__body, bg=colr['purple'], width=30)
-        self.__buts_actions = self._set_buts(self.__container_c, 'act_buts')
+        self.__buts_actions = self._set_buts(self.__container_c, 'action')
 
         self.__container_r = Frame(self.__body, bg=colr['purple'], width=30)
         self.__entry_text_str = StringVar()
@@ -45,22 +45,22 @@ class AppMain:
 
         self._enable_config()
 
-    def _set_buts(self, container, type_buts, font=font):
+    def _set_buts(self, container, type_buts, font=letter):
 
         buts = list()
         values = tuple()
-        temporaty_container = None
+        temporaty_container = Frame(container, bg=colr['purple'])
 
-        if type_buts == 'act_buts':
-            values = 11, font['but_act'], 10, 5, 3, DISABLED, colr['grey'], colr['purple'], container
+        if type_buts == 'action':
+            values = 11, font['but_act'], 10, 5, 1, NORMAL, colr['grey'], colr['white'], temporaty_container
         elif type_buts == 'others':
-            temporaty_container = Frame(container)
             values = 7, font['but_other'], 40, 0, 0, NORMAL, colr['purple'], colr['white'], temporaty_container
 
         how_many, font = values[0], values[1]
         width, height, bd = values[2], values[3], values[4]
-        state, bg, fg =  values[5], values[6] ,values[7]
+        state, bg, fg = values[5], values[6], values[7]
         local = values[8]
+
 
         cont = 1
         while cont <= how_many:
@@ -69,22 +69,20 @@ class AppMain:
                                state=state, bg=bg, fg=fg))
             cont += 1
 
-        if type_buts == 'act_buts':
-            buts[0].config(bg=colr['purple'], bd=0)
-            buts[2].config(text='play      >', command=self._click_but_play,
-                           font=font, width=width, height=-height, bd=bd, state=NORMAL, bg=bg, fg=fg)
-            return buts
 
+        if type_buts == 'action':
+            buts[2].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
         elif type_buts == 'others':
             all_names = ('Acesse o Site Oficial', 'Sobre o Autor do Livro', 'Sobre o Aplicativo',
-                            '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo',  ' ')
+                         '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo', ' ')
             cont = 0
             for i in buts:
                 name = all_names[cont]
-                i.config(text=f'{name}', command=lambda selected=(name, all_names): self._click_ohters_but(selected))
+                i.config(text=f'{name}',
+                         command=lambda selected=(name, all_names): self._click_ohters_but(selected))
                 cont += 1
 
-            return buts, temporaty_container
+        return buts, temporaty_container
 
     def _config_container_u(self):
         self.__label_img_banner.configure(image=self.__img_banner)
@@ -96,7 +94,7 @@ class AppMain:
         self.__opt_menu_books.config(bg=colr['white grey'], width=width['opt'], bd=3, anchor='center', state=NORMAL)
         self.__opt_menu_books.grid(row=2, column=1)
 
-        self.__list_summary.config(font=font['list'], bg=colr['grey'], fg=colr['white'], bd=15)
+        self.__list_summary.config(font=letter['list'], bg=colr['grey'], fg=colr['white'], bd=15)
         self.__list_summary.config(width=width['lis'], height=height['lis'])
         self.__list_summary.grid(row=3, column=1, columnspan=4)
 
@@ -117,8 +115,9 @@ class AppMain:
         self.__list_summary.insert(END, *self.__pybook_selected.summary())
 
     def _config_container_c(self):
-        for i in self.__buts_actions:
+        for i in self.__buts_actions[0]:
             i.pack()
+        self.__buts_actions[1].pack()
 
         self.__container_c.grid(row=0, column=1)
 
@@ -142,11 +141,11 @@ class AppMain:
         self.__text_screen.insert(END, file)
 
     def _config_container_r(self):
-        self.__entry_local.config(font=font['search'], textvariable=self.__entry_text_str)
+        self.__entry_local.config(font=letter['search'], textvariable=self.__entry_text_str)
         self.__entry_local.config(width=width['ent'], bd=5, bg=colr['white'], fg=colr['purple'], state=DISABLED)
         self.__entry_local.grid(row=2, column=3, columnspan=4)
 
-        self.__text_screen = Text(self.__container_r, font=font['principal'],
+        self.__text_screen = Text(self.__container_r, font=letter['principal'],
                                   bg=colr['grey'], fg=colr['white'], bd=3, height=height['tex'], width=width['tex'])
         self.__text_screen.grid(row=3, column=3)
 
@@ -165,7 +164,7 @@ class AppMain:
             i.pack()
         self.__buts_others[1].grid(row=3, rowspan=1, column=1)
 
-        self.__text_note.config(font=font['principal'],
+        self.__text_note.config(font=letter['principal'],
                                 selectforeground='black', selectbackground='white', insertbackground='white',
                                 bg=colr['purple'], fg=colr['white'], bd=10, height=height['not'], width=width['not'])
         self.__text_note.grid(row=3, column=4, columnspan=5)
@@ -190,7 +189,7 @@ class AppMain:
             oficial = 'https://pythonfluente.com/'
 
             string = f'Acesse o site oficial:  {oficial}'
-            self.__text_note.insert(1.0, string)
+            self.__text_note.insert(END, string)
 
             access_website(oficial)
 
@@ -202,7 +201,7 @@ class AppMain:
 
         elif selected == all_buts[2]:
             string =  (
-                """    
+                """!!!  ...
                     Este aplicativo tem como principal objetivo o desenvolvimento pessoal do criador na linguagem
                 Python e não tem fins lucrativos, procurando ao máximo não ferir direitos autorais.
     
@@ -228,7 +227,7 @@ class AppMain:
         else:
             string = f'{selected}:   Not defined yet, Sorry!'
 
-        self.__text_note.insert(1.0, string)
+        self.__text_note.insert(END, string)
 
     def _enable_config(self):
         self._config_container_u()
