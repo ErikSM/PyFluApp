@@ -24,27 +24,43 @@ width['lis'] = 60
 width['ent'] = 33
 width['tex'] = 100
 width['not'] = 130
+width['but_act'] = 6
+width['but_oth'] = 0
 
 height = dict()
-height['lis'] = 20
-height['tex'] = 20
-height['not'] = 5
-
+height['lis'] = 15
+height['tex'] = 15
+height['not'] = 10
+height['but_act'] = 0
+height['but_oth'] = 0
 
 def set_size_in_proportion(width_or_height, how_much):
-    if width_or_height == 'width':
-        for i in width:
-            if i == 'ent':
-                pass
-            else:
-                width[i] += how_much
+    approved = False
+    not_edit = 'opt', 'ent', 'but_act', 'but_oth'
 
-    elif width_or_height == 'height':
-        if how_much >= 7:
-            how_much = 7
-        for i in height:
-            height[i] += how_much
+    if -30 <= how_much <= 20:
+        approved = True
+
+    if approved:
+        if width_or_height == 'width':
+            for i in width:
+                if i in not_edit:
+                    pass
+                else:
+                    width[i] += how_much
+
+        elif width_or_height == 'height':
+            if -10 <= how_much >= 7:
+                how_much = 7
+            for i in height:
+                if i in not_edit:
+                    pass
+                else:
+                    height[i] += how_much
+
+    else:
+        print('nao foi possivel')
 
 
-set_size_in_proportion('width', 17)
-set_size_in_proportion('height', 7)
+set_size_in_proportion('width', 0)
+set_size_in_proportion('height', 0)

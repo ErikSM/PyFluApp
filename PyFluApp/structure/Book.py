@@ -1,6 +1,4 @@
 from data.summary import python_books, open_file
-import io
-import os
 
 
 class Book:

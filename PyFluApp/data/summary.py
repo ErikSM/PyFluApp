@@ -72,7 +72,6 @@ chapters_of_book_one = {
     'Referências, mutabilidade, e memória': titles_of_book[44:51]
 }
 
-
 python_books = {
     'I- Estruturas de dados': chapters_of_book_one,
     'II- Funções como objetos': None,
@@ -86,5 +85,5 @@ def open_file(file_name, directory='data/papers'):
     file = io.open(f'{directory}/{file_name}.txt', 'r', encoding="utf8")
 
     text = file.read()
-    file.close
+    file.close()
     return text

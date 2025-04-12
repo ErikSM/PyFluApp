@@ -9,7 +9,6 @@ from app.web_actions import access_website
 class AppMain:
 
     def __init__(self):
-
         self.__window = Tk()
 
         self.__pybook_selected = None
@@ -46,43 +45,56 @@ class AppMain:
         self._enable_config()
 
     def _set_buts(self, container, type_buts, font=letter):
-
         buts = list()
         values = tuple()
-        temporaty_container = Frame(container, bg=colr['purple'])
+        temporary_container = Frame(container, bg=colr['purple'])
 
         if type_buts == 'action':
-            values = 11, font['but_act'], 10, 5, 1, NORMAL, colr['grey'], colr['white'], temporaty_container
-        elif type_buts == 'others':
-            values = 7, font['but_other'], 40, 0, 0, NORMAL, colr['purple'], colr['white'], temporaty_container
+            values = (5,
+                      temporary_container, font['but_act'],
+                      width['but_act'], height['but_act'], 1,
+                      NORMAL, colr['grey'], colr['white'])
 
-        how_many, font = values[0], values[1]
-        width, height, bd = values[2], values[3], values[4]
-        state, bg, fg = values[5], values[6], values[7]
-        local = values[8]
+        elif type_buts == 'others':
+            values = (7,
+                      temporary_container, font['but_other'],
+                      width['but_oth'], height['but_oth'], 0,
+                      NORMAL,  colr['purple'], colr['white'])
+
+        cont = 0
+        for i in values:
+            print(cont, i )
+            cont += 1
+
+        how_many = values[0]
+        local, font = values[1], values[2]
+        x_size, y_size, bd = values[3], values[4], values[5]
+        state, bg, fg = values[6], values[7], values[8]
 
 
         cont = 1
         while cont <= how_many:
-            buts.append(Button(local, font=font,
-                               width=width, height=-height, bd=bd,
-                               state=state, bg=bg, fg=fg))
+            buts.append(
+                Button(local, font=font,
+                width=x_size, height=y_size, bd=bd,
+                state=state, bg=bg, fg=fg)
+            )
             cont += 1
 
-
         if type_buts == 'action':
-            buts[2].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
+            buts[1].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
         elif type_buts == 'others':
             all_names = ('Acesse o Site Oficial', 'Sobre o Autor do Livro', 'Sobre o Aplicativo',
                          '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo', ' ')
+
             cont = 0
             for i in buts:
                 name = all_names[cont]
                 i.config(text=f'{name}',
-                         command=lambda selected=(name, all_names): self._click_ohters_but(selected))
+                         command=lambda selected=(name, all_names): self._click_any_but_others(selected))
                 cont += 1
 
-        return buts, temporaty_container
+        return buts, temporary_container
 
     def _config_container_u(self):
         self.__label_img_banner.configure(image=self.__img_banner)
@@ -162,26 +174,25 @@ class AppMain:
     def _config_container_d(self):
         for i in self.__buts_others[0]:
             i.pack()
-        self.__buts_others[1].grid(row=3, rowspan=1, column=1)
+        self.__buts_others[1].grid(row=2, rowspan=3, column=1)
 
         self.__text_note.config(font=letter['principal'],
                                 selectforeground='black', selectbackground='white', insertbackground='white',
                                 bg=colr['purple'], fg=colr['white'], bd=10, height=height['not'], width=width['not'])
-        self.__text_note.grid(row=3, column=4, columnspan=5)
+        self.__text_note.grid(row=3, column=4)
 
         scr_note_x = Scrollbar(self.__container_d, orient=HORIZONTAL, command=self.__text_note.xview)
-        scr_note_x.grid(row=4, column=4, columnspan=5, sticky=W + E)
+        scr_note_x.grid(row=4, column=4, sticky=W + E)
         self.__text_note.config(xscrollcommand=scr_note_x.set)
 
         scr_note_y = Scrollbar(self.__container_d, orient=VERTICAL, command=self.__text_note.yview)
-        scr_note_y.grid(row=3, rowspan=2, column=3, sticky=N + S)
+        scr_note_y.grid(row=3, column=3, sticky=N + S)
         self.__text_note.config(yscrollcommand=scr_note_y.set)
 
         self.__container_d.grid(row=1, column=1)
 
-    def _click_ohters_but(self, but_selected_and_all_buts:tuple):
-        self.__text_note.delete(1.0, END)
-        string = ''
+    def _click_any_but_others(self, but_selected_and_all_buts:tuple):
+        self.__text_note.delete(0.0, END)
 
         selected, all_buts = but_selected_and_all_buts[0], but_selected_and_all_buts[1]
 
@@ -239,7 +250,7 @@ class AppMain:
     def _config_window(self):
         self.__window.config(bg=colr['purple'])
         self.__window.resizable(True, True)
-        self.__window.geometry('+15+10')
+        self.__window.geometry('+1+1')
         self.__window.title('Fluent Python App Study')
 
     def start_app(self):
