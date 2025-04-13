@@ -1,41 +1,46 @@
-    def _set_buts(self, container, type_buts, font=letter):
+    def _click_any_but_others(self, but_selected_and_all_buts:tuple):
+        self.__text_note.delete(0.0, END)
 
-        buts = list()
-        values = tuple()
-        temporaty_container = Frame(container)
+        selected, all_buts = but_selected_and_all_buts[0], but_selected_and_all_buts[1]
 
-        if type_buts == 'act_buts':
-            values = 11, font['but_act'], 10, 5, 3, DISABLED, colr['grey'], colr['purple'], temporaty_container
-        elif type_buts == 'others':
-            temporaty_container = Frame(container)
-            values = 7, font['but_other'], 40, 0, 0, NORMAL, colr['purple'], colr['white'], temporaty_container
+        if selected == all_buts[0]:
+            oficial = 'https://pythonfluente.com/'
 
-        how_many, font = values[0], values[1]
-        width, height, bd = values[2], values[3], values[4]
-        state, bg, fg =  values[5], values[6] ,values[7]
-        local = values[8]
+            string = f'Acesse o site oficial:  {oficial}'
+            self.__text_note.insert(END, string)
 
-        cont = 1
-        while cont <= how_many:
-            buts.append(Button(local, font=font,
-                               width=width, height=-height, bd=bd,
-                               state=state, bg=bg, fg=fg))
-            cont += 1
+            access_website_on_browser(oficial)
 
-        if type_buts == 'act_buts':
-            buts[0].config(bg=colr['purple'], bd=0)
-            buts[2].config(text='play      >', command=self._click_but_play,
-                           font=font, width=width, height=-height, bd=bd, state=NORMAL, bg=bg, fg=fg)
+        elif selected == all_buts[1]:
+            string = ('     Luciano Ramalho é programador Python desde 1998, Parceiro da Python Software Foundation; \n'
+                      'é sócio do Python.pro.br – uma empresa de treinamento – e cofundador do Garoa Hacker Clube, \n'
+                      'o primeiro hackerspace do Brasil. Tem liderado equipes de desenvolvimento de software e \n'
+                      'ministrado cursos sobre Python em empresas de mídia, bancos e para o governo federal.')
 
-            return buts, temporaty_container
+        elif selected == all_buts[2]:
+            string =  (
+                """!!!  ...
+                    Este aplicativo tem como principal objetivo o desenvolvimento pessoal do criador na linguagem
+                Python e não tem fins lucrativos, procurando ao máximo não ferir direitos autorais.
 
-        elif type_buts == 'others':
-            all_names = ('Acesse o Site Oficial', 'Sobre o Autor do Livro', 'Sobre o Aplicativo',
-                            '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo',  ' ')
-            cont = 0
-            for i in buts:
-                name = all_names[cont]
-                i.config(text=f'{name}', command=lambda selected=(name, all_names): self._click_ohters_but(selected))
-                cont += 1
+                    Este aplicativo também busca, na medida do possível, ajudar na divulgação da fonte do conteúdo
+                original e por isso, não apresenta o conteúdo na sua totalidade, mas sim, de forma resumida para
+                incentivar outros possíveis usuários do aplicativo a irem até o local do conteúdo original e conhecer
+                tanto o conteúdo na sua totalidade quanto o autor do livro.
 
-            return buts, temporaty_container
+                    Sendo assim, em caso de alguma queixa ou desagrado com o autor ou dono dos direitos do conteúdo,
+                o criador do app esta disposto a modificar ou eliminar o conteúdo do aplicativo ou até mesmo remove-lo
+                (remover o app) do github e por um fim ao acesso a este aplicativo.
+                """
+            )
+
+        elif selected == all_buts[6]:
+            string = ('Principal\n'
+                      '    GitHub:     https://github.com/ErikSM \n\n'
+                      'Outras formas\n'
+                      '    Instagram:     https://www.instagram.com/erik_miyajima/#\n'
+                      '    Linkedin:      https://www.linkedin.com/in/erik-miyajima-355a7223b/\n'
+                      '    Facebook:      https://www.facebook.com/profile.php?id=100009124251611\n')
+
+        else:
+            string = f'{selected}:   Not defined yet, Sorry!'

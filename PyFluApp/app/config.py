@@ -59,8 +59,7 @@ def set_size_in_proportion(width_or_height, how_much):
                     height[i] += how_much
 
     else:
-        print('nao foi possivel')
+        pass
 
-
-set_size_in_proportion('width', 0)
-set_size_in_proportion('height', 0)
+set_size_in_proportion('width', 10)
+set_size_in_proportion('height', 4)

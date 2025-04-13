@@ -2,7 +2,7 @@ import webbrowser
 from tkinter import Button, Label, LEFT, Frame, Toplevel
 
 
-def access_website(url):
+def access_website_on_browser(url):
     tk = Toplevel()
     tk.title("Acessar o Site no Browser")
     tk.geometry("400x65+350+500")

@@ -1,9 +1,10 @@
 from tkinter import *
 
 from app.config import letter, colr, width, height
+from app.executions import processing_but_other
+from data.content_but_other import other_buts_dict
 from data.summary import python_books
 from structure.Book import Book
-from app.web_actions import access_website
 
 
 class AppMain:
@@ -56,21 +57,15 @@ class AppMain:
                       NORMAL, colr['grey'], colr['white'])
 
         elif type_buts == 'others':
-            values = (7,
+            values = (6,
                       temporary_container, font['but_other'],
                       width['but_oth'], height['but_oth'], 0,
                       NORMAL,  colr['purple'], colr['white'])
-
-        cont = 0
-        for i in values:
-            print(cont, i )
-            cont += 1
 
         how_many = values[0]
         local, font = values[1], values[2]
         x_size, y_size, bd = values[3], values[4], values[5]
         state, bg, fg = values[6], values[7], values[8]
-
 
         cont = 1
         while cont <= how_many:
@@ -84,14 +79,13 @@ class AppMain:
         if type_buts == 'action':
             buts[1].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
         elif type_buts == 'others':
-            all_names = ('Acesse o Site Oficial', 'Sobre o Autor do Livro', 'Sobre o Aplicativo',
-                         '* Outras fontes de estudo', '* Dicas adicionais', '* Sugestoes', '* Contato comigo', ' ')
 
+            all_buts = [i for i in other_buts_dict.keys()]
             cont = 0
             for i in buts:
-                name = all_names[cont]
-                i.config(text=f'{name}',
-                         command=lambda selected=(name, all_names): self._click_any_but_others(selected))
+                but_txt = all_buts[cont]
+                i.config(text=f'{but_txt}',
+                         command=lambda selected=but_txt: self._click_any_but_others(selected))
                 cont += 1
 
         return buts, temporary_container
@@ -186,59 +180,20 @@ class AppMain:
         self.__text_note.config(xscrollcommand=scr_note_x.set)
 
         scr_note_y = Scrollbar(self.__container_d, orient=VERTICAL, command=self.__text_note.yview)
-        scr_note_y.grid(row=3, column=3, sticky=N + S)
+        scr_note_y.grid(row=3, rowspan=4, column=3, sticky=N + S)
         self.__text_note.config(yscrollcommand=scr_note_y.set)
 
         self.__container_d.grid(row=1, column=1)
 
-    def _click_any_but_others(self, but_selected_and_all_buts:tuple):
+    def _click_any_but_others(self, selected):
         self.__text_note.delete(0.0, END)
 
-        selected, all_buts = but_selected_and_all_buts[0], but_selected_and_all_buts[1]
+        processed = processing_but_other(selected)
+        text_str, more_action, action = processed[0], processed[1], processed[2]
 
-        if selected == all_buts[0]:
-            oficial = 'https://pythonfluente.com/'
-
-            string = f'Acesse o site oficial:  {oficial}'
-            self.__text_note.insert(END, string)
-
-            access_website(oficial)
-
-        elif selected == all_buts[1]:
-            string = ('     Luciano Ramalho é programador Python desde 1998, Parceiro da Python Software Foundation; \n'
-                      'é sócio do Python.pro.br – uma empresa de treinamento – e cofundador do Garoa Hacker Clube, \n'
-                      'o primeiro hackerspace do Brasil. Tem liderado equipes de desenvolvimento de software e \n'
-                      'ministrado cursos sobre Python em empresas de mídia, bancos e para o governo federal.')
-
-        elif selected == all_buts[2]:
-            string =  (
-                """!!!  ...
-                    Este aplicativo tem como principal objetivo o desenvolvimento pessoal do criador na linguagem
-                Python e não tem fins lucrativos, procurando ao máximo não ferir direitos autorais.
-    
-                    Este aplicativo também busca, na medida do possível, ajudar na divulgação da fonte do conteúdo
-                original e por isso, não apresenta o conteúdo na sua totalidade, mas sim, de forma resumida para
-                incentivar outros possíveis usuários do aplicativo a irem até o local do conteúdo original e conhecer
-                tanto o conteúdo na sua totalidade quanto o autor do livro.
-    
-                    Sendo assim, em caso de alguma queixa ou desagrado com o autor ou dono dos direitos do conteúdo,
-                o criador do app esta disposto a modificar ou eliminar o conteúdo do aplicativo ou até mesmo remove-lo
-                (remover o app) do github e por um fim ao acesso a este aplicativo.
-                """
-            )
-
-        elif selected == all_buts[6]:
-            string = ('Principal\n'
-                      '    GitHub:     https://github.com/ErikSM \n\n'
-                      'Outras formas\n'
-                      '    Instagram:     https://www.instagram.com/erik_miyajima/#\n'
-                      '    Linkedin:      https://www.linkedin.com/in/erik-miyajima-355a7223b/\n'
-                      '    Facebook:      https://www.facebook.com/profile.php?id=100009124251611\n')
-
-        else:
-            string = f'{selected}:   Not defined yet, Sorry!'
-
-        self.__text_note.insert(END, string)
+        self.__text_note.insert(END, text_str)
+        if more_action:
+            action()
 
     def _enable_config(self):
         self._config_container_u()
@@ -260,3 +215,4 @@ class AppMain:
 
         self._config_window()
         self.__window.mainloop()
+

@@ -1,7 +1,7 @@
 import io
 
 
-titles_of_book = (
+book_one = (
     'Summary',
 
     ("1", "O modelo de dados do Python"),
@@ -64,12 +64,12 @@ titles_of_book = (
 )
 
 chapters_of_book_one = {
-    'O modelo de dados do Python': titles_of_book[1:6],
-    'Uma coleção de sequências': titles_of_book[6:16],
-    'Dicionários e conjuntos': titles_of_book[16:28],
-    'Texto em Unicode versus Bytes': titles_of_book[28:37],
-    'Fábricas de classes de dados': titles_of_book[37:44],
-    'Referências, mutabilidade, e memória': titles_of_book[44:51]
+    'O modelo de dados do Python': book_one[1:6],
+    'Uma coleção de sequências': book_one[6:16],
+    'Dicionários e conjuntos': book_one[16:28],
+    'Texto em Unicode versus Bytes': book_one[28:37],
+    'Fábricas de classes de dados': book_one[37:44],
+    'Referências, mutabilidade, e memória': book_one[44:51]
 }
 
 python_books = {
@@ -81,9 +81,10 @@ python_books = {
 }
 
 def open_file(file_name, directory='data/papers'):
-    # 'io.open': necessario para leitura em  utf8 (obs: nao funcionava da maneira tradicional)
+
     file = io.open(f'{directory}/{file_name}.txt', 'r', encoding="utf8")
 
     text = file.read()
     file.close()
+
     return text
