@@ -1,0 +1,46 @@
+                                3.7. Mapeamentos imutáveis
+
+
+    Os tipos de mapeamentos disponíveis na biblioteca padrão são todos mutáveis, mas pode ser necessário
+impedir que os usuários mudem um mapeamento por acidente. Um caso de uso concreto pode ser encontrado,
+novamente, em uma biblioteca de programação de hardware como a Pingo, o mapeamento board.pins representa
+as portas de GPIO (General Purpose Input/Output, Entrada/Saída Genérica) em um dispositivo. Dessa forma,
+seria útil evitar atualizações descuidadas de board.pins, pois o hardware não pode ser modificado via
+software: qualquer mudança no mapeamento o tornaria inconsistente com a realidade física do dispositivo.
+
+    O módulo types oferece uma classe invólucro (wrapper) chamada MappingProxyType que, dado um mapeamento,
+devolve uma instância de mappingproxy, que é um proxy somente para leitura (mas dinâmico) do mapeamento
+original. Isso significa que atualizações ao mapeamento original são refletidas no mappingproxy, mas
+nenhuma mudança pode ser feita através desse último. Veja uma breve demonstração no Exemplo abaixo.
+
+-------------------------------------------------------------------------------------------------------
+Exemplo MappingProxyType cria uma instância somente de leitura de mappingproxy a partir de um dict
+-------------------------------------------------------------------------------------------------------
+>>> from types import MappingProxyType
+>>> d = {1: 'A'}
+>>> d_proxy = MappingProxyType(d)
+>>> d_proxy
+mappingproxy({1: 'A'})
+>>> d_proxy[1]  (1)
+'A'
+>>> d_proxy[2] = 'x'  (2)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'mappingproxy' object does not support item assignment
+>>> d[2] = 'B'
+>>> d_proxy  (3)
+mappingproxy({1: 'A', 2: 'B'})
+>>> d_proxy[2]
+'B'
+>>>
+-------------------------------------------------------------------------------------------------------
+                1.Os items em d podem ser vistos através de d_proxy.
+                2.Não é possível fazer modificações através de d_proxy.
+                3.d_proxy é dinâmica: qualquer mudança em d é refletida ali.
+
+
+    Isso pode ser usado assim na prática, no cenário da programação de hardware: o construtor em uma subclasse
+concreta Board preencheria um mapeamento privado com os objetos porta, e o exporia aos clientes da API via um
+atributo público .portas, implementado como um mappingproxy.  Dessa forma, os clientes não poderiam acrescentar,
+remover ou modificar as portas por acidente.
+
