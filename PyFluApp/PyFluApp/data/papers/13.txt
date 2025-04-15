@@ -20,15 +20,14 @@ exemplo do FrenchDeck.
 
     Em condições normais, seu código não deveria conter muitas chamadas diretas a métodos especiais.
 A menos que você esteja fazendo muita metaprogramação, implementar métodos especiais deve ser muito
-mais frequente que invocá-los explicitamente.
+mais frequente que invocá los explicitamente.
 
     Sendo assim, se você precisa invocar um método especial,
 é melhor chamar a função embutida relacionada (por exemplo, len, iter, str, etc.).
 
 
 
-           >> Alguns dos usos mais importantes dos métodos especiais:
-            ---------------------------------------------------------------------------------------------
+>> Alguns dos usos mais importantes dos métodos especiais:
 
                     * Emular tipos numéricos
                             Exemplos:
@@ -53,5 +52,3 @@ mais frequente que invocá-los explicitamente.
                             Obs:
                                 - Interfaces essenciais: Iterable(for), Sized(len), Container(in)
                                 - Especializações: Sequence(list,str), Mapping(dict), Set(set)
-
-            ---------------------------------------------------------------------------------------------

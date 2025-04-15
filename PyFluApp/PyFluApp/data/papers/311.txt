@@ -29,13 +29,18 @@ Isso tem os seguintes efeitos:
 
 
 
-                - Operações de conjuntos
+                # Operações de conjuntos
 
 
     A Exemplo abaixo dá uma visão geral dos métodos disponíveis em conjuntos mutáveis e imutáveis. Muitos
 deles são métodos especiais que sobrecarregam operadores, tais como & and >=.
 
+
+
+
 *Visão Geral dos métodos disponíveis:
+
+
 --------------------------------------------------------------------------------------------
 Exemplo. Diagrama de classes UML simplificado para MutableSet e suas superclasses em
 collections.abc (nomes em itálico são classes e métodos abstratos; métodos de operadores

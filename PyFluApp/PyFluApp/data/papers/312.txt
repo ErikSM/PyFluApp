@@ -6,6 +6,9 @@ um frozenset.
     Especificamente, dict_keys e dict_items implementam os métodos especiais para suportar as poderosas
 operações de conjuntos & (intersecção), | (união), - (diferença), and ^ (diferença simétrica).
 
+
+
+
 Por exemplo, usando & é fácil obter as chaves que aparecem em dois dicionários:
 -------------------------------------------------------------------------------------------------
 >>> d1 = dict(a=1, b=2, c=3, d=4)
@@ -13,6 +16,10 @@ Por exemplo, usando & é fácil obter as chaves que aparecem em dois dicionário
 >>> d1.keys() & d2.keys()
 {'b', 'd'}
 -------------------------------------------------------------------------------------------------
+
+
+
+
 
 
 Observe que o valor devolvido por & é um set. Melhor ainda: os operadores de conjuntos em views
@@ -24,6 +31,10 @@ de dicionários são compatíveis com instâncias de set. Veja isso:
 >>> d1.keys() | s
 {'a', 'c', 'b', 'd', 'i', 'e'}
 -------------------------------------------------------------------------------------------------
+
+
+
+
 
     Usar operações de conjunto com views pode evitar a necessidade de muitos loops e ifs quando seu código
 precisa inspecionar o conteúdo de dicionários. Deixe a eficiente implementação do Python em C trabalhar

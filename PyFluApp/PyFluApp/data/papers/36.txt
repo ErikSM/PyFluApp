@@ -3,7 +3,7 @@
 
 
 
-                - collections.OrderedDict
+                # collections.OrderedDict
 
 
     Agora que o dict embutido também mantém as chaves ordenadas (desde o Python 3.6), o motivo
@@ -14,7 +14,7 @@ mais comum para usar OrderedDict é escrever código compatível com versões an
 
 
 
-                -  collections.ChainMap
+                #  collections.ChainMap
 
 
     Uma instância de ChainMap mantém uma lista de mapeamentos que podem ser consultados como
@@ -26,7 +26,7 @@ daqueles mapeamentos.
 
 
 
-                 - collections.Counter
+                 # collections.Counter
 
 
     Um mapeamento que mantém uma contagem inteira para cada chave. Atualizar uma chave existente
@@ -40,7 +40,7 @@ suas contagens.
 
 
 
-                - shelve.Shelf
+                # shelve.Shelf
 
 
     O módulo shelve na biblioteca padrão fornece armazenamento persistente a um mapeamento de
@@ -63,7 +63,7 @@ simples de chave-valor, baseado no módulo dbm, com as seguintes característica
 
 
 
-                - Criando subclasses de UserDict em vez de dict
+                # Criando subclasses de UserDict em vez de dict
 
 
     A principal razão pela qual é melhor criar uma subclasse de UserDict em vez de dict é que o tipo
@@ -102,6 +102,9 @@ de __contains__, quando comparado com o Exemplo acima.
     Graças a UserDict, o StrKeyDict (Exemplo abaixo) é mais conciso que o StrKeyDict0 (Exemplo acima),
 mais ainda faz melhor: ele armazena todas as chaves como str, evitando surpresas desagradáveis
 se a instância for criada ou atualizada com dados contendo chaves de outros tipos (que não string).
+
+
+
 
 
 ----------------------------------------------------------------------------------------------------------

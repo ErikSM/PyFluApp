@@ -24,7 +24,7 @@ width['lis'] = 60
 width['ent'] = 33
 width['tex'] = 100
 width['not'] = 130
-width['but_act'] = 6
+width['but_act'] = 7
 width['but_oth'] = 0
 
 height = dict()

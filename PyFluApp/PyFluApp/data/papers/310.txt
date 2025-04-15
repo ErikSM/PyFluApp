@@ -7,6 +7,9 @@
             tanto a set quanto a frozenset. Quando falo especificamente
             sobre a classe set, uso a fonte de espaçamento constante: set.
 
+
+
+
 -----------------------------------------------------------------------------------------------------
 Um conjunto é uma coleção de objetos únicos. Um caso de uso básico é a remoção de itens duplicados:
 ------------------------------------------------------------------------------------------------------
@@ -16,6 +19,7 @@ Um conjunto é uma coleção de objetos únicos. Um caso de uso básico é a rem
 >>> list(set(l))
 ['eggs', 'spam', 'bacon']
 ------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -32,10 +36,10 @@ tempo em que tornam o código mais legível e mais fácil de entender e debater�
 condicional.
 
 
-
     Por exemplo, imagine que você tem um grande conjunto de endereços de email (o palheiro—haystack) e um
 conjunto menor de endereços (as agulhas—needles), e precisa contar quantas agulhas existem no palheiro. Graças
 à interseção de set (o operador &), é possível programar isso em uma única linha (veja o Exemplo abaixo).
+
 
 
 
@@ -49,8 +53,10 @@ found = len(needles & haystack)
 
 
 
+
     Sem o operador de intersecção, seria necessário escrever o Exemplo abaixo para realizar a mesma tarefa
 executa pelo Exemplo acima.
+
 
 
 
@@ -66,9 +72,12 @@ for n in needles:
 
 
 
+
+
     O primeiro Exemplo é um pouco mais rápido que o segundo Exemplo. Por outro lado, o segundo Exemplo funciona
 para quaisquer objetos iteráveis needles e haystack, enquanto o primeiro Exemplo exige que ambos sejam conjuntos.
 Mas se você não tem conjuntos à mão, pode sempre criá-los na hora, como mostra o Exemplo abaixo.
+
 
 
 
@@ -82,6 +91,8 @@ found = len(set(needles) & set(haystack))
 # another way:
 found = len(set(needles).intersection(haystack))
 -------------------------------------------------------------------------------------------------------------
+
+
 
 
 
@@ -101,8 +112,9 @@ existentes.
 
 
 
-                - Sets literais
 
+
+                # Sets literais
 
 
     A sintaxe de literais set—{1}, {1, 2}, etc.—parece exatamente igual à notação matemática, mas tem uma
@@ -123,6 +135,9 @@ lado, para processar um literal como {1, 2, 3}, o Python roda um bytecode especi
     Não há sintaxe especial para representar literais frozenset—eles devem ser criados chamando seu construtor.
 Sua representação padrão como string no Python 3 se parece com uma chamada ao construtor de frozenset. Observe a
 saída na sessão de console a seguir:
+
+
+
 --------------------------------------------------------------------------
 >>> frozenset(range(10))
 frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
@@ -132,11 +147,16 @@ frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 
 
 
-                - Compreensões de conjuntos
+
+                # Compreensões de conjuntos
 
 
     Compreensões de conjuntos (setcomps) apareceram há bastante tempo, no Python 2.7, junto com as dictcomps que
 vimos na Seção 3.2.1. O Exemplo 15 mostra procedimento.
+
+
+
+
 
 ------------------------------------------------------------------------------------------------------
 Exemplo: Cria um conjunto de caracteres Latin-1 que tenham a palavra "SIGN" em seus nomes Unicode

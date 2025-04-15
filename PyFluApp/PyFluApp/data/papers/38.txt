@@ -10,6 +10,9 @@ duplicando dados já presentes no dict alvo. E também substituem os métodos an
 iteradores.
     O Exemplo abaixo mostra algumas operações básicas suportadas por todas as views de dicionários.
 
+
+
+
 ----------------------------------------------------------------------------------------------------
 Exemplo: O método .values() devolve uma view dos valores em um dict:
 ----------------------------------------------------------------------------------------------------
@@ -36,8 +39,12 @@ TypeError: 'dict_values' object is not subscriptable
 
 
 
+
     Um objeto view é um proxy dinâmico. Se o dict fonte é atualizado, as mudanças podem ser vistas
 imediatamente através de uma view existente. Continuando do Exemplo acima:
+
+
+
 -----------------------------------------------------------------------------------------------------
 >>> d['z'] = 99
 >>> d
@@ -51,6 +58,9 @@ dict_values([10, 20, 30, 99])
     As classes dict_keys, dict_values, e dict_items são internas: elas não estão disponíveis via
 __builtins__ ou qualquer módulo da biblioteca padrão, e mesmo que você obtenha uma referência para
 uma delas, não pode usar essa referência para criar uma view do zero no seu código Python:
+
+
+
 -----------------------------------------------------------------------------------------------------
 >>> values_class = type({}.values())
 >>> v = values_class()
@@ -58,6 +68,9 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: cannot create 'dict_values' instances
 -----------------------------------------------------------------------------------------------------
+
+
+
 
     A classe dict_values é a view de dicionário mais simples—ela implementa apenas os métodos
 especiais __len__, __iter__, e __reversed__. Além desses métodos, dict_keys e dict_items implementam

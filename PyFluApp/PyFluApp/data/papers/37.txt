@@ -13,6 +13,10 @@ devolve uma instância de mappingproxy, que é um proxy somente para leitura (ma
 original. Isso significa que atualizações ao mapeamento original são refletidas no mappingproxy, mas
 nenhuma mudança pode ser feita através desse último. Veja uma breve demonstração no Exemplo abaixo.
 
+
+
+
+
 -------------------------------------------------------------------------------------------------------
 Exemplo MappingProxyType cria uma instância somente de leitura de mappingproxy a partir de um dict
 -------------------------------------------------------------------------------------------------------
@@ -37,6 +41,11 @@ mappingproxy({1: 'A', 2: 'B'})
                 1.Os items em d podem ser vistos através de d_proxy.
                 2.Não é possível fazer modificações através de d_proxy.
                 3.d_proxy é dinâmica: qualquer mudança em d é refletida ali.
+
+
+
+
+
 
 
     Isso pode ser usado assim na prática, no cenário da programação de hardware: o construtor em uma subclasse
