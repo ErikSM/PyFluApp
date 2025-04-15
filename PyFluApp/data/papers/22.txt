@@ -1,24 +1,22 @@
 			            2.2. Uma visão geral das sequências embutidas
 
 
-
-
     A biblioteca padrão oferece uma boa seleção de tipos de sequências, implementadas em C:
-    ---------------------------------------------------------------------------------------------------------
-- Sequências contêiner
-        Podem armazenar itens de tipos diferentes, incluindo contêineres
-    aninhados e objetos de qualquer tipo.
 
-                        Ex: (list, tuple, e collections.deque)
+                    - Sequências contêiner
+                            Podem armazenar itens de tipos diferentes, incluindo contêineres
+                        aninhados e objetos de qualquer tipo.
+
+                                            Ex: (list, tuple, e collections.deque)
 
 
 
-- Sequências planas
-        Armazenam itens de algum tipo simples, mas não outras coleções ou
-    referências a objetos.
+                    - Sequências planas
+                            Armazenam itens de algum tipo simples, mas não outras coleções ou
+                        referências a objetos.
 
-                        Ex: (str, bytes, e array.array)
-    ---------------------------------------------------------------------------------------------------------
+                                            Ex: (str, bytes, e array.array)
+
 
 
 
@@ -31,15 +29,15 @@ como objetos Python distintos.
 
 
     Outra forma de agrupar as sequências é por mutabilidade:
-    ---------------------------------------------------------------------------------------------------------
-        - Sequências mutáveis
-                Ex: (list, bytearray, array.array e collections.deque)
+
+                    - Sequências mutáveis
+                            Ex: (list, bytearray, array.array e collections.deque)
 
 
 
-        - Sequências imutáveis
-                Ex: (tuple, str, e bytes)
-    ---------------------------------------------------------------------------------------------------------
+                    - Sequências imutáveis
+                            Ex: (tuple, str, e bytes)
+
 
 
 

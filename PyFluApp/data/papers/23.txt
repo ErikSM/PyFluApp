@@ -1,31 +1,37 @@
-2.3. Compreensões de listas e expressões geradoras
+                            2.3. Compreensões de listas e expressões geradoras
 
     Um jeito rápido de criar uma sequência é usando uma compreensão de lista (se o alvo é uma list) ou uma
 expressão geradora (para outros tipos de sequências).
 
 
 
-# Compreensões de lista e legibilidade:
+
+
+
+
+            # Compreensões de lista e legibilidade:
+
+
+    Aqui está um teste: qual dos dois você acha mais fácil de ler:
 --------------------------------------------------------------------------------------------------------------------
-        Aqui está um teste: qual dos dois você acha mais fácil de ler.
-
-                Exemplo 1: (Cria uma lista de pontos de código Unicode a partir de uma string).
-                    >>> symbols = '$¢£¥€¤'
-                    >>> codes = []
-                    >>> for symbol in symbols:
-                    ...     codes.append(ord(symbol))
-                    ...
-                    >>> codes
-                    [36, 162, 163, 165, 8364, 164]
+Exemplo 1: (Cria uma lista de pontos de código Unicode a partir de uma string).
+>>> symbols = '$¢£¥€¤'
+>>> codes = []
+>>> for symbol in symbols:
+...     codes.append(ord(symbol))
+...
+>>> codes
+[36, 162, 163, 165, 8364, 164]
 
 
 
-                Exemplo 2: (Cria uma lista de pontos de código Unicode a partir de uma string, usando uma listcomp).
-                    >>> symbols = '$¢£¥€¤'
-                    >>> codes = [ord(symbol) for symbol in symbols]
-                    >>> codes
-                    [36, 162, 163, 165, 8364, 164]
+Exemplo 2: (Cria uma lista de pontos de código Unicode a partir de uma string, usando uma listcomp).
+>>> symbols = '$¢£¥€¤'
+>>> codes = [ord(symbol) for symbol in symbols]
+>>> codes
+[36, 162, 163, 165, 8364, 164]
 --------------------------------------------------------------------------------------------------------------------
+
 
 
 
@@ -37,25 +43,49 @@ melhor quebrá-la ou reescrevê-la como um bom e velho loop for.
 
 
 
-# Listcomps versus map e filter:
+
+
+
+
+
+
+
+            # Listcomps versus map e filter:
+
+
+
     Listcomps fazem tudo que as funções map e filter fazem, sem os malabarismos exigidos pela funcionalidade
 limitada do lambda do Python.
 
+
+
+
         A mesma lista, criada por uma listcomp e por uma composição de map/filter:
 --------------------------------------------------------------------------------------------------------------------
-                    >>> symbols = '$¢£¥€¤'
+>>> symbols = '$¢£¥€¤'
 
-                    listcomp:
-                        >>> beyond_ascii = [ord(s) for s in symbols if ord(s) > 127]
+# listcomp:
+>>> beyond_ascii = [ord(s) for s in symbols if ord(s) > 127]
 
-                    map/filter:
-                        >>> beyond_ascii = list(filter(lambda c: c > 127, map(ord, symbols)))
+# map/filter:
+>>> beyond_ascii = list(filter(lambda c: c > 127, map(ord, symbols)))
 --------------------------------------------------------------------------------------------------------------------
 
 
 
-# Produtos cartesianos:
+
+
+
+
+
+
+
+            # Produtos cartesianos:
+
+
     Listcomps podem criar listas a partir do produto cartesiano de dois ou mais iteráveis.
+
+
 
         Produto cartesiano usando uma compreensão de lista
 --------------------------------------------------------------------------------------------------------------------
@@ -74,30 +104,41 @@ limitada do lambda do Python.
 
 
 
-# Expressões geradoras:
+
+
+
+
+
+
+
+            # Expressões geradoras:
+
+
     Para inicializar tuplas, arrays e outros tipos de sequências, você também poderia começar de uma listcomp, mas
 uma genexp (expressão geradora) economiza memória. As genexps usam a mesma sintaxe das listcomps, mas são delimitadas
 por parênteses em vez de colchetes.
 
 
-        Inicializando uma tupla e um array a partir de uma expressão geradora:
+
+
+    Inicializando uma tupla e um array a partir de uma expressão geradora:
 --------------------------------------------------------------------------------------------------------------------
-            tupla:
-                >>> symbols = '$¢£¥€¤'
-                >>> tuple(ord(symbol) for symbol in symbols)
+# tupla:
+>>> symbols = '$¢£¥€¤'
+>>> tuple(ord(symbol) for symbol in symbols)
 
-            array:
-                >>> import array
-                >>> array.array('I', (ord(symbol) for symbol in symbols))
-                array('I', [36, 162, 163, 165, 8364, 164])
+# array:
+>>> import array
+>>> array.array('I', (ord(symbol) for symbol in symbols))
+array('I', [36, 162, 163, 165, 8364, 164])
 
 
-        Produto cartesiano em uma expressão geradora:
-                >>> colors = ['black', 'white']
-                >>> sizes = ['S', 'M', 'L']
+# Produto cartesiano em uma expressão geradora:
+>>> colors = ['black', 'white']
+>>> sizes = ['S', 'M', 'L']
 
-            genexp:
-                >>> for tshirt in (f'{c} {s}' for c in colors for s in sizes):
-                ...     print(tshirt)
+# genexp:
+>>> for tshirt in (f'{c} {s}' for c in colors for s in sizes):
+...     print(tshirt)
 --------------------------------------------------------------------------------------------------------------------
 

@@ -32,34 +32,37 @@ ausente é buscada usando a sintaxe d[k].
 
 
 
-            Exemplo: index_default.py: usando um defaultdict em vez do método setdefault:
-            ----------------------------------------------------------------------------------------------
 
-                                """Build an index mapping word -> list of occurrences"""
 
-                                import collections
-                                import re
-                                import sys
 
-                                WORD_RE = re.compile(r'\w+')
+Exemplo: index_default.py: usando um defaultdict em vez do método setdefault:
+----------------------------------------------------------------------------------------------
 
-                                index = collections.defaultdict(list)     # (1)
-                                with open(sys.argv[1], encoding='utf-8') as fp:
-                                    for line_no, line in enumerate(fp, 1):
-                                        for match in WORD_RE.finditer(line):
-                                            word = match.group()
-                                            column_no = match.start() + 1
-                                            location = (line_no, column_no)
-                                            index[word].append(location)  # (2)
+"""Build an index mapping word -> list of occurrences"""
 
-                                # display in alphabetical order
-                                for word in sorted(index, key=str.upper):
-                                    print(word, index[word])
-            ----------------------------------------------------------------------------------------------
-            1.Cria um defaultdict com o construtor de list como default_factory.
-            2.Se word não está inicialmente no index, o default_factory é chamado para produzir o valor
-              ausente, que neste caso é uma list vazia, que então é atribuída a index[word] e devolvida,
-              de forma que a operação .append(location) é sempre bem sucedida.
+import collections
+import re
+import sys
+
+WORD_RE = re.compile(r'\w+')
+
+index = collections.defaultdict(list)     # (1)
+with open(sys.argv[1], encoding='utf-8') as fp:
+    for line_no, line in enumerate(fp, 1):
+        for match in WORD_RE.finditer(line):
+            word = match.group()
+            column_no = match.start() + 1
+            location = (line_no, column_no)
+            index[word].append(location)  # (2)
+
+# display in alphabetical order
+for word in sorted(index, key=str.upper):
+    print(word, index[word])
+----------------------------------------------------------------------------------------------
+1.Cria um defaultdict com o construtor de list como default_factory.
+2.Se word não está inicialmente no index, o default_factory é chamado para produzir o valor
+ausente, que neste caso é uma list vazia, que então é atribuída a index[word] e devolvida,
+de forma que a operação .append(location) é sempre bem sucedida.
 
 
 

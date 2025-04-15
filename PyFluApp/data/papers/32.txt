@@ -8,76 +8,104 @@ mais antigos desses recursos.
 
 
 
-        - Compreensões de dict:
+
+
+
+
+        # Compreensões de dict:
+
 
     Uma dictcomp (compreensão de dict) cria uma instância de dict, recebendo pares key:value de qualquer iterável.
 
-                Exemplos de compreensões de dict:
-                -------------------------------------------------------------------------------------------
-                            >>> dial_codes = [                                                             # (1)
-                            ...     (880, 'Bangladesh'),
-                            ...     (55,  'Brazil'),
-                            ...     (86,  'China'),
-                            ...     (91,  'India'),
-                            ...     (62,  'Indonesia'),
-                            ...     (81,  'Japan'),
-                            ...     (234, 'Nigeria'),
-                            ...     (92,  'Pakistan'),
-                            ...     (7,   'Russia'),
-                            ...     (1,   'United States'),
-                            ... ]
-                            >>> country_dial = {country: code for code, country in dial_codes}              # (2)
-                            >>> country_dial
-                            {'Bangladesh': 880, 'Brazil': 55, 'China': 86, 'India': 91, 'Indonesia': 62,
-                            'Japan': 81, 'Nigeria': 234, 'Pakistan': 92, 'Russia': 7, 'United States': 1}
-                            >>> {code: country.upper()                                                      # (3)
-                            ...     for country, code in sorted(country_dial.items())
-                            ...     if code < 70}
-                            {55: 'BRAZIL', 62: 'INDONESIA', 7: 'RUSSIA', 1: 'UNITED STATES'}
-                -------------------------------------------------------------------------------------------
-                1.Um iterável de pares chave-valor como dial_codes pode ser passado diretamente para o
-                  construtor de dict, mas…
-                2.…aqui permutamos os pares: country é a chave, e code é o valor.
-                3.Ordenando country_dial por nome, revertendo novamente os pares, colocando os valores
-                  em maiúsculas e filtrando os itens com code < 70.
 
 
 
-        - Desempacotando mapeamentos
+
+Exemplos de compreensões de dict:
+-------------------------------------------------------------------------------------------
+>>> dial_codes = [                                                             # (1)
+...     (880, 'Bangladesh'),
+...     (55,  'Brazil'),
+...     (86,  'China'),
+...     (91,  'India'),
+...     (62,  'Indonesia'),
+...     (81,  'Japan'),
+...     (234, 'Nigeria'),
+...     (92,  'Pakistan'),
+...     (7,   'Russia'),
+...     (1,   'United States'),
+... ]
+>>> country_dial = {country: code for code, country in dial_codes}              # (2)
+>>> country_dial
+{'Bangladesh': 880, 'Brazil': 55, 'China': 86, 'India': 91, 'Indonesia': 62,
+'Japan': 81, 'Nigeria': 234, 'Pakistan': 92, 'Russia': 7, 'United States': 1}
+>>> {code: country.upper()                                                      # (3)
+...     for country, code in sorted(country_dial.items())
+...     if code < 70}
+{55: 'BRAZIL', 62: 'INDONESIA', 7: 'RUSSIA', 1: 'UNITED STATES'}
+-------------------------------------------------------------------------------------------
+1.Um iterável de pares chave-valor como dial_codes pode ser passado diretamente para o
+construtor de dict, mas…
+2.…aqui permutamos os pares: country é a chave, e code é o valor.
+3.Ordenando country_dial por nome, revertendo novamente os pares, colocando os valores
+em maiúsculas e filtrando os itens com code < 70.
+
+
+
+
+
+
+
+
+
+            # Desempacotando mapeamentos
+
 
     Podemos aplicar ** a mais de um argumento em uma chamada de função. Isso funciona quando todas as chaves
 são strings e únicas, para todos os argumentos (porque argumentos nomeados duplicados são proibidos):
 
-                ----------------------------------------------------
-                            >>> def dump(**kwargs):
-                            ...     return kwargs
-                            ...
-                            >>> dump(**{'x': 1}, y=2, **{'z': 3})
-                            {'x': 1, 'y': 2, 'z': 3}
-                ----------------------------------------------------
 
 
 
-                e tambem, ** pode ser usado dentro de um literal dict—também múltiplas vezes:
-                ----------------------------------------------------------------
-                            >>> {'a': 0, **{'x': 1}, 'y': 2, **{'z': 3, 'x': 4}}
-                            {'a': 0, 'x': 4, 'y': 2, 'z': 3}
-                ----------------------------------------------------------------
-                    Nesse caso, chaves duplicadas são permitidas. Cada ocorrência sobrescreve
-                ocorrências anteriores—observe o valor mapeado para x no exemplo.
+----------------------------------------------------------------------------
+>>> def dump(**kwargs):
+...     return kwargs
+...
+>>> dump(**{'x': 1}, y=2, **{'z': 3})
+{'x': 1, 'y': 2, 'z': 3}
+----------------------------------------------------------------------------
+
+
+
+
+e tambem, ** pode ser usado dentro de um literal dict—também múltiplas vezes:
+
+
+
+-----------------------------------------------------------
+>>> {'a': 0, **{'x': 1}, 'y': 2, **{'z': 3, 'x': 4}}
+{'a': 0, 'x': 4, 'y': 2, 'z': 3}
+----------------------------------------------------------------------------
+Nesse caso, chaves duplicadas são permitidas. Cada ocorrência sobrescreve
+ocorrências anteriores—observe o valor mapeado para x no exemplo.
+
+
+
 
 
     Desde a versão 3.9, Python suporta o uso de | e |= para mesclar mapeamentos. Isso faz todo sentido, já que
 estes são também os operadores de união de conjuntos.
 
 
-                O operador | cria um novo mapeamento:
-                -------------------------------------------------
-                            >>> d1 = {'a': 1, 'b': 3}
-                            >>> d2 = {'a': 2, 'b': 4, 'c': 6}
 
-                            >>> d1 | d2
-                            {'a': 2, 'b': 4, 'c': 6}
-                -------------------------------------------------
+
+O operador | cria um novo mapeamento:
+-------------------------------------------------
+>>> d1 = {'a': 1, 'b': 3}
+>>> d2 = {'a': 2, 'b': 4, 'c': 6}
+
+>>> d1 | d2
+{'a': 2, 'b': 4, 'c': 6}
+-------------------------------------------------
 
 

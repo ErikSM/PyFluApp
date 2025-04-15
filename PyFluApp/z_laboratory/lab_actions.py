@@ -7,12 +7,6 @@ import urllib.request
 url_test = 'https://pythonfluente.com/'
 
 
-##  Classe para executar as funcoes ???????
-
-
-
-
-
 def page_url_open_in_tkinter_window(url):
     webview.create_window('Image Open in tkinter (webview)', url)
     webview.start()

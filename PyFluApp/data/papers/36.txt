@@ -1,0 +1,140 @@
+                            3.6. Variações de dict
+
+
+
+
+                # collections.OrderedDict
+
+
+    Agora que o dict embutido também mantém as chaves ordenadas (desde o Python 3.6), o motivo
+mais comum para usar OrderedDict é escrever código compatível com versões anteriores do Python.
+**OBS: (A documentação lista algumas diferenças entre dict e OrderedDict)
+
+
+
+
+
+                #  collections.ChainMap
+
+
+    Uma instância de ChainMap mantém uma lista de mapeamentos que podem ser consultados como
+se fossem um mapeamento único. A busca é realizada em cada mapa incluído, na ordem em que eles
+aparecem na chamada ao construtor, e é bem sucedida assim que a chave é encontrada em um
+daqueles mapeamentos.
+
+
+
+
+
+                 # collections.Counter
+
+
+    Um mapeamento que mantém uma contagem inteira para cada chave. Atualizar uma chave existente
+adiciona à sua contagem. Isso pode ser usado para contar instâncias de objetos hashable ou
+como um multiset ("conjunto múltiplo").
+    Counter implementa os operadores + e - para combinar contagens, e outros métodos úteis tal
+como o most_common([n]), que devolve uma lista ordenada de tuplas com os n itens mais comuns e
+suas contagens.
+
+
+
+
+
+                # shelve.Shelf
+
+
+    O módulo shelve na biblioteca padrão fornece armazenamento persistente a um mapeamento de
+chaves em formato string para objetos Python serializados no formato binário pickle.
+
+    A função de módulo shelve.open devolve uma instância de shelve.Shelf—um banco de dados DBM
+simples de chave-valor, baseado no módulo dbm, com as seguintes características:
+
+                - shelve.Shelf é uma subclasse de abc.MutableMapping, então fornece os métodos essenciais esperados de
+                    um tipo mapeamento.
+                - Além disso, shelve.Shelf fornece alguns outros métodos de gerenciamento de E/S, como sync e close.
+                - Uma instância de Shelf é um gerenciador de contexto, então é possível usar um bloco with para garantir
+                    que ela seja fechada após o uso.
+                - Chaves e valores são salvos sempre que um novo valor é atribuído a uma chave.
+                - As chaves devem ser strings.
+                - Os valores devem ser objetos que o módulo pickle possa serializar.
+**OBS: (A documentação para os módulos shelve, dbm (EN), e pickle traz mais detalhes e também algumas ressalvas)
+
+
+
+
+
+                # Criando subclasses de UserDict em vez de dict
+
+
+    A principal razão pela qual é melhor criar uma subclasse de UserDict em vez de dict é que o tipo
+embutido tem alguns atalhos de implementação, que acabam nos obrigando a sobrepor métodos que
+poderíamos apenas herdar de UserDict sem maiores problemas.
+
+    É melhor criar um novo tipo de mapeamento estendendo collections.UserDict em vez de dict.
+Percebemos isso quando tentamos estender nosso StrKeyDict0 do Exemplo abaixo para assegurar que qualquer
+chave adicionada ao mapeamento seja armazenada como str.
+
+--------------------------------------------------------------------
+Exemplo:
+--------------------------------------------------------------------
+class StrKeyDict0(dict):
+
+    def __missing__(self, key):
+        if isinstance(key, str):
+            raise KeyError(key)
+        return self[str(key)]
+
+    def get(self, key, default=None):
+        try:
+            return self[key]
+        except KeyError:
+            return default
+
+    def __contains__(self, key):
+        return key in self.keys() or str(key) in self.keys()
+--------------------------------------------------------------------
+
+    Observe que UserDict não herda de dict, mas usa uma composição: a classe tem uma instância
+interna de dict, chamada data, que mantém os itens propriamente ditos. Isso evita recursão
+indesejada quando escrevemos métodos especiais, como __setitem__, e simplifica a programação
+de __contains__, quando comparado com o Exemplo acima.
+
+    Graças a UserDict, o StrKeyDict (Exemplo abaixo) é mais conciso que o StrKeyDict0 (Exemplo acima),
+mais ainda faz melhor: ele armazena todas as chaves como str, evitando surpresas desagradáveis
+se a instância for criada ou atualizada com dados contendo chaves de outros tipos (que não string).
+
+
+
+
+
+----------------------------------------------------------------------------------------------------------
+Exemplo: StrKeyDict sempre converte chaves que não sejam strings para str na inserção, atualização e busca:
+----------------------------------------------------------------------------------------------------------
+import collections
+
+
+class StrKeyDict(collections.UserDict):  # (1)
+
+    def __missing__(self, key):  # (2)
+        if isinstance(key, str):
+            raise KeyError(key)
+        return self[str(key)]
+
+    def __contains__(self, key):
+        return str(key) in self.data  # (3)
+
+    def __setitem__(self, key, item):
+        self.data[str(key)] = item   # (4)
+
+----------------------------------------------------------------------------------------------------------
+    1.StrKeyDict estende UserDict.
+    2.__missing__ é exatamente igual ao do Exemplo 8.
+    3.__contains__ é mais simples: podemos assumir que todas as chaves armazenadas são str, e podemos operar
+    sobre self.data em vez de invocar self.keys(), como fizemos em StrKeyDict0.
+    4.__setitem__ converte qualquer key para uma str. Esse método é mais fácil de sobrepor quando podemos
+    delegar para o atributo self.data.
+
+
+
+
+

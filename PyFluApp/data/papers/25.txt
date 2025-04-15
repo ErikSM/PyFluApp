@@ -11,32 +11,40 @@ na ponta de recebimento, a menos que você use um asterisco (*) para capturar os
     A forma mais visível de desempacotamento é a atribuição paralela; isto é, atribuir itens de um iterável a uma
 tupla de variáveis.
 
-                Exemplo:
-                ---------------------------------------------------------------------------------
-                    >>> lax_coordinates = (33.9425, -118.408056)
-                    >>> latitude, longitude = lax_coordinates  # unpacking
 
-                    >>> latitude
-                    33.9425
 
-                    >>> longitude
-                    -118.408056
-                ---------------------------------------------------------------------------------
+Exemplo:
+---------------------------------------------------------------------------------
+>>> lax_coordinates = (33.9425, -118.408056)
+>>> latitude, longitude = lax_coordinates  # unpacking
+
+>>> latitude
+33.9425
+
+>>> longitude
+-118.408056
+---------------------------------------------------------------------------------
+
+
 
 
 
     Outra forma de desempacotamento é prefixar um argumento com * ao chamar uma função:
 
-                Exemplo:
-                ---------------------------------------------------------------------------------
-                    >>> divmod(20, 8)
-                    (2, 4)
 
-                    >>> t = (20, 8)
-                    >>> divmod(*t)
-                    (2, 4)
 
-                    >>> quotient, remainder = divmod(*t)
-                    >>> quotient, remainder
-                    (2, 4)
-                ---------------------------------------------------------------------------------
+
+
+Exemplo:
+---------------------------------------------------------------------------------
+>>> divmod(20, 8)
+(2, 4)
+
+>>> t = (20, 8)
+>>> divmod(*t)
+(2, 4)
+
+>>> quotient, remainder = divmod(*t)
+>>> quotient, remainder
+(2, 4)
+---------------------------------------------------------------------------------

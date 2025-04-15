@@ -24,7 +24,7 @@ width['lis'] = 60
 width['ent'] = 33
 width['tex'] = 100
 width['not'] = 130
-width['but_act'] = 6
+width['but_act'] = 7
 width['but_oth'] = 0
 
 height = dict()
@@ -57,7 +57,6 @@ def set_size_in_proportion(width_or_height, how_much):
                     pass
                 else:
                     height[i] += how_much
-
     else:
         pass
 

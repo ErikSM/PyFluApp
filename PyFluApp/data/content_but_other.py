@@ -46,3 +46,4 @@ other_buts_dict['Sobre o Aplicativo'] = string_about_app
 other_buts_dict['* Dicas Adicionais'] = string_additional_tips
 other_buts_dict['* Sugestões'] = string_suggestions
 other_buts_dict['Contato-te me'] = string_contact_me
+

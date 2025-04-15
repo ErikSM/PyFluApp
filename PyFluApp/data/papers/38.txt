@@ -1,0 +1,79 @@
+                            3.8. Views de dicionários
+
+
+
+    Os métodos de instância de dict .keys(), .values(), e .items() devolvem instâncias de classes
+chamadas dict_keys, dict_values, e dict_items, respectivamente. Essas views de dicionário são
+projeções somente para leitura de estruturas de dados internas usadas na implemetação de dict. Elas
+evitam o uso de memória adicional dos métodos equivalentes no Python 2, que devolviam listas,
+duplicando dados já presentes no dict alvo. E também substituem os métodos antigos que devolviam
+iteradores.
+    O Exemplo abaixo mostra algumas operações básicas suportadas por todas as views de dicionários.
+
+
+
+
+----------------------------------------------------------------------------------------------------
+Exemplo: O método .values() devolve uma view dos valores em um dict:
+----------------------------------------------------------------------------------------------------
+>>> d = dict(a=10, b=20, c=30)
+>>> values = d.values()
+>>> values
+dict_values([10, 20, 30])  (1)
+>>> len(values)  (2)
+3
+>>> list(values)  (3)
+[10, 20, 30]
+>>> reversed(values)  (4)
+<dict_reversevalueiterator object at 0x10e9e7310>
+>>> values[0] (5)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'dict_values' object is not subscriptable
+----------------------------------------------------------------------------------------------------
+                    1.O repr de um objeto view mostra seu conteúdo.
+                    2.Podemos consultar a len de uma view.
+                    3.Views são iteráveis, então é fácil criar listas a partir delas.
+                    4.Views implementam __reversed__, devolvendo um iterador personalizado.
+                    5.Não é possível usar [] para obter itens individuais de uma view.
+
+
+
+
+    Um objeto view é um proxy dinâmico. Se o dict fonte é atualizado, as mudanças podem ser vistas
+imediatamente através de uma view existente. Continuando do Exemplo acima:
+
+
+
+-----------------------------------------------------------------------------------------------------
+>>> d['z'] = 99
+>>> d
+{'a': 10, 'b': 20, 'c': 30, 'z': 99}
+>>> values
+dict_values([10, 20, 30, 99])
+-----------------------------------------------------------------------------------------------------
+
+
+
+    As classes dict_keys, dict_values, e dict_items são internas: elas não estão disponíveis via
+__builtins__ ou qualquer módulo da biblioteca padrão, e mesmo que você obtenha uma referência para
+uma delas, não pode usar essa referência para criar uma view do zero no seu código Python:
+
+
+
+-----------------------------------------------------------------------------------------------------
+>>> values_class = type({}.values())
+>>> v = values_class()
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: cannot create 'dict_values' instances
+-----------------------------------------------------------------------------------------------------
+
+
+
+
+    A classe dict_values é a view de dicionário mais simples—ela implementa apenas os métodos
+especiais __len__, __iter__, e __reversed__. Além desses métodos, dict_keys e dict_items implementam
+vários métodos dos sets, quase tantos quanto a classe frozenset.
+
+

@@ -12,7 +12,7 @@ class AppMain:
     def __init__(self):
         self.__window = Tk()
 
-        self.__pybook_selected = None
+        self.__book = None
         self.__img_banner = PhotoImage(file=r'assets\banner.PNG')
 
         self.__head = Frame(self.__window, bg=colr['purple'], width=100, height=100, bd=3)
@@ -116,9 +116,9 @@ class AppMain:
 
     def _active_opt_menu(self, selected):
         self.__list_summary.delete(0, END)
-        self.__pybook_selected = Book(selected)
+        self.__book = Book(selected)
 
-        self.__list_summary.insert(END, *self.__pybook_selected.summary())
+        self.__list_summary.insert(END, *self.__book.summary())
 
     def _config_container_c(self):
         for i in self.__buts_actions[0]:
@@ -132,19 +132,14 @@ class AppMain:
 
         selected = self.__list_summary.get(ANCHOR)
 
-        parentheses = selected.find(')')
-        file_name = selected[:parentheses]
-        file_name = file_name.replace(' ', '')
-        file_name = file_name.replace('.', '')
-
         try:
-            file = self.__pybook_selected[file_name]
+            file_content = self.__book[selected]
         except TypeError:
-            file = (f'    [ book not found ]\n\n\n'
+            file_content = (f'    [ book not found ]\n\n\n'
                         f'Acesse:\n'
                         f'          https://pythonfluente.com/')
 
-        self.__text_screen.insert(END, file)
+        self.__text_screen.insert(END, file_content)
 
     def _config_container_r(self):
         self.__entry_local.config(font=letter['search'], textvariable=self.__entry_text_str)
@@ -215,4 +210,3 @@ class AppMain:
 
         self._config_window()
         self.__window.mainloop()
-

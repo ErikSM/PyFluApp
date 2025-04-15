@@ -16,9 +16,15 @@ class Book:
     def __len__(self):
         return len(self.__chapters)
 
-    def __getitem__(self, item='item'):
+    def __getitem__(self, selected: str):
+        parentheses = selected.find(')')
+        file_name = selected[:parentheses]
+
+        file_name = file_name.replace(' ', '')
+        file_name = file_name.replace('.', '')
+
         try:
-            return self.__contents[item]
+            return self.__contents[file_name]
         except KeyError:
             return (f'    [ Chapter not found ]\n\n\n'
                         f'Acesse:\n'
