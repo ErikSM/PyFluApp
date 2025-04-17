@@ -1,4 +1,4 @@
-from data.summary import python_books, open_file
+from data.content_summary import python_books, open_file
 
 
 class Book:
@@ -10,6 +10,7 @@ class Book:
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}
         self.__contents = self._dict_contents()
 
+
     def __str__(self):
         return f'Book({self.__name})'
 
@@ -18,6 +19,7 @@ class Book:
 
     def __getitem__(self, selected: str):
         parentheses = selected.find(')')
+
         file_name = selected[:parentheses]
 
         file_name = file_name.replace(' ', '')
@@ -38,7 +40,6 @@ class Book:
                     yield j
         except TypeError:
             pass
-
 
     def _dict_contents(self):
         titles = dict()
@@ -65,20 +66,20 @@ class Book:
             yield i, self.__titles[i]
 
     def summary(self):
-        summary = list()
 
         for i in self.__titles.items():
             number = i[0]
             name = i[1]
 
-            if len(i[0]) != 1:
+            try:
+                int(number)
+            except ValueError:
                 paragraph = ' ' * 2
             else:
                 paragraph = ''
-
-            between = ') '
+            finally:
+                between = ') '
 
             string = f'{paragraph}{number}{between}{name}'
-            summary.append(string)
 
-        return summary
+            yield string

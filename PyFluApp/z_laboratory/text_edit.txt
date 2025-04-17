@@ -1,46 +1,47 @@
-    def _click_any_but_others(self, but_selected_and_all_buts:tuple):
-        self.__text_note.delete(0.0, END)
+    def _set_buts(self, container, type_buts, font=letter):
 
-        selected, all_buts = but_selected_and_all_buts[0], but_selected_and_all_buts[1]
+        buts = list()
+        values = tuple()
+        temporary_container = Frame(container, bg=colr['purple'])
 
-        if selected == all_buts[0]:
-            oficial = 'https://pythonfluente.com/'
 
-            string = f'Acesse o site oficial:  {oficial}'
-            self.__text_note.insert(END, string)
+        if type_buts == 'action':
+            values = (5,
+                      temporary_container, font['but_act'],
+                      width['but_act'], height['but_act'], 1,
+                      NORMAL, colr['grey'], colr['white'])
 
-            access_website_on_browser(oficial)
+        elif type_buts == 'others':
+            values = (6,
+                      temporary_container, font['but_other'],
+                      width['but_oth'], height['but_oth'], 0,
+                      NORMAL,  colr['purple'], colr['white'])
 
-        elif selected == all_buts[1]:
-            string = ('     Luciano Ramalho é programador Python desde 1998, Parceiro da Python Software Foundation; \n'
-                      'é sócio do Python.pro.br – uma empresa de treinamento – e cofundador do Garoa Hacker Clube, \n'
-                      'o primeiro hackerspace do Brasil. Tem liderado equipes de desenvolvimento de software e \n'
-                      'ministrado cursos sobre Python em empresas de mídia, bancos e para o governo federal.')
 
-        elif selected == all_buts[2]:
-            string =  (
-                """!!!  ...
-                    Este aplicativo tem como principal objetivo o desenvolvimento pessoal do criador na linguagem
-                Python e não tem fins lucrativos, procurando ao máximo não ferir direitos autorais.
+        how_many = values[0]
+        local, font = values[1], values[2]
+        x_size, y_size, bd = values[3], values[4], values[5]
+        state, bg, fg = values[6], values[7], values[8]
 
-                    Este aplicativo também busca, na medida do possível, ajudar na divulgação da fonte do conteúdo
-                original e por isso, não apresenta o conteúdo na sua totalidade, mas sim, de forma resumida para
-                incentivar outros possíveis usuários do aplicativo a irem até o local do conteúdo original e conhecer
-                tanto o conteúdo na sua totalidade quanto o autor do livro.
 
-                    Sendo assim, em caso de alguma queixa ou desagrado com o autor ou dono dos direitos do conteúdo,
-                o criador do app esta disposto a modificar ou eliminar o conteúdo do aplicativo ou até mesmo remove-lo
-                (remover o app) do github e por um fim ao acesso a este aplicativo.
-                """
+        cont = 1
+        while cont <= how_many:
+            buts.append(
+                Button(local, font=font,
+                width=x_size, height=y_size, bd=bd,
+                state=state, bg=bg, fg=fg)
             )
+            cont += 1
 
-        elif selected == all_buts[6]:
-            string = ('Principal\n'
-                      '    GitHub:     https://github.com/ErikSM \n\n'
-                      'Outras formas\n'
-                      '    Instagram:     https://www.instagram.com/erik_miyajima/#\n'
-                      '    Linkedin:      https://www.linkedin.com/in/erik-miyajima-355a7223b/\n'
-                      '    Facebook:      https://www.facebook.com/profile.php?id=100009124251611\n')
 
-        else:
-            string = f'{selected}:   Not defined yet, Sorry!'
+        if type_buts == 'action':
+            buts[1].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
+
+        elif type_buts == 'others':
+            all_buts = [i for i in other_buts_dict.keys()]
+            cont = 0
+            for i in buts:
+                but_txt = all_buts[cont]
+                i.config(text=f'{but_txt}',
+                         command=lambda selected=but_txt: self._click_any_but_others(selected))
+                cont += 1

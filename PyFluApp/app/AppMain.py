@@ -1,13 +1,13 @@
 from tkinter import *
 
 from app.config import letter, colr, width, height
-from app.executions import processing_but_other
-from data.content_but_other import other_buts_dict
-from data.summary import python_books
+from app.executions import processing_but_other, configuring_buts
+from data.content_summary import python_books
 from structure.Book import Book
 
 
 class AppMain:
+
 
     def __init__(self):
         self.__window = Tk()
@@ -45,50 +45,19 @@ class AppMain:
 
         self._enable_config()
 
-    def _set_buts(self, container, type_buts, font=letter):
-        buts = list()
-        values = tuple()
-        temporary_container = Frame(container, bg=colr['purple'])
+
+    def _set_buts(self, container, type_buts):
+        command = None
 
         if type_buts == 'action':
-            values = (5,
-                      temporary_container, font['but_act'],
-                      width['but_act'], height['but_act'], 1,
-                      NORMAL, colr['grey'], colr['white'])
-
+            command = self._click_but_play
         elif type_buts == 'others':
-            values = (6,
-                      temporary_container, font['but_other'],
-                      width['but_oth'], height['but_oth'], 0,
-                      NORMAL,  colr['purple'], colr['white'])
+            command = self._click_any_but_others
 
-        how_many = values[0]
-        local, font = values[1], values[2]
-        x_size, y_size, bd = values[3], values[4], values[5]
-        state, bg, fg = values[6], values[7], values[8]
+        buts, buts_container = configuring_buts(container, type_buts, command)
 
-        cont = 1
-        while cont <= how_many:
-            buts.append(
-                Button(local, font=font,
-                width=x_size, height=y_size, bd=bd,
-                state=state, bg=bg, fg=fg)
-            )
-            cont += 1
+        return buts, buts_container
 
-        if type_buts == 'action':
-            buts[1].config(text='play      >', bg=colr['purple'], bd=3, command=self._click_but_play)
-        elif type_buts == 'others':
-
-            all_buts = [i for i in other_buts_dict.keys()]
-            cont = 0
-            for i in buts:
-                but_txt = all_buts[cont]
-                i.config(text=f'{but_txt}',
-                         command=lambda selected=but_txt: self._click_any_but_others(selected))
-                cont += 1
-
-        return buts, temporary_container
 
     def _config_container_u(self):
         self.__label_img_banner.configure(image=self.__img_banner)
@@ -184,7 +153,7 @@ class AppMain:
         self.__text_note.delete(0.0, END)
 
         processed = processing_but_other(selected)
-        text_str, more_action, action = processed[0], processed[1], processed[2]
+        text_str, more_action, action = processed
 
         self.__text_note.insert(END, text_str)
         if more_action:

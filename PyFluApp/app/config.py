@@ -10,8 +10,8 @@ letter['search'] = ('Consolas', 14, 'bold')
 letter['principal'] = ('Ariel', 9, 'bold')
 letter['list'] = ('Consolas', 8, 'bold')
 letter['foot'] = ('Consolas', 7, 'bold')
-letter['but_act'] = ('Impact', 10)
-letter['but_other'] = ('Arial', 11, 'bold')
+letter['bt_act'] = ('Impact', 10)
+letter['bt_oth'] = ('Arial', 11, 'bold')
 
 
 def set_some_type_letter(witch, font: str = 'Arial', size: int = 9, shape: str = 'bold'):
@@ -24,19 +24,19 @@ width['lis'] = 60
 width['ent'] = 33
 width['tex'] = 100
 width['not'] = 130
-width['but_act'] = 7
-width['but_oth'] = 0
+width['bt_act'] = 7
+width['bt_oth'] = 0
 
 height = dict()
 height['lis'] = 15
 height['tex'] = 15
 height['not'] = 10
-height['but_act'] = 0
-height['but_oth'] = 0
+height['bt_act'] = 0
+height['bt_oth'] = 0
 
 def set_size_in_proportion(width_or_height, how_much):
     approved = False
-    not_edit = 'opt', 'ent', 'but_act', 'but_oth'
+    not_edit = 'opt', 'ent', 'bt_act', 'bt_oth'
 
     if -30 <= how_much <= 20:
         approved = True
