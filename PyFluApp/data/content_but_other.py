@@ -2,10 +2,12 @@
 string_oficial_site = (f'Acesse o site oficial:  '
             f'https://pythonfluente.com/')
 
-string_author_book = ('     Luciano Ramalho é programador Python desde 1998, Parceiro da Python Software Foundation; \n'
-            'é sócio do Python.pro.br – uma empresa de treinamento – e cofundador do Garoa Hacker Clube, \n'
-            'o primeiro hackerspace do Brasil. Tem liderado equipes de desenvolvimento de software e \n'
-            'ministrado cursos sobre Python em empresas de mídia, bancos e para o governo federal.')
+string_author_book = (
+    """!!!  ...
+        Luciano Ramalho é programador Python desde 1998, Parceiro da Python Software Foundation; 
+    é sócio do Python.pro.br – uma empresa de treinamento – e cofundador do Garoa Hacker Clube, 
+    o primeiro hackerspace do Brasil. Tem liderado equipes de desenvolvimento de software e 
+    ministrado cursos sobre Python em empresas de mídia, bancos e para o governo federal.""")
 
 string_about_app = (
     """!!!  ...
@@ -23,27 +25,25 @@ string_about_app = (
     """
 )
 
-string_additional_tips = (f'    [not found ]\n\n\n'
-                        f'Acesse:\n'
-                        f'          https://pythonfluente.com/')
+string_additional_tips = ('    [not found ]\n\n\n'
+                          'Acesse:\n'
+                          '          https://pythonfluente.com/')
 
-string_suggestions = (f'    [not found ]\n\n\n'
-                        f'Acesse:\n'
-                        f'          https://pythonfluente.com/')
+string_suggestions = ('    [not found ]\n\n\n'
+                      'Acesse:\n'
+                      '          https://pythonfluente.com/')
 
 string_contact_me = ('Principal\n'
-            '    GitHub:     https://github.com/ErikSM \n\n'
-            'Outras formas\n'
-            '    Instagram:     https://www.instagram.com/erik_miyajima/#\n'
-            '    Linkedin:      https://www.linkedin.com/in/erik-miyajima-355a7223b/\n'
-            '    Facebook:      https://www.facebook.com/profile.php?id=100009124251611\n')
+                     '    GitHub:     https://github.com/ErikSM \n\n'
+                     'Outras formas\n'
+                     '    Instagram:     https://www.instagram.com/erik_miyajima/#\n'
+                     '    Linkedin:      https://www.linkedin.com/in/erik-miyajima-355a7223b/\n'
+                     '    Facebook:      https://www.facebook.com/profile.php?id=100009124251611\n')
 
 
-other_buts_dict = dict()
-other_buts_dict['Acesse o Site Oficial'] = string_oficial_site
-other_buts_dict['Sobre o Autor do Livro'] = string_author_book
-other_buts_dict['Sobre o Aplicativo'] = string_about_app
-other_buts_dict['* Dicas Adicionais'] = string_additional_tips
-other_buts_dict['* Sugestões'] = string_suggestions
-other_buts_dict['Contato-te me'] = string_contact_me
-
+other_buts_dict = {'Acesse o Site Oficial': string_oficial_site,
+                   'Sobre o Autor do Livro': string_author_book,
+                   'Sobre o Aplicativo': string_about_app,
+                   '* Dicas Adicionais': string_additional_tips,
+                   '* Sugestões': string_suggestions,
+                   'Contato-te me': string_contact_me}
