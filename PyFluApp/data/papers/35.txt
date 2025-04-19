@@ -8,7 +8,7 @@ ver as duas soluções a seguir.
 
 
 
-       - defaultdict: outra perspectiva sobre as chaves ausentes:
+                # defaultdict: outra perspectiva sobre as chaves ausentes:
 
     Uma instância de collections.defaultdict cria itens com um valor default sob demanda, sempre que uma chave
 ausente é buscada usando a sintaxe d[k].
@@ -28,11 +28,8 @@ ausente é buscada usando a sintaxe d[k].
                                     2.Insere a lista em dd usando 'new-key' como chave.
                                     3.Devolve uma referência para aquela lista.
 
+
     O chamável que produz os valores default é mantido em um atributo de instância chamado default_factory.
-
-
-
-
 
 
 Exemplo: index_default.py: usando um defaultdict em vez do método setdefault:
@@ -59,19 +56,14 @@ with open(sys.argv[1], encoding='utf-8') as fp:
 for word in sorted(index, key=str.upper):
     print(word, index[word])
 ----------------------------------------------------------------------------------------------
-1.Cria um defaultdict com o construtor de list como default_factory.
-2.Se word não está inicialmente no index, o default_factory é chamado para produzir o valor
-ausente, que neste caso é uma list vazia, que então é atribuída a index[word] e devolvida,
-de forma que a operação .append(location) é sempre bem sucedida.
+    1.Cria um defaultdict com o construtor de list como default_factory.
+    2.Se word não está inicialmente no index, o default_factory é chamado para produzir o valor
+        ausente, que neste caso é uma list vazia, que então é atribuída a index[word] e devolvida,
+        de forma que a operação .append(location) é sempre bem sucedida.
 
 
 
-
-
-
-
-
-              - O método __missing__
+              # O método __missing__
 
     Por trás da forma como os mapeamentos lidam com chaves ausentes está o método muito apropriadamente
 chamado __missing__. Esse método não é definido na classe base dict, mas dict está ciente de sua
@@ -80,11 +72,7 @@ vai chamar seu método sempre que uma chave não for encontrada, em vez de gerar
 
 
 
-
-
-
-
-            - O uso inconsistente de __missing__ na biblioteca padrão:
+            # O uso inconsistente de __missing__ na biblioteca padrão:
 
     Considere os seguintes cenários, e como eles afetam a busca de chaves ausentes:
     --------------------------------------------------------------------------------

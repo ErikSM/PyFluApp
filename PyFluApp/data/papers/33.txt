@@ -13,9 +13,6 @@ como o MongoDB, o EdgeDB, ou o PostgreSQL.
     As dicas de tipo simples em get_creators tornam claro que ela recebe um dict e devolve uma list.
 
 
-
-
-
 Exemplo: creator.py: get_creators() extrai o nome dos criadores em registros de mídia:
 ----------------------------------------------------------------------------------------------
 def get_creators(record: dict) -> list:
@@ -31,14 +28,14 @@ def get_creators(record: dict) -> list:
         case _:  # (5)
             raise ValueError(f'Invalid record: {record!r}')
 ----------------------------------------------------------------------------------------------
-1.Casa com qualquer mapeamento na forma 'type': 'book', 'api' :2, e uma chave 'authors' mapeada
-para uma sequência. Devolve os itens da sequência, como uma nova list.
-2.Casa com qualquer mapeamento na forma 'type': 'book', 'api' :1, e uma chave 'author' mapeada
-para qualquer objeto. Devolve aquele objeto dentro de uma list.
-3.Qualquer outro mapeamento na forma 'type': 'book' é inválido e gera um ValueError.
-4.Casa qualquer mapeamento na forma 'type': 'movie' e uma chave 'director' mapeada para um único
-objeto. Devolve o objeto dentro de uma list.
-5.Qualquer outro sujeito é inválido e gera um ValueError.
+    1.Casa com qualquer mapeamento na forma 'type': 'book', 'api' :2, e uma chave 'authors' mapeada
+        para uma sequência. Devolve os itens da sequência, como uma nova list.
+    2.Casa com qualquer mapeamento na forma 'type': 'book', 'api' :1, e uma chave 'author' mapeada
+        para qualquer objeto. Devolve aquele objeto dentro de uma list.
+    3.Qualquer outro mapeamento na forma 'type': 'book' é inválido e gera um ValueError.
+    4.Casa qualquer mapeamento na forma 'type': 'movie' e uma chave 'director' mapeada para um único
+        objeto. Devolve o objeto dentro de uma list.
+    5.Qualquer outro sujeito é inválido e gera um ValueError.
 
 
         ** O Exemplo mostra algumas práticas úteis para lidar com dados semi-estruturados, tais como

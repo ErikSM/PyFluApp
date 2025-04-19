@@ -2,15 +2,12 @@
 
 
 
-
                 # collections.OrderedDict
 
 
     Agora que o dict embutido também mantém as chaves ordenadas (desde o Python 3.6), o motivo
 mais comum para usar OrderedDict é escrever código compatível com versões anteriores do Python.
 **OBS: (A documentação lista algumas diferenças entre dict e OrderedDict)
-
-
 
 
 
@@ -21,8 +18,6 @@ mais comum para usar OrderedDict é escrever código compatível com versões an
 se fossem um mapeamento único. A busca é realizada em cada mapa incluído, na ordem em que eles
 aparecem na chamada ao construtor, e é bem sucedida assim que a chave é encontrada em um
 daqueles mapeamentos.
-
-
 
 
 

@@ -15,16 +15,11 @@ estrutura de dados FIFO[20] mais eficiente.
 
 
 
-
-
-
             # Arrays:
 
     Se uma lista contém apenas números, uma array.array é um substituto mais eficiente. Arrays
 suportam todas as operações das sequências mutáveis (incluindo .pop, .insert, e .extend), bem como
 métodos adicionais para carregamento e armazenamento rápidos, tais como .frombytes e .tofile.
-
-
 
 
 Criando, armazenando e carregando uma grande array de números de ponto flutuante:
@@ -58,9 +53,6 @@ qualquer objeto iterável—nesse caso, uma expressão geradora.
 
 
 
-
-
-
             # Views de memória:
 
 
@@ -71,9 +63,6 @@ fatias de arrays sem copiar bytes. Ela foi inspirada pela biblioteca NumPy.
             Python (sem a matemática). Ela permite compartilhar memória entre estruturas de dados (coisas como
             imagens PIL, bancos de dados SQLite, arrays da NumPy, etc.) sem copiar antes. Isso é muito importante
             para conjuntos grandes de dados.
-
-
-
 
 
 Manipular 6 bytes de memória como views de 1×6, 2×3, e 3×2:
@@ -105,7 +94,6 @@ array('B', [0, 1, 2, 33, 22, 5])
 
 
 
-
              # NumPy:
 
     Por suas operações avançadas de arrays e matrizes, o Numpy é a razão pela qual o Python se tornou
@@ -117,8 +105,6 @@ incluindo álgebra linear, cálculo numérico e estatística. A SciPy é rápida
 base de código C e Fortran do Repositório Netlib. Em outras palavras, a SciPy dá a cientistas o melhor de
 dois mundos: um prompt iterativo e as APIs de alto nível do Python, junto com funções estáveis e de
 eficiência comprovada para processamento de números, otimizadas em C e Fortran.
-
-
 
 
 
@@ -163,8 +149,6 @@ do Python). Por convenção, numpy é importada como np.
 
 
 
-
-
             # Deques e outras filas:
 
 
@@ -176,8 +160,6 @@ para inserção e remoção rápida nas duas pontas. É também a estrutura pref
 manter uma lista de "últimos itens vistos" ou coisa semelhante, pois um deque pode ser delimitado.
 Isto é, criado com um tamanho máximo fixo. Se um deque delimitado está cheio, quando se adiciona um
 novo item, o item na ponta oposta é descartado.
-
-
 
 
 
@@ -203,18 +185,15 @@ deque([3, 4, 5, 6, 7, 8, 9, 11, 22, 33], maxlen=10)
 >>> dq
 deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
 ---------------------------------------------------------------------------------------------------
-1.O argumento opcional maxlen determina o número máximo de itens permitidos nessa instância de
-  deque; isso estabelece o valor de um atributo de instância maxlen, somente de leitura.
-2.Rotacionar com n > 0 retira itens da direita e os recoloca pela esquerda; quando n < 0, os itens
-  são retirados pela esquerda e anexados pela direita.
-3.Acrescentar itens a um deque cheio (len(d) == d.maxlen) elimina itens da ponta oposta. Observe,
-  na linha seguinte, que o 0 foi descartado.
-4.Acrescentar três itens à direita derruba -1, 1, e 2 da extremidade esquerda.
-5.Observe que extendleft(iter) acrescenta cada item sucessivo do argumento iter do lado esquerdo
-  do deque, então a posição final dos itens é invertida.
-
-
-
+    1.O argumento opcional maxlen determina o número máximo de itens permitidos nessa instância de
+      deque; isso estabelece o valor de um atributo de instância maxlen, somente de leitura.
+    2.Rotacionar com n > 0 retira itens da direita e os recoloca pela esquerda; quando n < 0, os itens
+      são retirados pela esquerda e anexados pela direita.
+    3.Acrescentar itens a um deque cheio (len(d) == d.maxlen) elimina itens da ponta oposta. Observe,
+      na linha seguinte, que o 0 foi descartado.
+    4.Acrescentar três itens à direita derruba -1, 1, e 2 da extremidade esquerda.
+    5.Observe que extendleft(iter) acrescenta cada item sucessivo do argumento iter do lado esquerdo
+      do deque, então a posição final dos itens é invertida.
 
 
 

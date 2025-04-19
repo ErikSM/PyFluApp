@@ -14,8 +14,6 @@ Alguns textos introdutórios de Python apresentam as tuplas como "listas imutáv
 
 
 
-
-
             # Tuplas como registros:
 
 
@@ -23,8 +21,6 @@ Alguns textos introdutórios de Python apresentam as tuplas como "listas imutáv
 significado. Se você pensar em uma tupla apenas como uma lista imutável, a quantidade e a ordem dos elementos pode
 ou não ter alguma importância, dependendo do contexto. Mas quando usamos uma tupla como uma coleção de campos, o
 número de itens em geral é fixo e sua ordem é sempre importante.
-
-
 
 
 

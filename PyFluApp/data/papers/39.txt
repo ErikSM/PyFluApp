@@ -36,4 +36,3 @@ de hash só para o __dict__ daquela instância (que era o comportamento default 
 objetos. Os detalhes das otimizações do layout compacto e do compartilhamento de chaves são bastante complexos.
 
 ***OBS: (Para saber mais, por favor leio o texto "Internals of sets and dicts" (EN) em fluentpython.com).
-

@@ -4,8 +4,6 @@ import webview
 import webbrowser
 import urllib.request
 
-url_test = 'https://pythonfluente.com/'
-
 
 def page_url_open_in_tkinter_window(url):
     webview.create_window('Image Open in tkinter (webview)', url)
@@ -34,9 +32,4 @@ def save_image_from_url_selected(url, file_name_and_ext, size):
             if not chunk:
                 break
             file.write(chunk)
-
-
-face = "https://www.instagram.com/erik_miyajima/"
-
-page_url_open_in_tkinter_window(face)
 

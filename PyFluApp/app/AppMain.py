@@ -17,6 +17,7 @@ class AppMain:
         self.__opt_books_str = StringVar()
         self.__obt_books_tuple = python_books.keys()
 
+
         head = Frame(self.__window, bg=colr['purple'], width=100, height=100, bd=3)
 
         self.__head_up = Frame(head)
@@ -28,7 +29,7 @@ class AppMain:
 
         self._body_left = Frame(body)
         self.__opt_books = OptionMenu(self._body_left, self.__opt_books_str, *self.__obt_books_tuple,
-                                      command=lambda opt_str=self.__opt_books_str: self._active_opt_menu(opt_str))
+                                      command=lambda opt_str=self.__opt_books_str: self._click_opt_book(opt_str))
         self.__list_summary = Listbox(self._body_left)
 
         self.__body_center = Frame(body)
@@ -49,7 +50,7 @@ class AppMain:
         foot.pack()
 
 
-    def _active_opt_menu(self, selected):
+    def _click_opt_book(self, selected):
         self.__list_summary.delete(0, END)
         self.__book = Book(selected)
 

@@ -7,7 +7,6 @@ implementação de apenas dois métodos especiais, __getitem__ e __len__.
 
 
 
-
 ----------------------------------------------------------------------------------------------------------
         * Exemplo: Um baralho pythonico:
 -----------------------------------------------------------------------------------------------------------
@@ -32,12 +31,9 @@ class FrenchDeck:
 -----------------------------------------------------------------------------------------------------------
 
 
-
-
     O coração deste exemplo é a classe FrenchDeck. Ela é curta, mas
 poderosa. Primeiro, como qualquer coleção Python padrão, uma instância de
 FrenchDeck responde à função len(), retornando o número de cartas naquele baralho:
-
 
 
 

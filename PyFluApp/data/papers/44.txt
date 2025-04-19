@@ -1,0 +1,46 @@
+                            4.4. Codificadores/Decodificadores básicos
+    A distribuição do Python inclui mais de 100 codecs (encoders/decoders, _codificadores/decodificadores) para
+conversão de texto para bytes e vice-versa. Cada codec tem um nome, como 'utf_8', e muitas vezes apelidos, tais
+como 'utf8', 'utf-8', e 'U8', que você pode usar como o argumento de codificação em funções como open(),
+str.encode(), bytes.decode(), e assim por diante.
+
+
+    * O Exemplo mostra o mesmo texto codificado como três sequências de bytes diferentes.
+
+
+------------------------------------------------------------------------------------
+Exemplo: A string "El Niño" codificada com três codecs, gerando sequências de bytes
+muito diferentes:
+------------------------------------------------------------------------------------
+>>> for codec in ['latin_1', 'utf_8', 'utf_16']:
+...     print(codec, 'El Niño'.encode(codec), sep='\t')
+...
+latin_1 b'El Ni\xf1o'
+utf_8   b'El Ni\xc3\xb1o'
+utf_16  b'\xff\xfeE\x00l\x00 \x00N\x00i\x00\xf1\x00o\x00'
+------------------------------------------------------------------------------------
+
+
+        -> latin1 a.k.a. iso8859_1
+    Importante por ser a base de outras codificações,tal como a cp1252 e o próprio Unicode.
+
+        -> cp437
+    O conjunto de caracteres original do IBM PC, com caracteres de desenho de caixas. Incompatível com o latin1,
+    que surgiu depois.
+
+        -> gb2312
+    Uma das várias codificações muito populares para línguas asiáticas.
+
+        -> utf-8
+    De longe a codificação de 8 bits mais comum na web.
+
+        -> utf-16le
+    Uma forma do esquema de codificação UTF de 16 bits;
+
+            ** A UTF-16 sucedeu a codificação de 16 bits original do
+                Unicode 1.0—a UCS-2—há muito tempo, em 1996. A UCS-2
+                ainda é usada em muitos sistemas, apesar de ter sido
+                descontinuada ainda no século passado.
+
+
+

@@ -8,8 +8,6 @@
             sobre a classe set, uso a fonte de espaçamento constante: set.
 
 
-
-
 -----------------------------------------------------------------------------------------------------
 Um conjunto é uma coleção de objetos únicos. Um caso de uso básico é a remoção de itens duplicados:
 ------------------------------------------------------------------------------------------------------
@@ -19,9 +17,6 @@ Um conjunto é uma coleção de objetos únicos. Um caso de uso básico é a rem
 >>> list(set(l))
 ['eggs', 'spam', 'bacon']
 ------------------------------------------------------------------------------------------------------
-
-
-
 
 
     Elementos de um conjunto devem ser hashable. O tipo set não é hashable, então não é possível criar
@@ -41,9 +36,6 @@ conjunto menor de endereços (as agulhas—needles), e precisa contar quantas ag
 à interseção de set (o operador &), é possível programar isso em uma única linha (veja o Exemplo abaixo).
 
 
-
-
-
 -------------------------------------------------------------------------------------------------------------
 Exemplo: Conta as ocorrências de agulhas (needles) em um palheiro (haystack), ambos do tipo set:
 -------------------------------------------------------------------------------------------------------------
@@ -51,14 +43,8 @@ found = len(needles & haystack)
 -------------------------------------------------------------------------------------------------------------
 
 
-
-
-
     Sem o operador de intersecção, seria necessário escrever o Exemplo abaixo para realizar a mesma tarefa
 executa pelo Exemplo acima.
-
-
-
 
 
 -------------------------------------------------------------------------------------------------------------
@@ -71,15 +57,9 @@ for n in needles:
 -------------------------------------------------------------------------------------------------------------
 
 
-
-
-
     O primeiro Exemplo é um pouco mais rápido que o segundo Exemplo. Por outro lado, o segundo Exemplo funciona
 para quaisquer objetos iteráveis needles e haystack, enquanto o primeiro Exemplo exige que ambos sejam conjuntos.
 Mas se você não tem conjuntos à mão, pode sempre criá-los na hora, como mostra o Exemplo abaixo.
-
-
-
 
 
 -------------------------------------------------------------------------------------------------------------
@@ -93,10 +73,6 @@ found = len(set(needles).intersection(haystack))
 -------------------------------------------------------------------------------------------------------------
 
 
-
-
-
-
     Claro, há o custo extra envolvido na criação dos conjuntos no terceiro Exemplo, mas se ou as needles ou o
 haystack já forem um set, a alternativa no terceiro Exemplo pode ser mais barata que o segundo Exemplo.
 
@@ -106,11 +82,6 @@ de 0,3 milisegundos—isso é próximo de 0,3 microsegundos por elemento.
     Além do teste de existência extremamente rápido (graças à tabela de hash subjacente), os tipos embutidos
 set e frozenset oferecem uma rica API para criar novos conjuntos ou, no caso de set, para modificar conjuntos
 existentes.
-
-
-
-
-
 
 
 
@@ -137,14 +108,10 @@ Sua representação padrão como string no Python 3 se parece com uma chamada ao
 saída na sessão de console a seguir:
 
 
-
 --------------------------------------------------------------------------
 >>> frozenset(range(10))
 frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 --------------------------------------------------------------------------
-
-
-
 
 
 
@@ -153,9 +120,6 @@ frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
 
     Compreensões de conjuntos (setcomps) apareceram há bastante tempo, no Python 2.7, junto com as dictcomps que
 vimos na Seção 3.2.1. O Exemplo 15 mostra procedimento.
-
-
-
 
 
 ------------------------------------------------------------------------------------------------------
@@ -169,8 +133,7 @@ Exemplo: Cria um conjunto de caracteres Latin-1 que tenham a palavra "SIGN" em s
 {'§', '=', '¢', '#', '¤', '<', '¥', 'µ', '×', '$', '¶', '£', '©',
 '°', '+', '÷', '±', '>', '¬', '®', '%'}
 ------------------------------------------------------------------------------------------------------
-                    1.Importa a função name de unicodedata para obter os nomes dos caracteres.
-                    2.Cria um conjunto de caracteres com códigos entre 32 e 255 que contenham a
+                1.Importa a função name de unicodedata para obter os nomes dos caracteres.
+                2.Cria um conjunto de caracteres com códigos entre 32 e 255 que contenham a
                     palavra 'SIGN' em seus nomes.
-
 

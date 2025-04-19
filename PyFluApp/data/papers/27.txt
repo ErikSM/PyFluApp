@@ -8,9 +8,6 @@ suporte a operações de fatiamento, que são mais potentes do que a maioria das
 
 
 
-
-
-
                     # Por que fatias e faixas excluem o último item?
 
 
@@ -72,11 +69,6 @@ Três exemplos esclarecem a questão:
 >>> s[::-2]
 'eccb'
 -----------------------------------------------
-
-
-
-
-
 
 
 

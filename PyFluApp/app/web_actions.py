@@ -18,8 +18,8 @@ def access_website_on_browser(url):
     tk.mainloop()
 
 
-def _but_access_website(url: str, tk: Toplevel, yes_or_not: bool):
-    if yes_or_not:
+def _but_access_website(url: str, tk: Toplevel, on_browser: bool):
+    if on_browser:
         webbrowser.open(url)
     else:
         pass

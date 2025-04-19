@@ -6,9 +6,6 @@ expressão geradora (para outros tipos de sequências).
 
 
 
-
-
-
             # Compreensões de lista e legibilidade:
 
 
@@ -34,15 +31,11 @@ Exemplo 2: (Cria uma lista de pontos de código Unicode a partir de uma string, 
 
 
 
-
     Naturalmente, é possível abusar das compreensões de lista para escrever código verdadeiramente
 incompreensível. Já vi código Python usando listcomps apenas para repetir um bloco de código por seus
 efeitos colaterais. Se você não vai fazer alguma coisa com a lista criada, não deveria usar essa sintaxe.
 Além disso, tente manter o código curto. Se uma compreensão ocupa mais de duas linhas, provavelmente seria
 melhor quebrá-la ou reescrevê-la como um bom e velho loop for.
-
-
-
 
 
 
@@ -77,9 +70,6 @@ limitada do lambda do Python.
 
 
 
-
-
-
             # Produtos cartesianos:
 
 
@@ -101,9 +91,6 @@ limitada do lambda do Python.
                         ...     for size in sizes:
                         ...         print((color, size))
 --------------------------------------------------------------------------------------------------------------------
-
-
-
 
 
 

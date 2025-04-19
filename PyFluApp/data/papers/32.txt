@@ -66,7 +66,6 @@ são strings e únicas, para todos os argumentos (porque argumentos nomeados dup
 
 
 
-
 ----------------------------------------------------------------------------
 >>> def dump(**kwargs):
 ...     return kwargs
@@ -76,27 +75,21 @@ são strings e únicas, para todos os argumentos (porque argumentos nomeados dup
 ----------------------------------------------------------------------------
 
 
-
-
 e tambem, ** pode ser usado dentro de um literal dict—também múltiplas vezes:
-
 
 
 -----------------------------------------------------------
 >>> {'a': 0, **{'x': 1}, 'y': 2, **{'z': 3, 'x': 4}}
 {'a': 0, 'x': 4, 'y': 2, 'z': 3}
 ----------------------------------------------------------------------------
-Nesse caso, chaves duplicadas são permitidas. Cada ocorrência sobrescreve
+
+
+    Nesse caso, chaves duplicadas são permitidas. Cada ocorrência sobrescreve
 ocorrências anteriores—observe o valor mapeado para x no exemplo.
-
-
-
 
 
     Desde a versão 3.9, Python suporta o uso de | e |= para mesclar mapeamentos. Isso faz todo sentido, já que
 estes são também os operadores de união de conjuntos.
-
-
 
 
 O operador | cria um novo mapeamento:

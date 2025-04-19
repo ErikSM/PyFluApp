@@ -8,9 +8,8 @@ projeções somente para leitura de estruturas de dados internas usadas na imple
 evitam o uso de memória adicional dos métodos equivalentes no Python 2, que devolviam listas,
 duplicando dados já presentes no dict alvo. E também substituem os métodos antigos que devolviam
 iteradores.
+
     O Exemplo abaixo mostra algumas operações básicas suportadas por todas as views de dicionários.
-
-
 
 
 ----------------------------------------------------------------------------------------------------
@@ -38,11 +37,8 @@ TypeError: 'dict_values' object is not subscriptable
                     5.Não é possível usar [] para obter itens individuais de uma view.
 
 
-
-
     Um objeto view é um proxy dinâmico. Se o dict fonte é atualizado, as mudanças podem ser vistas
 imediatamente através de uma view existente. Continuando do Exemplo acima:
-
 
 
 -----------------------------------------------------------------------------------------------------
@@ -54,11 +50,9 @@ dict_values([10, 20, 30, 99])
 -----------------------------------------------------------------------------------------------------
 
 
-
     As classes dict_keys, dict_values, e dict_items são internas: elas não estão disponíveis via
 __builtins__ ou qualquer módulo da biblioteca padrão, e mesmo que você obtenha uma referência para
 uma delas, não pode usar essa referência para criar uma view do zero no seu código Python:
-
 
 
 -----------------------------------------------------------------------------------------------------
@@ -68,8 +62,6 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 TypeError: cannot create 'dict_values' instances
 -----------------------------------------------------------------------------------------------------
-
-
 
 
     A classe dict_values é a view de dicionário mais simples—ela implementa apenas os métodos

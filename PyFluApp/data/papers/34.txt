@@ -8,8 +8,6 @@ similares.
 critério para testes com isinstance em código que precise suportar mapeamentos de forma geral:
 
 
-
-
 ---------------------------------------------------------------------------------
                 >>> my_dict = {}
                 >>> isinstance(my_dict, abc.Mapping)
@@ -17,8 +15,6 @@ critério para testes com isinstance em código que precise suportar mapeamentos
                 >>> isinstance(my_dict, abc.MutableMapping)
                 True
 ---------------------------------------------------------------------------------
-
-
 
 
 ** Usar isinstance com uma ABC é muitas vezes melhor que verificar se um argumento
@@ -48,18 +44,11 @@ de função é do tipo concreto dict, porque daí tipos alternativos de mapeamen
     ----------------------------------------------------------------------------------------------------
 
 
-
-
     Para implementar um mapeamento personalizado, é mais fácil estender collections.UserDict, ou envolver um dict
 por composição, ao invés de criar uma subclasse dessas ABCs. A classe collections.UserDict e todas as classes
 concretas de mapeamentos da biblioteca padrão encapsulam o dict básico em suas implementações, que por sua vez é
 criado sobre uma tabela de hash. Assim, todas elas compartilham a mesma limitação, as chaves precisam ser hashable
 (os valores não precisam ser hashable, só as chaves).
-
-
-
-
-
 
 
 
@@ -81,7 +70,6 @@ itens também forem. Observe as tuplas tt, tl, and tf:
 
 
 
-
 -----------------------------------------------------------------------
 >>> tt = (1, 2, (30, 40))
 >>> hash(tt)
@@ -95,7 +83,6 @@ TypeError: unhashable type: 'list'
 >>> hash(tf)
 -4118419923444501110
 -----------------------------------------------------------------------
-
 
 
 
