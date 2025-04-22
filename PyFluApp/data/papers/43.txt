@@ -1,0 +1,101 @@
+                            4.3. Os fundamentos do byte
+    Os novos tipos de sequências binárias são diferentes do str do Python 2 em vários aspectos. A primeira
+coisa importante é que existem dois tipos embutidos básicos de sequências binárias: o tipo imutável bytes,
+introduzido no Python 3, e o tipo mutável bytearray, introduzido há tempos, no Python 2.6[44]. A
+documentação do Python algumas vezes usa o termo genérico "byte string" (string de bytes, na documentação
+em português) para se referir a bytes e bytearray.
+
+    Cada item em bytes ou bytearray é um inteiro entre 0 e 255, e não uma string de um caractere, como no str
+do Python 2. Entretanto, uma fatia de uma sequência binária sempre produz uma sequência binária do mesmo tipo,
+incluindo fatias de tamanho 1. Veja o Exemplo:
+
+
+---------------------------------------------------------------------------
+Exemplo 2. Uma sequência de cinco bytes, como bytes e como `bytearray
+---------------------------------------------------------------------------
+>>> cafe = bytes('café', encoding='utf_8')  (1)
+>>> cafe
+b'caf\xc3\xa9'
+>>> cafe[0]  (2)
+99
+>>> cafe[:1]  (3)
+b'c'
+>>> cafe_arr = bytearray(cafe)
+>>> cafe_arr  (4)
+bytearray(b'caf\xc3\xa9')
+>>> cafe_arr[-1:]  (5)
+bytearray(b'\xa9')
+---------------------------------------------------------------------------
+
+    1.bytes pode ser criado a partir de uma str, dada uma codificação.
+    2.Cada item é um inteiro em range(256).
+    3.Fatias de bytes também são bytes—mesmo fatias de um único byte.
+    4.Não há uma sintaxe literal para bytearray: elas aparecem como
+        bytearray() com um literal bytes como argumento.
+    5.Uma fatia de bytearray também é uma bytearray
+
+
+    ***     O fato de my_bytes[0] obter um int mas my_bytes[:1] devolver uma sequência de bytes
+        de tamanho 1 só é surpreeendente porque estamos acostumados com o tipo str do Python,
+        onde s[0] == s[:1]. Para todos os outros tipos de sequência no Python, um item não é
+        o mesmo que uma fatia de tamanho 1.
+
+
+
+
+    Apesar de sequências binárias serem na verdade sequências de inteiros, sua notação literal reflete o fato
+ delas frequentemente embutirem texto ASCII. Assim, quatro formas diferentes de apresentação são utilizadas,
+ dependendo do valor de cada byte:
+
+        - Para bytes com código decimais de 32 a 126—do espaço ao ~ (til)—é usado o próprio
+        caractere ASCII.
+
+        - Para os bytes correspondendo ao tab, à quebra de linha, ao carriage return (CR) e à \, são
+        usadas as sequências de escape \t, \n, \r, e \\.
+
+        - Se os dois delimitadores de string, ' e ", aparecem na sequência de bytes, a sequência
+        inteira é delimitada com ', e qualquer ' dentro da sequência é precedida do caractere de escape, assim \'.[45]
+
+        - Para qualquer outro valor do byte, é usada uma sequência de escape hexadecimal
+        (por exemplo, \x00 é o byte nulo).
+
+
+    ***     É por isso que no Exemplo 2 vemos b’caf\xc3\xa9': os primeiros três bytes, b’caf', estão na
+            faixa de impressão do ASCII, ao contrário dos dois últimos.
+
+
+
+
+    Tanto bytes quanto bytearray suportam todos os métodos de str, exceto aqueles relacionados a
+formatação (format, format_map) e aqueles que dependem de dados Unicode, incluindo casefold, isdecimal,
+isidentifier, isnumeric, isprintable, e encode.
+    Isso significa que você pode usar os métodos conhecidos de string, e dezenas de outros, com sequências
+binárias—mas com argumentos bytes em vez de str.
+    Além disso, as funções de expressões regulares no módulo re também funcionam com sequências binárias,
+se a regex for compilada a partir de uma sequência binária ao invés de uma str. Desde o Python 3.5, o
+operador % voltou a funcionar com sequências binárias.
+
+
+    As sequências binárias tem um método de classe que str não possui, chamado fromhex, que cria uma
+sequência binária a partir da análise de pares de dígitos hexadecimais, separados opcionalmente por
+espaços:
+
+----------------------------------------
+>>> bytes.fromhex('31 4B CE A9')
+b'1K\xce\xa9'
+----------------------------------------
+
+
+    As outras formas de criar instâncias de bytes ou bytearray são chamadas a seus construtores com:
+
+        - Uma str e um argumento nomeado encoding
+
+        - Um iterável que forneça itens com valores entre 0 e 255
+
+        - Um objeto que implemente o protocolo de buffer (por exemplo bytes,
+        bytearray, memoryview, array.array), que copia os bytes do objeto
+        fonte para a recém-criada sequência binária
+
+
+    ***     Até o Python 3.5, era possível chamar bytes ou bytearray com um único inteiro, para criar
+            uma sequência daquele tamanho inicializada com bytes nulos. Essa assinatura for descontinuada no Python 3.5 e removida no Python 3.6

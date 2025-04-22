@@ -1,0 +1,67 @@
+                            3.11. Consequências práticas da forma de funcionamento dos conjuntos
+
+
+
+    Os tipos set e frozenset são ambos implementados com uma tabela de hash.
+Isso tem os seguintes efeitos:
+
+        * Elementos de conjuntos tem que ser objetos hashable. Eles precisam implementar métodos __hash__ e __eq__
+        adequados, como descrido na Seção 3.4.1.
+
+        * O teste de existência de um elemento é muito eficiente. Um conjunto pode ter milhões de elementos, mas um
+         elemento pode ser localizado diretamente, computando o código hash da chave e derivando um deslocamento do
+         índice, com o possível ônus de um pequeno número de tentativas até encontrar a entrada correspondente ou
+         exaurir a busca.
+
+        * Conjuntos usam mais memória se comparados aos simples ponteiros de um array para seus elementos—que é uma
+        estrutura mais compacta, mas também muito mais lenta para buscas se seu tamanho cresce além de uns poucos
+        elementos.
+
+        * A ordem dos elementos depende da ordem de inserção, mas não de forma útil ou confiável. Se dois elementos
+        são diferentes, mas tem o mesmo código hash, sua posição depende de qual elemento foi inserido primeiro.
+
+        * Acrescentar elementos a um conjunto muda a ordem dos elementos existentes. Isso ocorre porque o algoritmo
+        se torna menos eficiente se a tabela de hash estiver com mais de dois terços de ocupação, então o Python
+        pode ter que mover e redimensionar a tabela conforme ela cresce. Quando isso acontece, os elementos são
+        reinseridos e sua ordem relativa pode mudar.
+
+
+
+
+
+                # Operações de conjuntos
+
+
+    A Exemplo abaixo dá uma visão geral dos métodos disponíveis em conjuntos mutáveis e imutáveis. Muitos
+deles são métodos especiais que sobrecarregam operadores, tais como & and >=.
+
+
+
+
+*Visão Geral dos métodos disponíveis:
+
+
+--------------------------------------------------------------------------------------------
+Exemplo. Diagrama de classes UML simplificado para MutableSet e suas superclasses em
+collections.abc (nomes em itálico são classes e métodos abstratos; métodos de operadores
+reversos foram omitidos por concisão).
+--------------------------------------------------------------------------------------------
+
+        ----------------------------------------------------------------
+        |
+        |   Collection        <-      Set         <-      MutaleSet
+        ----------------------------------------------------------------
+        |   __contains__            isdisjoint              add
+        |   __iter__                __le__                  discard
+        |   __len__                 __it__                  remove
+        |                           __gt__                  pop
+        |                           __ge__                  clear
+        |                           __eq__                  __ior__
+        |                           __ne__                  __iand__
+        |                           __and__                 __ixor__
+        |                           __or__                  __isub__
+        |                           __sub__
+        |                           __xor__
+        ----------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------

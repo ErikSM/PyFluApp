@@ -1,0 +1,139 @@
+                            3.10. Teoria dos conjuntos
+
+
+    Conjuntos não são novidade no Python, mais ainda são um tanto subutilizados.
+
+            ** OBS: Nesse livro, uso a palavra "conjunto" para me referir
+            tanto a set quanto a frozenset. Quando falo especificamente
+            sobre a classe set, uso a fonte de espaçamento constante: set.
+
+
+-----------------------------------------------------------------------------------------------------
+Um conjunto é uma coleção de objetos únicos. Um caso de uso básico é a remoção de itens duplicados:
+------------------------------------------------------------------------------------------------------
+>>> l = ['spam', 'spam', 'eggs', 'spam', 'bacon', 'eggs']
+>>> set(l)
+{'eggs', 'spam', 'bacon'}
+>>> list(set(l))
+['eggs', 'spam', 'bacon']
+------------------------------------------------------------------------------------------------------
+
+
+    Elementos de um conjunto devem ser hashable. O tipo set não é hashable, então não é possível criar
+um set com instâncias aninhadas de set. Mas frozenset é hashable, então você pode ter elementos frozenset
+dentro de um set.
+
+    Além de impor a unicidade de cada elemento, os tipos conjunto implementam muitas operações entre
+conjuntos como operadores infixos. Assim, dados dois conjuntos a e b, a | b devolve sua união, a & b calcula
+a intersecção, a - b a diferença, e a ^ b a diferença simétrica. Usadas com sabedoria, as operações de
+conjuntos podem reduzir tanto a contagem de linhas quanto o tempo de execução de programas Python, ao mesmo
+tempo em que tornam o código mais legível e mais fácil de entender e debater—pela remoção de loops e da lógica
+condicional.
+
+
+    Por exemplo, imagine que você tem um grande conjunto de endereços de email (o palheiro—haystack) e um
+conjunto menor de endereços (as agulhas—needles), e precisa contar quantas agulhas existem no palheiro. Graças
+à interseção de set (o operador &), é possível programar isso em uma única linha (veja o Exemplo abaixo).
+
+
+-------------------------------------------------------------------------------------------------------------
+Exemplo: Conta as ocorrências de agulhas (needles) em um palheiro (haystack), ambos do tipo set:
+-------------------------------------------------------------------------------------------------------------
+found = len(needles & haystack)
+-------------------------------------------------------------------------------------------------------------
+
+
+    Sem o operador de intersecção, seria necessário escrever o Exemplo abaixo para realizar a mesma tarefa
+executa pelo Exemplo acima.
+
+
+-------------------------------------------------------------------------------------------------------------
+Exemplo: Conta as ocorrências de agulhas (needles) em um palheiro (haystack); mesmo resultado do outro exemplo
+-------------------------------------------------------------------------------------------------------------
+found = 0
+for n in needles:
+    if n in haystack:
+        found += 1
+-------------------------------------------------------------------------------------------------------------
+
+
+    O primeiro Exemplo é um pouco mais rápido que o segundo Exemplo. Por outro lado, o segundo Exemplo funciona
+para quaisquer objetos iteráveis needles e haystack, enquanto o primeiro Exemplo exige que ambos sejam conjuntos.
+Mas se você não tem conjuntos à mão, pode sempre criá-los na hora, como mostra o Exemplo abaixo.
+
+
+-------------------------------------------------------------------------------------------------------------
+Exemplo:. Conta as ocorrências de agulhas (needles) em um palheiro (haystack); essas linhas funcionam para
+qualquer tipo iterável
+-------------------------------------------------------------------------------------------------------------
+found = len(set(needles) & set(haystack))
+
+# another way:
+found = len(set(needles).intersection(haystack))
+-------------------------------------------------------------------------------------------------------------
+
+
+    Claro, há o custo extra envolvido na criação dos conjuntos no terceiro Exemplo, mas se ou as needles ou o
+haystack já forem um set, a alternativa no terceiro Exemplo pode ser mais barata que o segundo Exemplo.
+
+    Qualquer dos exemplos acima é capaz de buscar 1000 elementos em um haystack de 10,000,000 de itens em cerca
+de 0,3 milisegundos—isso é próximo de 0,3 microsegundos por elemento.
+
+    Além do teste de existência extremamente rápido (graças à tabela de hash subjacente), os tipos embutidos
+set e frozenset oferecem uma rica API para criar novos conjuntos ou, no caso de set, para modificar conjuntos
+existentes.
+
+
+
+                # Sets literais
+
+
+    A sintaxe de literais set—{1}, {1, 2}, etc.—parece exatamente igual à notação matemática, mas tem uma
+importante exceção: não há notação literal para o set vazio, então precisamos nos lembrar de escrever set().
+
+        ***OBS: (Peculiaridade sintática) Não esqueça que, para criar um set vazio, é
+        preciso usar o construtor sem argumentos: set(). Se você escrever {}, vai criar
+        um dict vazio—isso não mudou no Python 3.
+
+    No Python 3, a representação padrão dos sets como strings sempre usa a notação {…}, exceto para o
+conjunto vazio.
+
+    A sintaxe do set literal, como {1, 2, 3}, é mais rápida e mais legível que uma chamada ao construtor (por
+exemplo, set([1, 2, 3])). Essa última forma é mais lenta porque, para avaliá-la, o Python precisa buscar o
+nome set para obter seu construtor, daí criar uma lista e, finalmente, passá-la para o construtor. Por outro
+lado, para processar um literal como {1, 2, 3}, o Python roda um bytecode especializado, BUILD_SET.
+
+    Não há sintaxe especial para representar literais frozenset—eles devem ser criados chamando seu construtor.
+Sua representação padrão como string no Python 3 se parece com uma chamada ao construtor de frozenset. Observe a
+saída na sessão de console a seguir:
+
+
+--------------------------------------------------------------------------
+>>> frozenset(range(10))
+frozenset({0, 1, 2, 3, 4, 5, 6, 7, 8, 9})
+--------------------------------------------------------------------------
+
+
+
+                # Compreensões de conjuntos
+
+
+    Compreensões de conjuntos (setcomps) apareceram há bastante tempo, no Python 2.7, junto com as dictcomps que
+vimos na Seção 3.2.1. O Exemplo 15 mostra procedimento.
+
+
+------------------------------------------------------------------------------------------------------
+Exemplo: Cria um conjunto de caracteres Latin-1 que tenham a palavra "SIGN" em seus nomes Unicode
+------------------------------------------------------------------------------------------------------
+>>> from unicodedata import name  (1)
+
+
+>>> {chr(i) for i in range(32, 256) if 'SIGN' in name(chr(i),'')}  (2)
+
+{'§', '=', '¢', '#', '¤', '<', '¥', 'µ', '×', '$', '¶', '£', '©',
+'°', '+', '÷', '±', '>', '¬', '®', '%'}
+------------------------------------------------------------------------------------------------------
+                1.Importa a função name de unicodedata para obter os nomes dos caracteres.
+                2.Cria um conjunto de caracteres com códigos entre 32 e 255 que contenham a
+                    palavra 'SIGN' em seus nomes.
+

@@ -1,0 +1,113 @@
+                            3.5. Tratamento automático de chaves ausentes
+
+
+    Algumas vezes é conveniente que os 'mapeamentos devolvam algum valor padronizado' quando se 'busca por uma chave
+ausente'. Há 'duas abordagem' principais para esse fim: uma é usar um' defaultdict' em vez de um dict simples. A outra
+é criar uma subclasse de dict ou de qualquer outro tipo de mapeamento e 'acrescentar um método __missing__'. Vamos
+ver as duas soluções a seguir.
+
+
+
+                # defaultdict: outra perspectiva sobre as chaves ausentes:
+
+    Uma instância de collections.defaultdict cria itens com um valor default sob demanda, sempre que uma chave
+ausente é buscada usando a sintaxe d[k].
+
+    ** O Exemplo usa defaultdict para fornecer uma solucao elegante.
+
+    Funciona assim:
+                    Ao instanciar um defaultdict, você fornece um chamável que produz um valor default
+                    sempre que __getitem__ recebe uma chave inexistente como argumento.
+
+
+    Por exemplo:
+                 Dado um defaultdict criado por dd = defaultdict(list), se 'new-key' não estiver em dd,
+                 a expressão dd['new-key'] segue os seguintes passos:
+
+                                    1. Chama list() para criar uma nova lista.
+                                    2.Insere a lista em dd usando 'new-key' como chave.
+                                    3.Devolve uma referência para aquela lista.
+
+
+    O chamável que produz os valores default é mantido em um atributo de instância chamado default_factory.
+
+
+Exemplo: index_default.py: usando um defaultdict em vez do método setdefault:
+----------------------------------------------------------------------------------------------
+
+"""Build an index mapping word -> list of occurrences"""
+
+import collections
+import re
+import sys
+
+WORD_RE = re.compile(r'\w+')
+
+index = collections.defaultdict(list)     # (1)
+with open(sys.argv[1], encoding='utf-8') as fp:
+    for line_no, line in enumerate(fp, 1):
+        for match in WORD_RE.finditer(line):
+            word = match.group()
+            column_no = match.start() + 1
+            location = (line_no, column_no)
+            index[word].append(location)  # (2)
+
+# display in alphabetical order
+for word in sorted(index, key=str.upper):
+    print(word, index[word])
+----------------------------------------------------------------------------------------------
+    1.Cria um defaultdict com o construtor de list como default_factory.
+    2.Se word não está inicialmente no index, o default_factory é chamado para produzir o valor
+        ausente, que neste caso é uma list vazia, que então é atribuída a index[word] e devolvida,
+        de forma que a operação .append(location) é sempre bem sucedida.
+
+
+
+              # O método __missing__
+
+    Por trás da forma como os mapeamentos lidam com chaves ausentes está o método muito apropriadamente
+chamado __missing__. Esse método não é definido na classe base dict, mas dict está ciente de sua
+possibilidade: se você criar uma subclasse de dict e incluir um método __missing__, o dict.__getitem__ padrão
+vai chamar seu método sempre que uma chave não for encontrada, em vez de gerar um KeyError.
+
+
+
+            # O uso inconsistente de __missing__ na biblioteca padrão:
+
+    Considere os seguintes cenários, e como eles afetam a busca de chaves ausentes:
+    --------------------------------------------------------------------------------
+                - subclasse de dict:
+                            Uma subclasse de dict que implemente apenas __missing__ e nenhum outro método.
+                        Nesse caso, __missing__ pode ser chamado apenas em d[k], que usará o __getitem__ herdado
+                        de dict.
+
+                - subclasse de collections.UserDict:
+                            Da mesma forma, uma subclasse de UserDict que implemente apenas __missing__ e
+                        nenhum outro método. O método get herdado de UserDict chama __getitem__. Isso significa
+                        que __missing__ pode ser chamado para tratar de consultas com d[k] e com d.get(k).
+
+                - subclasse de abc.Mapping com o __getitem__ mais simples possível:
+                            Uma subclasse mínima de abc.Mapping, implementando __missing__ e os métodos abstratos
+                        obrigatórios, incluindo uma implementação de __getitem__ que não chama __missing__.
+                        O método __missing__ nunca é acionado nessa classe.
+
+                - subclasse de abc.Mapping com __getitem__ chamando __missing__:
+                            Uma subclasse mínima de abc.Mapping, implementando __missing__ e os métodos abstratos
+                         obrigatórios, incluindo uma implementação de __getitem__ que chama __missing__. O
+                         método __missing__ é acionado nessa classe para consultas por chaves ausentes feitas
+                         com d[k], d.get(k), e k in d.
+
+    Os quatro cenários que acabo de descrever supõem implementações mínimas. Se a sua subclasse
+implementa __getitem__, get, e __contains__, então você pode ou não fazer tais métodos usarem __missing__,
+dependendo de suas necessidades.
+
+    * O ponto aqui é mostrar que é preciso ter cuidado ao criar subclasses dos mapeamentos da biblioteca padrão para
+usar __missing__, porque as classes base suportam comportamentos
+default diferentes.
+
+    * Não se esqueça que o comportamento de setdefault e update também é afetado pela consulta
+de chaves.
+
+    * E por fim, dependendo da lógica de seu __missing__, pode ser necessário implementar uma lógica especial
+em __setitem__, para evitar inconsistências ou comportamentos surpreeendentes.
+

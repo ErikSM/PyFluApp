@@ -1,0 +1,213 @@
+                            4.7. Normalizando o Unicode para comparações confiáveis
+
+
+Comparações de strings são dificultadas pelo fato do Unicode ter combinações de
+caracteres: sinais diacríticos e outras marcações que são anexadas aos caractere anterior,
+ambos aparecendo juntos como um só caractere quando impressos.
+
+Por exemplo, a palavra "café" pode ser composta de duas formas, usando quatro ou
+cinco pontos de código, mas o resultado parece exatamente o mesmo:
+
+------------------------------------------------------------
+>>> s1 = 'café'
+>>> s2 = 'cafe\N{COMBINING ACUTE ACCENT}'
+>>> s1, s2
+('café', 'café')
+>>> len(s1), len(s2)
+(4, 5)
+>>> s1 == s2
+False
+------------------------------------------------------------
+
+
+Colocar COMBINING ACUTE ACCENT (U+0301) após o "e" resulta em "é". No padrão Unicode,
+sequências como 'é' e 'e\u0301' são chamadas de "equivalentes canônicas", e se espera que as
+aplicações as tratem como iguais. Mas o Python vê duas sequências de pontos de código
+diferentes, e não as considera iguais.
+
+A solução é a unicodedata.normalize(). O primeiro argumento para essa função é uma
+dessas quatro strings: 'NFC', 'NFD', 'NFKC', e 'NFKD'. Vamos começar pelas duas primeiras.
+
+A Forma Normal C (NFC) combina os ponto de código para produzir a string equivalente
+mais curta, enquanto a NFD decompõe, expandindo os caracteres compostos em caracteres base e
+separando caracteres combinados. Ambas as normalizações fazem as comparações funcionarem da
+forma esperada, como mostra o próximo exemplo:
+
+
+------------------------------------------------------------------------
+>>> from unicodedata import normalize
+>>> s1 = 'café'
+>>> s2 = 'cafe\N{COMBINING ACUTE ACCENT}'
+>>> len(s1), len(s2)
+(4, 5)
+>>> len(normalize('NFC', s1)), len(normalize('NFC', s2))
+(4, 4)
+>>> len(normalize('NFD', s1)), len(normalize('NFD', s2))
+(5, 5)
+>>> normalize('NFC', s1) == normalize('NFC', s2)
+True
+>>> normalize('NFD', s1) == normalize('NFD', s2)
+True
+---------------------------------------------------------------------------
+
+
+Drivers de teclado normalmente geram caracteres compostos, então o texto digitado
+pelos usuários estará na NFC por default. Entretanto, por segurança, pode ser melhor normalizar
+as strings com normalize('NFC', user_text) antes de salvá-las.
+    * A NFC também é a forma de normalização recomendada pelo W3C em: https://www.w3.org/TR/charmod-norm/
+
+
+    As outras duas formas de normalização são a NFKC e a NFKD, a letra K significando
+"compatibilidade". Essas são formas mais fortes de normalizaçào, afetando os assim chamados
+"caracteres de compatibilidade".
+    Apesar de um dos objetivos do Unicode ser a existência de um único ponto de código
+"canônico" para cada caractere, alguns caracteres aparecem mais de uma vez, para manter
+compatibilidade com padrões pré-existentes.
+    Por exemplo, o MICRO SIGN, µ (U+00B5), foi adicionado para permitir a conversão
+bi-direcional com o latin1, que o inclui, apesar do mesmo caractere ser parte do alfabeto grego com
+o ponto de código U+03BC (GREEK SMALL LETTER MU). Assim, o símbolo de micro é considerado um
+"caractere de compatibilidade".
+
+
+    Nas formas NFKC e NFKD, cada caractere de compatibilidade é substituído por uma "decomposição
+de compatibilidade" de um ou mais caracteres, que é considerada a representação "preferencial", mesmo
+se ocorrer alguma perda de formatação;
+    * (Idealmente, a formatação deveria ser responsabilidade de alguma marcação externa, não parte do
+Unicode).
+    Para exemplificar, a decomposição de compatibilidade da fração um meio, '½' (U+00BD), é a
+sequência de três caracteres '1/2', e a decomposição de compatibilidade do símbolo de micro, 'µ' (U+00B5),
+é o mu minúsculo, 'μ' (U+03BC).[49]
+
+    É assim que a NFKC funciona na prática:
+
+--------------------------------------------------------------------------
+>>> from unicodedata import normalize, name
+>>> half = '\N{VULGAR FRACTION ONE HALF}'
+>>> print(half)
+½
+>>> normalize('NFKC', half)
+'1⁄2'
+>>> for char in normalize('NFKC', half):
+...     print(char, name(char), sep='\t')
+...
+1	DIGIT ONE
+⁄	FRACTION SLASH
+2	DIGIT TWO
+>>> four_squared = '4²'
+>>> normalize('NFKC', four_squared)
+'42'
+>>> micro = 'µ'
+>>> micro_kc = normalize('NFKC', micro)
+>>> micro, micro_kc
+('µ', 'μ')
+>>> ord(micro), ord(micro_kc)
+(181, 956)
+>>> name(micro), name(micro_kc)
+('MICRO SIGN', 'GREEK SMALL LETTER MU')
+--------------------------------------------------------------------------
+
+
+    Ainda que '1⁄2' seja um substituto razoável para '½', e o símbolo de micro ser realmente a
+letra grega mu minúscula, converter '4²' para '42' muda o sentido.
+    Uma aplicação poderia armazenar '4²' como '4<sup>2</sup>', mas a função normalize não sabe
+nada sobre formatação. Assim, NFKC ou NFKD podem perder ou distorcer informações, mas podem produzir
+representações intermediárias convenientes para buscas ou indexação.
+
+
+    Infelizmente, com o Unicode tudo é sempre mais complicado do que parece à primeira vista. Para o
+VULGAR FRACTION ONE HALF, a normalização NFKC produz 1 e 2 unidos pelo FRACTION SLASH, em vez do
+SOLIDUS, também conhecido como "barra" ("slash" em inglês)—o familiar caractere com código decimal 47
+em ASCII. Portanto, buscar pela sequência ASCII de três caracteres '1/2' não encontraria a sequência
+Unicode normalizada.
+
+            ***     As normalizações NFKC e NFKD causam perda de dados e devem ser aplicadas
+                    apenas em casos especiais, como busca e indexação, e não para armazenamento
+                    permanente do texto.
+
+
+
+
+
+            # Case Folding
+
+
+    Case folding é essencialmente a conversão de todo o texto para minúsculas, com algumas transformações
+adicionais. A operação é suportada pelo método str.casefold().
+
+    Para qualquer string s contendo apenas caracteres latin1, s.casefold() produz o mesmo resultado de
+s.lower(), com apenas duas exceções—o símbolo de micro, 'µ', é trocado pela letra grega mu minúscula
+(que é exatamente igual na maioria das fontes) e a letra alemã Eszett (ß), também chamada "s agudo"
+(scharfes S) se torna "ss":
+
+
+--------------------------------------------------------------
+>>> micro = 'µ'
+>>> name(micro)
+'MICRO SIGN'
+>>> micro_cf = micro.casefold()
+>>> name(micro_cf)
+'GREEK SMALL LETTER MU'
+>>> micro, micro_cf
+('µ', 'μ')
+>>> eszett = 'ß'
+>>> name(eszett)
+'LATIN SMALL LETTER SHARP S'
+>>> eszett_cf = eszett.casefold()
+>>> eszett, eszett_cf
+('ß', 'ss')
+--------------------------------------------------------------
+
+        **      Há quase 300 pontos de código para os quais str.casefold() e
+                str.lower() devolvem resultados diferentes.
+
+
+
+
+
+            # "Normalização" extrema: removendo sinais diacríticos
+
+
+    O tempero secreto da busca do Google inclui muitos truques, mas um deles aparentemente é ignorar
+sinais diacríticos (acentos e cedilhas, por exemplo), pelo menos em alguns contextos.
+    Remover sinais diacríticos não é uma forma regular de normalização, pois muitas vezes muda o sentido
+das palavras e pode produzir falsos positivos em uma busca.
+    Por outro lado, ajuda a lidar com alguns fatos da vida: as pessoas às vezes são preguiçosas ou
+desconhecem o uso correto dos sinais diacríticos, e regras de ortografia mudam com o tempo, levando acentos
+a desaparecerem e reaparecerem nas línguas vivas.
+
+
+    Além do caso da busca, eliminar os acentos torna as URLs mais legíveis, pelo menos nas línguas latinas.
+Veja a URL do artigo da Wikipedia sobre a cidade de São Paulo:
+
+https://en.wikipedia.org/wiki/S%C3%A3o_Paulo
+
+
+    O trecho %C3%A3 é a renderização em UTF-8 de uma única letra, o "ã" ("a" com til). A forma a seguir é
+muito mais fácil de reconhecer, mesmo com a ortografia incorreta:
+
+https://en.wikipedia.org/wiki/Sao_Paulo
+
+
+
+Para remover todos os sinais diacríticos de uma str, você pode usar uma função como a do Exemplo.
+
+-----------------------------------------------------------------------------------------
+Exemplo: simplify.py: função para remover todas as marcações combinadas
+-----------------------------------------------------------------------------------------
+import unicodedata
+import string
+
+
+def shave_marks(txt):
+    """Remove all diacritic marks"""
+    norm_txt = unicodedata.normalize('NFD', txt)  # (1)
+    shaved = ''.join(c for c in norm_txt
+                     if not unicodedata.combining(c))  # (2)
+    return unicodedata.normalize('NFC', shaved)  # (3)
+-----------------------------------------------------------------------------------------
+        1.Decompõe todos os caracteres em caracteres base e marcações combinadas.
+        2.Filtra e retira todas as marcações combinadas.
+        3.Recompõe todos os caracteres.
+
+
+
