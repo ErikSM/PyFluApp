@@ -2,6 +2,8 @@ from tkinter import *
 
 from app.config import letter, colr, width, height
 from app.executions import processing_but_other, configuring_buts
+from data.all_errors import log_error
+from data.content_welcome import attention_string, hello_string
 from data.content_summary import python_books
 from structure.Book import Book
 
@@ -16,7 +18,6 @@ class AppMain:
         self.__path_str = StringVar()
         self.__opt_books_str = StringVar()
         self.__obt_books_tuple = python_books.keys()
-
 
         head = Frame(self.__window, bg=colr['purple'], width=100, height=100, bd=3)
 
@@ -49,14 +50,16 @@ class AppMain:
 
         foot.pack()
 
-
     def _click_opt_book(self, selected):
         self.__list_summary.delete(0, END)
+        self.__text_screen.delete(0.0, END)
+        self.__text_note.delete(0.0, END)
+
         self.__book = Book(selected)
 
         self.__list_summary.insert(END, *self.__book.summary())
 
-    def _set_buts(self, container, type_buts):
+    def _set_buts(self, container: Frame, type_buts: str):
         command = None
 
         if type_buts == 'action':
@@ -72,17 +75,14 @@ class AppMain:
         self.__text_screen.delete(1.0, END)
 
         selected = self.__list_summary.get(ANCHOR)
-
         try:
             file_content = self.__book[selected]
-        except TypeError:
-            file_content = (f'    [ book not found ]\n\n\n'
-                        f'Acesse:\n'
-                        f'          https://pythonfluente.com/')
+        except TypeError as te:
+            file_content = log_error('AppMain _click_but_play', te, 'book not found')
 
         self.__text_screen.insert(END, file_content)
 
-    def _click_any_but_others(self, selected):
+    def _click_any_but_others(self, selected: str):
         self.__text_note.delete(0.0, END)
 
         processed = processing_but_other(selected)
@@ -91,6 +91,7 @@ class AppMain:
         self.__text_note.insert(END, text_str)
         if more_action:
             action()
+
 
     def _config_head_up(self):
         self.__img_banner.config(file=r'assets\banner.PNG')
@@ -101,7 +102,7 @@ class AppMain:
         self.__head_up.pack()
 
     def _config_body_left(self):
-        self.__opt_books_str.set(value='Click to Select Python Book')
+        self.__opt_books_str.set(value='Selecione o Livro')
 
         self.__opt_books.config(bg=colr['white grey'], width=width['opt'], bd=3, anchor='center', state=NORMAL)
         self.__opt_books.grid(row=2, column=1)
@@ -174,7 +175,7 @@ class AppMain:
         self.__window.config(bg=colr['purple'])
         self.__window.resizable(True, True)
         self.__window.geometry('+1+1')
-        self.__window.title('Fluent Python App Study')
+        self.__window.title('Fluent Python App Study (Não oficial)')
 
     def _enable_all_config(self):
         self._config_head_up()
@@ -187,4 +188,8 @@ class AppMain:
 
     def start_app(self):
         self._enable_all_config()
+
+        self.__text_screen.insert(1.0, attention_string)
+        self.__text_note.insert(1.0, hello_string)
+
         self.__window.mainloop()

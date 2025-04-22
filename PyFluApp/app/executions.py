@@ -1,11 +1,11 @@
-from tkinter import NORMAL, Frame, Button
+from tkinter import NORMAL, Frame, Button, COMMAND
 
 from app.config import letter, width, height, colr
 from app.web_actions import access_website_on_browser
 from data.content_but_other import other_buts_dict
 
 
-def processing_but_other(selected):
+def processing_but_other(selected: str):
     action = None
     string = other_buts_dict[selected]
 
@@ -18,7 +18,7 @@ def processing_but_other(selected):
     return string, more_action, action
 
 
-def configuring_buts(container, type_buts, self_command):
+def configuring_buts(container: Frame, type_buts: str, self_command: COMMAND):
 
     buts, buts_local = _create_but_list(container, type_buts)
 
@@ -38,7 +38,7 @@ def configuring_buts(container, type_buts, self_command):
     return buts, buts_local
 
 
-def _create_but_list(container, type_buts):
+def _create_but_list(container: Frame, type_buts: str):
     buts = []
     values = ()
 

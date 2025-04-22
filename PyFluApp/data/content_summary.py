@@ -62,12 +62,8 @@ book_one = (
 )
 
 chapters_of_book_one = {
-    'O modelo de dados do Python': book_one[0:5],
-    'Uma coleção de sequências': book_one[5:15],
-    'Dicionários e conjuntos': book_one[15:27],
-    'Texto em Unicode versus Bytes': book_one[27:36],
-    'Fábricas de classes de dados': book_one[36:43],
-    'Referências, mutabilidade, e memória': book_one[43:50]
+    book_one[0][1]: book_one[0:5], book_one[5][1]: book_one[5:15], book_one[15][1]: book_one[15:27],
+    book_one[27][1]: book_one[27:36], book_one[36][1]: book_one[36:43], book_one[43][1]: book_one[43:50]
 }
 
 python_books = {
@@ -80,13 +76,7 @@ python_books = {
 
 def open_file(file_name, directory='data/papers'):
 
-    address = f'{directory}/{file_name}'
-
-    file_type = 'txt'
-    open_mode = 'r'
-    txt_unicode = 'utf8'
-
-    file = io.open(f'{address}.{file_type}', f'{open_mode}', encoding=txt_unicode)
+    file = io.open(f'{directory}/{file_name}.txt', 'r', encoding='utf8')
 
     text = file.read()
     file.close()

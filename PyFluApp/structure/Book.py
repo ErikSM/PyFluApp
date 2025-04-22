@@ -1,10 +1,23 @@
+from data.all_errors import log_error
 from data.content_summary import python_books, open_file
+
+
+def prepare_file_name(selected: str):
+    parentheses = selected.find(')')
+
+    file_name = selected[:parentheses]
+
+    file_name = file_name.replace(' ', '')
+    file_name = file_name.replace('.', '')
+
+    return file_name
 
 
 class Book:
 
     def __init__(self, book: python_books):
         self.__name = book
+
         self.__chapters = python_books[self.__name]
 
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}
@@ -18,20 +31,11 @@ class Book:
         return len(self.__chapters)
 
     def __getitem__(self, selected: str):
-        parentheses = selected.find(')')
-
-        file_name = selected[:parentheses]
-
-        file_name = file_name.replace(' ', '')
-        file_name = file_name.replace('.', '')
-
+        file_name = prepare_file_name(selected)
         try:
             return self.__contents[file_name]
-        except KeyError:
-            return (f'    [ Chapter not found ]\n\n\n'
-                        f'Acesse:\n'
-                        f'          https://pythonfluente.com/')
-
+        except KeyError as ke:
+            return log_error('book __getitem__', ke, 'chapter not found')
 
     def _generating_titles(self):
         try:
@@ -49,10 +53,8 @@ class Book:
 
             try:
                 text = open_file(key)
-            except FileNotFoundError:
-                text = (f'    [ file not found ]\n\n\n'
-                        f'Acesse:\n'
-                        f'          https://pythonfluente.com/')
+            except FileNotFoundError as ffe:
+                text = log_error('Book _dict_contents', ffe, 'file not found')
 
             titles[key] = text
 
@@ -68,18 +70,11 @@ class Book:
     def summary(self):
 
         for i in self.__titles.items():
-            number = i[0]
-            name = i[1]
-
             try:
-                int(number)
+                int(i[0])
             except ValueError:
-                paragraph = ' ' * 2
+                space = ' ' * 2
             else:
-                paragraph = ''
-            finally:
-                between = ') '
+                space = ''
 
-            string = f'{paragraph}{number}{between}{name}'
-
-            yield string
+            yield f'{space} {i[0]}) {i[1]}'
