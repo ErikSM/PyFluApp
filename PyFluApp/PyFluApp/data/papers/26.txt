@@ -1,0 +1,116 @@
+                        2.6. Pattern matching com sequências
+
+
+    * O novo recurso mais visível do Python 3.10 é o pattern matching (casamento de padrões) com a
+    instrução match/case.
+
+
+    Vamos ao exemplo do tratamento de sequências com match/case:
+Imagine que você está construindo um robô que aceita comandos, enviados como sequências de palavras
+e números, como BEEPER 440 3. Após separar o comando em partes e analisar os números, você teria uma
+mensagem como ['BEEPER', 440, 3]. Então, você poderia usar um método assim para interpretar mensagens
+naquele formato:
+
+
+
+
+Exemplo:. Método de uma classe Robot imaginária:
+-----------------------------------------------------------------------------
+def handle_command(self, message):
+    match message:  # (1)
+        case ['BEEPER', frequency, times]:  # (2)
+            self.beep(times, frequency)
+        case ['NECK', angle]:  # (3)
+            self.rotate_neck(angle)
+        case ['LED', ident, intensity]:  # (4)
+            self.leds[ident].set_brightness(ident, intensity)
+        case ['LED', ident, red, green, blue]:  # (5)
+            self.leds[ident].set_color(ident, red, green, blue)
+        case _:  # (6)
+            raise InvalidCommand(message)
+-----------------------------------------------------------------------------
+1. A expressão após a palavra-chave match é o sujeito (subject). O sujeito contém os dados que
+o Python vai comparar aos padrões em cada instrução case.
+2. Esse padrão casa com qualquer sujeito que seja uma sequência de três itens. O primeiro item
+deve ser a string BEEPER. O segundo e o terceiro itens podem ser qualquer coisa, e serão
+vinculados às variáveis frequency e times, nessa ordem.
+3. Isso casa com qualquer sujeito com dois itens, se o primeiro for 'NECK'.
+4. Isso vai casar com uma sujeito de três itens começando com LED. Se o número de itens não for
+correspondente, o Python segue para o próximo case.
+5. Outro padrão de sequência começando com 'LED', agora com cinco itens—incluindo a constante 'LED'.
+6. Esse é o case default. Vai casar com qualquer sujeito que não tenha sido capturado por um dos
+padrões precedentes. A variável _ é especial, como logo veremos.
+
+
+
+    Olhando superficialmente, match/case se parece instrução switch/case da linguagem C—mas isso é só uma
+pequena parte da sua funcionalidade. Uma melhoria fundamental do match sobre o switch é a
+"desestruturação" (uma forma mais avançada de desempacotamento). Desestruturação é uma palavra nova no
+vocabulário do Python, mas é usada com frequência na documentação de linguagens que suportam o
+pattern matching (como Scala e Elixir).
+
+
+
+
+
+Exemplo: Desestruturando tuplas aninhadas—requer Python ≥ 3.10
+--------------------------------------------------------------------------------
+metro_areas = [
+    ('Tokyo', 'JP', 36.933, (35.689722, 139.691667)),
+    ('Delhi NCR', 'IN', 21.935, (28.613889, 77.208889)),
+    ('Mexico City', 'MX', 20.142, (19.433333, -99.133333)),
+    ('New York-Newark', 'US', 20.104, (40.808611, -74.020386)),
+    ('São Paulo', 'BR', 19.649, (-23.547778, -46.635833)),
+]
+
+
+def main():
+    print(f'{"":15} | {"latitude":>9} | {"longitude":>9}')
+
+    for record in metro_areas:
+        match record:     # (1)
+
+            case [name, _, _, (lat, lon)] if lon <= 0:      # (2)
+                print(f'{name:15} | {lat:9.4f} | {lon:9.4f}')
+--------------------------------------------------------------------------------
+1. O sujeito desse match é record—isto é, cada uma das tuplas em metro_areas.
+2. Uma instrução case tem duas partes: um padrão e uma guarda opcional, com a
+palavra-chave if.
+
+
+
+
+    Em geral, um padrão de sequência casa com o sujeito se estas 3 condições forem verdadeiras:
+        1) O sujeito é uma sequência, e
+        2) O sujeito e o padrão tem o mesmo número de itens, e
+        3) Cada item correspondente casa, incluindo os itens aninhados.
+
+        * OBS: Por exemplo, o padrão [name, _, _, (lat, lon)] no Exemplo 10 casa com uma sequência de quatro
+        itens, e o último item tem que ser uma sequência de dois itens.
+
+
+    Padrões de sequência podem ser escritos como tuplas e listas, mas a sintaxe usada não faz diferença: em um
+padrão de sequência, colchetes e parênteses tem o mesmo significado. Para evitar a repetição de colchetes ou
+parênteses, no exemplo foi escrito o padrão como uma lista com uma tupla aninhada de dois itens (Apenas para evitar
+repetição).
+
+    Na biblioteca padrão, os seguintes tipos são compatíveis com padrões
+de sequência: list, memoryview, array.array, tuple, range, collections.deque.
+
+    Ao contrário do desempacotamento, padrões não desestruturam iteráveis que não sejam
+sequências (tal como os iteradores).
+
+    O símbolo _ é especial nos padrões: ele casa com qualquer item naquela posição, mas nunca é
+vinculado ao valor daquele item. O valor é descartado. Além disso, o _ é a única variável que
+pode aparecer mais de uma vez em um padrão.
+
+
+    Você pode vincular qualquer parte de um padrão a uma variável usando a palavra-chave as:
+
+
+
+Exemplo:
+-------------------------------------------------------------------
+case [name, _, _, (lat, lon) as coord]:
+-------------------------------------------------------------------
+
