@@ -1,13 +1,12 @@
                             4.10. APIs de modo dual para str e bytes
+
     A biblioteca padrão do Python tem funções que aceitam argumentos str ou bytes e se comportam de
 forma diferente dependendo do tipo recebido. Alguns exemplos podem ser encontrados nos módulos re e os.
 
 
 
 
-
             # str versus bytes em expressões regulares
-
 
 
     Se você criar uma expressão regular com bytes, padrões tal como \d e \w vão casar apenas com

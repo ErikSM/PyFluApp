@@ -1,4 +1,6 @@
                             4.9. O banco de dados do Unicode
+
+
     O padrão Unicode fornece todo um banco de dados—na forma de vários arquivos de texto estruturados—que
 inclui não apenas a tabela mapeando pontos de código para nomes de caracteres, mas também metadados sobre
 os caracteres individuais e como eles se relacionam.
