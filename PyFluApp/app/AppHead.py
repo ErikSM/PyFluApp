@@ -1,6 +1,6 @@
 from tkinter import Tk, Frame, Label, PhotoImage
 
-from app.config import colr
+from app.Config import colr
 
 
 class AppHead:

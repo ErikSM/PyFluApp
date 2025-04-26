@@ -1,0 +1,171 @@
+                            5.2. Visão geral das fábricas de classes de dados
+
+    ** Vamos começar por uma visão geral, por alto, das três fábricas de classes.
+
+
+    Considere uma classe simples, representando um par de coordenadas geográficas, como no Exemplo:
+
+--------------------------------------------------------------
+Primeiro Exemplo: class/coordinates.py
+--------------------------------------------------------------
+class Coordinate:
+
+    def __init__(self, lat, lon):
+        self.lat = lat
+        self.lon = lon
+--------------------------------------------------------------
+
+
+    A tarefa da classe Coordinate é manter os atributos latitude e longitude. Escrever o __init__ padrão fica
+cansativo muito rápido, especialmente se sua classe tiver mais que alguns poucos atributos: cada um deles é
+mencionado três vezes! E aquele código repetitivo não nos dá sequer os recursos básicos que esperamos de um
+objeto Python:
+
+--------------------------------------------------------------
+>>> from coordinates import Coordinate
+>>> moscow = Coordinate(55.76, 37.62)
+>>> moscow
+<coordinates.Coordinate object at 0x107142f10>  (1)
+>>> location = Coordinate(55.76, 37.62)
+>>> location == moscow  (2)
+False
+>>> (location.lat, location.lon) == (moscow.lat, moscow.lon)  (3)
+True
+--------------------------------------------------------------
+            1.O __repr__ herdado de object não é muito útil.
+            2.O == não faz sentido; o método __eq__ herdado de
+                object compara os IDs dos objetos.
+            3.Comparar duas coordenadas exige a comparação
+                explícita de cada atributo.
+
+
+    As fábricas de classes de dados tratadas nesse capítulo fornecem automaticamente os métodos __init__,
+__repr__, e __eq__ necessários, além alguns outros recursos úteis.
+
+
+
+                **      Nenhuma das fábricas de classes discutidas aqui depende de herança
+                    para funcionar.
+                        Tanto collections.namedtuple quanto typing.NamedTuple criam subclasses
+                    de tuple. O @dataclass é um decorador de classe, não afeta de forma
+                    alguma a hierarquia de classes.
+                        Cada um deles utiliza técnicas diferentes de metaprogramação para
+                    injetar métodos e atributos de dados na classe em construção.
+
+
+
+
+
+
+    Aqui está uma classe Coordinate criada com uma namedtuple (uma "função fábrica" que cria uma subclasse
+de tuple com o nome e os campos especificados):
+
+--------------------------------------------------------------------------
+>>> from collections import namedtuple
+>>> Coordinate = namedtuple('Coordinate', 'lat lon')
+>>> issubclass(Coordinate, tuple)
+True
+>>> moscow = Coordinate(55.756, 37.617)
+>>> moscow
+Coordinate(lat=55.756, lon=37.617)  (1)
+>>> moscow == Coordinate(lat=55.756, lon=37.617)  (2)
+True
+--------------------------------------------------------------------------
+            1.Um __repr__ útil.
+            2.Um __eq__ que faz sentido.
+
+
+
+    A typing.NamedTuple, mais recente, oferece a mesma funcionalidade e acrescenta anotações de tipo a
+cada campo:
+
+--------------------------------------------------------------------------
+>>> import typing
+>>> Coordinate = typing.NamedTuple('Coordinate',
+...     [('lat', float), ('lon', float)])
+>>> issubclass(Coordinate, tuple)
+True
+>>> typing.get_type_hints(Coordinate)
+{'lat': <class 'float'>, 'lon': <class 'float'>}
+--------------------------------------------------------------------------
+
+
+
+
+
+    Desde o Python 3.6, typing.NamedTuple pode também ser usada em uma instrução class, com as
+anotações de tipo escritas como descrito na: "PEP 526—Syntax for Variable Annotations (Sintaxe para
+Anotações de Variáveis)-(https://peps.python.org/pep-0526/)".
+
+    * É muito mais legível, e torna fácil sobrepor métodos ou acrescentar métodos novos.
+
+    O Segundo exemplo é a mesma classe Coordinate, com um par de atributos float e um __str__
+personalziado, para mostrar a coordenada no formato 55.8°N, 37.6°E.
+
+
+------------------------------------------------------------------------------------
+Segundo Exemplo: typing_namedtuple/coordinates.py
+------------------------------------------------------------------------------------
+from typing import NamedTuple
+
+class Coordinate(NamedTuple):
+    lat: float
+    lon: float
+
+    def __str__(self):
+        ns = 'N' if self.lat >= 0 else 'S'
+        we = 'E' if self.lon >= 0 else 'W'
+        return f'{abs(self.lat):.1f}°{ns}, {abs(self.lon):.1f}°{we}'
+------------------------------------------------------------------------------------
+
+                **  Apesar de NamedTuple aparecer na declaração class como uma
+                superclasse, não é esse o caso.
+                    typing.NamedTuple usa a funcionalidade avançada de uma
+                metaclasse para personalizar a criação da classe do usuário.
+
+                    Veja isso:
+
+                            >>> issubclass(Coordinate, typing.NamedTuple)
+                            False
+                            >>> issubclass(Coordinate, tuple)
+                            True
+
+
+    No método __init__ gerado por typing.NamedTuple, os campos aparecem como parâmetros e na mesma
+ordem em que aparecem na declaração class.
+
+
+
+
+    Assim como typing.NamedTuple, o decorador dataclass suporta a sintaxe da "PEP 526" para
+declarar atributos de instância.   "PEP 526": (https://peps.python.org/pep-0526/)
+
+    * O decorador lê as anotações das variáveis e gera métodos automaticamente para sua classe.
+
+    Como comparação, veja a classe Coordinate equivante escrita com a ajuda do decorador dataclass,
+como mostra o Terceiro Exemplo.
+
+----------------------------------------------------------------------------
+Terceiro Exemplo.: dataclass/coordinates.py
+----------------------------------------------------------------------------
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Coordinate:
+    lat: float
+    lon: float
+
+    def __str__(self):
+        ns = 'N' if self.lat >= 0 else 'S'
+        we = 'E' if self.lon >= 0 else 'W'
+        return f'{abs(self.lat):.1f}°{ns}, {abs(self.lon):.1f}°{we}'
+----------------------------------------------------------------------------
+
+    Observe que o corpo das classes no Segundo Exemplo e no Terceiro Exemplo são idênticos—a
+diferença está na própria declaração class.
+    O decorador @dataclass não depende de herança ou de uma metaclasse, então não deve interferir
+no uso desses mecanismos pelo usuário.
+    A classe Coordinate no Terceiro Exemplo é uma subclasse de object.
+
+
+

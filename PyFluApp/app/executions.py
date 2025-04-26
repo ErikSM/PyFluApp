@@ -1,6 +1,6 @@
 from tkinter import NORMAL, Frame, Button, COMMAND
 
-from app.config import letter, width, height, colr
+from app.Config import letter, width, height, colr
 from app.web_actions import access_website_on_browser
 from data.content_but_other import other_buts_dict
 

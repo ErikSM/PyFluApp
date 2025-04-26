@@ -1,7 +1,7 @@
 from tkinter import Tk, Text, Frame, END, Scrollbar, W, E, N, S
 
-from app.config import colr, letter, height, width
 from app.executions import processing_but_other, configuring_buts
+from data.content_configs import colr, letter, width, height
 from data.content_welcome import hello_string
 
 
@@ -20,16 +20,6 @@ class AppFoot:
         foot.pack()
 
 
-    def click_any_but_others(self, selected: str):
-        self.__text_note.delete(0.0, END)
-
-        processed = processing_but_other(selected)
-        text_str, more_action, action = processed
-
-        self.__text_note.insert(END, text_str)
-        if more_action:
-            action()
-
     def _config_center(self, foot):
         center = Frame(foot, bg=colr['purple'])
 
@@ -39,7 +29,7 @@ class AppFoot:
         self.__buts_others[1].grid(row=2, rowspan=3, column=1)
 
 
-        self.__text_note = Text(center, font=letter['principal'],
+        self.__text_note = Text(center, font=letter['note'],
                                 selectforeground='black', selectbackground='white', insertbackground='white',
                                 bg=colr['purple'], fg=colr['white'], bd=10, height=height['not'], width=width['not'])
 
@@ -55,3 +45,21 @@ class AppFoot:
         self.__text_note.insert(1.0, hello_string)
 
         return center
+
+    def click_any_but_others(self, selected: str):
+        self.__text_note.delete(0.0, END)
+
+        processed = processing_but_other(selected)
+        text_str, more_action, action = processed
+
+        self.__text_note.insert(END, text_str)
+        if more_action:
+            action()
+
+    def default(self):
+        self.__text_note.delete(0.0, END)
+        self.__text_note.insert(1.0, hello_string)
+
+    def update_size(self, sizes: tuple):
+        new_w, new_h = sizes
+        self.__text_note.config(width=new_w['not'], height=new_h['not'])

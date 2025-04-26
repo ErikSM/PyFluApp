@@ -23,13 +23,6 @@ class Book:
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}
         self.__contents = self._dict_contents()
 
-
-    def __str__(self):
-        return f'Book({self.__name})'
-
-    def __len__(self):
-        return len(self.__chapters)
-
     def __getitem__(self, selected: str):
         file_name = prepare_file_name(selected)
         try:
@@ -68,7 +61,6 @@ class Book:
             yield i, self.__titles[i]
 
     def summary(self):
-
         for i in self.__titles.items():
             try:
                 int(i[0])

@@ -23,3 +23,10 @@ escrever classes de dados:
                         potencialmente, mais complexidade—desde o Python 3.7.
 
 
+
+
+            # Novidades
+
+    Este capítulo é novo, aparece nessa segunda edição do Python Fluente. A Seção 5.3 era parte do capítulo 2 da
+primeira edição, mas o restante do capítulo é inteiramente inédito.
+
