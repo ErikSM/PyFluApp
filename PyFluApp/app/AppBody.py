@@ -1,6 +1,5 @@
 from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR
 
-from app.Config import Config
 from app.executions import configuring_buts
 from data.all_errors import log_error
 from data.content_configs import colr, letter, width, height
@@ -125,8 +124,11 @@ class AppBody:
         self.__opt_str.set(value ='Selecione o Livro')
         self.__text_screen.insert(1.0, attention_string)
 
-    def update_size(self, sizes: tuple):
-        new_w, new_h = sizes
-        self.__list_summary.config(width=new_w['lis'], height=new_h['lis'])
-        self.__text_screen.config(width=new_w['tex'], height=new_h['tex'])
+    def update_size(self, new_w: dict, new_h: dict, new_l: dict):
+        self.__list_summary.config(width=new_w['lis'], height=new_h['lis'], font=new_l['list'])
+        self.__text_screen.config(width=new_w['tex'], height=new_h['tex'], font=new_l['screen'])
+
+    def update_font(self, new_letters: dict):
+        self.__list_summary.config(font=new_letters['list'])
+        self.__text_screen.config(font=new_letters['screen'])
 

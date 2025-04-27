@@ -6,18 +6,14 @@ colr['white grey'] = '#494C51'
 
 
 letter = dict()
-letter['title'] = ('Arial', 10, 'bold')
-
-letter['opt'] = ('Consolas', 8, 'bold')
-letter['list'] = ('Consolas', 8, 'bold')
-
-letter['bt_act'] = ('Impact', 8, '')
-
-letter['search'] = ('Consolas', 8, 'bold')
-letter['screen'] = ('Ariel', 8, 'bold')
-
-letter['note'] = ('Consolas', 8, 'bold')
-letter['bt_oth'] = ('Arial', 8, 'bold')
+letter['title'] = ['Arial', 10, 'bold']
+letter['opt'] = ['Consolas', 9, 'bold']
+letter['list'] = ['Consolas', 8, 'bold']
+letter['search'] = ['Consolas', 9, 'bold']
+letter['screen'] = ['Ariel', 7, 'bold']
+letter['note'] = ['Consolas', 8, 'bold']
+letter['bt_act'] = ['Impact', 9, '']
+letter['bt_oth'] = ['Arial', 10, 'bold']
 
 
 width = dict()
@@ -28,6 +24,7 @@ width['tex'] = 110
 width['not'] = 140
 width['bt_act'] = 7
 width['bt_oth'] = 0
+
 
 height = dict()
 height['lis'] = 15

@@ -3,6 +3,8 @@ from tkinter import Tk, Menu
 from app.AppBody import AppBody
 from app.AppFoot import AppFoot
 from app.Config import Config
+from data.content_configs import width
+
 
 #  in progress
 
@@ -12,9 +14,8 @@ class MenuBar:
 
         self.__window = main_window
         self.__config = Config()
-
-        self.__default = body.default, foot.default
-        self.__size_update = body.update_size, foot.update_size
+        self.__body = body
+        self.__foot = foot
 
         self.__menu = self._config_bar()
 
@@ -48,23 +49,28 @@ class MenuBar:
         return bar
 
     def click_start(self):
-        for i in self.__default:
-            i()
+        self.__body.default()
+        self.__foot.default()
 
     def click_sair(self):
         self.__window.destroy()
 
-
-#  in progress
     def click_maximize(self):
-        sizes = self.__config.set_size_in_proportion('both', 2)
+        geometry = self.__window.wm_geometry()
 
-        for i in self.__size_update:
-            i(sizes)
+        self.__config.set_size_in_proportion('both', 2, geometry)
+
+        self.__body.update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__foot.update_size(self.__config['2'], self.__config['3'], self.__config[1])
+
+
 
     def click_minimize(self):
-        sizes  = self.__config.set_size_in_proportion('both', -2)
+        geometry = self.__window.wm_geometry()
 
-        for i in self.__size_update:
-            i(sizes)
+        self.__config.set_size_in_proportion('both', -2, geometry)
+
+        self.__body.update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__foot.update_size(self.__config['2'], self.__config['3'], self.__config[1])
+
 

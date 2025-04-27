@@ -60,6 +60,8 @@ class AppFoot:
         self.__text_note.delete(0.0, END)
         self.__text_note.insert(1.0, hello_string)
 
-    def update_size(self, sizes: tuple):
-        new_w, new_h = sizes
-        self.__text_note.config(width=new_w['not'], height=new_h['not'])
+    def update_size(self, new_w: dict, new_h: dict, new_l: dict):
+        self.__text_note.config(width=new_w['not'], height=new_h['not'], font=new_l['note'])
+
+    def update_font(self, new_letters: dict):
+        self.__text_note.config(font=new_letters['not'])

@@ -3,9 +3,8 @@ from data.content_summary import python_books, open_file
 
 
 def prepare_file_name(selected: str):
-    parentheses = selected.find(')')
 
-    file_name = selected[:parentheses]
+    file_name = selected[:selected.find(')')]
 
     file_name = file_name.replace(' ', '')
     file_name = file_name.replace('.', '')
