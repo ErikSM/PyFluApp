@@ -10,7 +10,7 @@ letter['title'] = ['Arial', 10, 'bold']
 letter['opt'] = ['Consolas', 9, 'bold']
 letter['list'] = ['Consolas', 8, 'bold']
 letter['search'] = ['Consolas', 9, 'bold']
-letter['screen'] = ['Ariel', 7, 'bold']
+letter['screen'] = ['Ariel', 8, 'bold']
 letter['note'] = ['Consolas', 8, 'bold']
 letter['bt_act'] = ['Impact', 9, '']
 letter['bt_oth'] = ['Arial', 10, 'bold']
@@ -18,7 +18,7 @@ letter['bt_oth'] = ['Arial', 10, 'bold']
 
 width = dict()
 width['opt'] = 28
-width['lis'] = 70
+width['lis'] = 65
 width['ent'] = 33
 width['tex'] = 110
 width['not'] = 140
@@ -27,8 +27,8 @@ width['bt_oth'] = 0
 
 
 height = dict()
-height['lis'] = 15
-height['tex'] = 16
-height['not'] = 10
+height['lis'] = 13
+height['tex'] = 14
+height['not'] = 12
 height['bt_act'] = 0
 height['bt_oth'] = 0

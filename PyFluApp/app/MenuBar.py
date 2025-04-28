@@ -6,8 +6,6 @@ from app.Config import Config
 from data.content_configs import width
 
 
-#  in progress
-
 class MenuBar:
 
     def __init__(self, main_window: Tk, body: AppBody, foot: AppFoot):
@@ -58,19 +56,15 @@ class MenuBar:
     def click_maximize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__config.set_size_in_proportion('both', 2, geometry)
+        self.__config.set_size_in_proportion('plus', geometry=geometry)
 
         self.__body.update_size(self.__config['2'], self.__config['3'], self.__config[1])
         self.__foot.update_size(self.__config['2'], self.__config['3'], self.__config[1])
-
-
 
     def click_minimize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__config.set_size_in_proportion('both', -2, geometry)
+        self.__config.set_size_in_proportion('less', geometry=geometry)
 
         self.__body.update_size(self.__config['2'], self.__config['3'], self.__config[1])
         self.__foot.update_size(self.__config['2'], self.__config['3'], self.__config[1])
-
-
