@@ -1,8 +1,21 @@
+import random
+
+
 colr = dict()
 colr['purple'] = '#03030E'
 colr['white'] = '#E5E4EA'
 colr['grey'] = '#1F2021'
 colr['white grey'] = '#494C51'
+colr['yellow'] = '#928339'
+
+tema_base = [colr[i] for i in colr]
+
+themes = dict()
+themes['tema 1'] = tema_base
+themes['tema 2'] = tema_base[1], tema_base[0], tema_base[3], tema_base[4], tema_base[2]
+themes['tema 3'] = tema_base[2], tema_base[1], tema_base[0], tema_base[3], tema_base[4]
+print(themes)
+
 
 
 letter = dict()
@@ -27,8 +40,8 @@ width['bt_oth'] = 0
 
 
 height = dict()
-height['lis'] = 13
-height['tex'] = 14
-height['not'] = 12
+height['lis'] = 11
+height['tex'] = 12
+height['not'] = 10
 height['bt_act'] = 0
 height['bt_oth'] = 0

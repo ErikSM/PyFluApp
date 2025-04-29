@@ -12,16 +12,21 @@ class AppFoot:
         self.__buts_others: None
         self.__text_note: Text
 
-        foot = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
+        self.__foot = self._foot_frame(main_window)
 
-        self.__center = self._config_center(foot)
+        self.__center = self._config_center()
         self.__center.grid(row=1, column=1)
 
-        foot.pack()
 
+    def _foot_frame(self, main_window):
+        self.__foot = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
 
-    def _config_center(self, foot):
-        center = Frame(foot, bg=colr['purple'])
+        self.__foot.pack()
+        return self.__foot
+
+    def _config_center(self):
+
+        center = Frame(self.__foot, bg=colr['purple'])
 
         self.__buts_others = configuring_buts(center, 'others', self.click_any_but_others)
         for i in self.__buts_others[0]:
@@ -65,3 +70,14 @@ class AppFoot:
 
     def update_font(self, new_letters: dict):
         self.__text_note.config(font=new_letters['not'])
+
+    def update_color(self, theme: list):
+
+        self.__foot.config(bg=theme[0])
+        self.__center.config(bg=theme[0])
+
+        self.__text_note.config(bg=theme[0], fg=theme[1])
+
+        self.__buts_others[1].config(bg=theme[0])
+        for i in self.__buts_others[0]:
+            i.config(bg=theme[0], fg=theme[1])

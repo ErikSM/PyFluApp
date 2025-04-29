@@ -15,29 +15,28 @@ class AppBody:
         self.__book = None
         self.__opt_str = StringVar()
         self.__opt_list = python_books.keys()
-        self.__opt_menu_books: OptionMenu
-        self.__list_summary: Listbox
-        self.__buts_actions = None
         self.__path_str = StringVar()
-        self.__entry_path: Entry
-        self.__text_screen: Text
 
+        self.__body = self._body_frame(main_window)
 
-        body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
-
-        self.__left = self._create_left(body)
+        self.__left = self._create_left()
         self.__left.grid(row=0, column=0)
 
-        self.__center = self._create_center(body)
+        self.__center = self._create_center()
         self.__center.grid(row=0, column=1)
 
-        self.__right = self._create_right(body)
+        self.__right = self._create_right()
         self.__right.grid(row=0, column=2)
 
-        body.pack()
+    def _body_frame(self, main_window):
+        self.__body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
+        self.__body.pack()
 
+        return self.__body
 
-    def _create_left(self, body):
+    def _create_left(self):
+        body = self.__body
+
         left = Frame(body, bg=colr['purple'], width=30)
 
         self.__opt_str.set(value ='Selecione o Livro')
@@ -64,7 +63,9 @@ class AppBody:
 
         return left
 
-    def _create_center(self, body):
+    def _create_center(self):
+        body = self.__body
+
         center = Frame(body, bg=colr['purple'], width=30)
 
         self.__buts_actions = configuring_buts(center, 'action', self.click_but_play)
@@ -75,17 +76,20 @@ class AppBody:
 
         return center
 
-    def _create_right(self, body):
+    def _create_right(self):
+        body = self.__body
+
         right = Frame(body, bg=colr['purple'], width=30)
 
-        self.__entry_path = Entry(right, textvariable=self.__path_str, state='disabled', bd=5,
-                                  font=letter['search'], bg=colr['white'], fg=colr['purple'], width=width['ent'])
+        self.__entry_path = Entry(right, textvariable=self.__path_str, font=letter['search'],
+                                  disabledbackground=colr['white grey'], disabledforeground=colr['purple'],
+                                  width=width['ent'], bd=5, state='disabled')
         self.__entry_path.grid(row=2, column=3, columnspan=4)
 
 
         self.__text_screen = Text(right, font=letter['screen'],
-                                  bg=colr['grey'], fg=colr['white'], bd=10,
-                                  height=height['tex'], width=width['tex'])
+                                  bg=colr['grey'], fg=colr['yellow'], selectbackground=colr['yellow'] ,
+                                  height=height['tex'], width=width['tex'], bd=10)
 
         scr_text_x = Scrollbar(right, orient='horizontal', command=self.__text_screen.xview)
         scr_text_x.grid(row=4, column=3, sticky=W + E)
@@ -95,7 +99,9 @@ class AppBody:
         self.__text_screen.config(yscrollcommand=scr_text_y.set, xscrollcommand=scr_text_x.set)
         self.__text_screen.grid(row=3, column=3)
 
+
         self.__text_screen.insert(1.0, attention_string)
+
 
         return right
 
@@ -131,4 +137,17 @@ class AppBody:
     def update_font(self, new_letters: dict):
         self.__list_summary.config(font=new_letters['list'])
         self.__text_screen.config(font=new_letters['screen'])
+
+    def update_color(self, theme: list):
+
+        self.__body.config(bg=theme[0])
+
+        self.__left.config(bg=theme[0])
+        self.__center.config(bg=theme[0])
+        self.__right.config(bg=theme[0])
+
+        self.__list_summary.config(bg=theme[2])
+        self.__entry_path.config(bg=theme[3])
+        self.__text_screen.config(bg=theme[2])
+
 
