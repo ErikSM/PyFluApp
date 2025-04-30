@@ -1,6 +1,6 @@
 from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR
 
-from app.executions import configuring_buts
+from structure.buttons import configuring_buts
 from data.all_errors import log_error
 from data.content_configs import colr, letter, width, height
 from data.content_summary import python_books

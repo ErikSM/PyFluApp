@@ -14,8 +14,6 @@ class Config:
         self.__calculation_values = {'plus': (5 , 9, 3), 'less': (-5, -9, -3)}
         self.__not_edit_key = None
 
-        self.__geometry = '1198x509+1+1', '1536x781+1+1'
-
 
     def __getitem__(self, item):
         items = self.__color, self.__letter, self.__width, self.__height

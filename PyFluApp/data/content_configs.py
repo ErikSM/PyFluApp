@@ -6,14 +6,14 @@ colr['white'] = '#E5E4EA'
 colr['grey'] = '#1F2021'
 colr['white grey'] = '#494C51'
 colr['yellow'] = '#928339'
-# colr['blue'] = '#2a4a6a'
+colr['blue'] = '#2a4a6a'
 
 base_theme = [colr[i] for i in colr]
 
 themes = dict()
-themes['tema 1'] = base_theme
-themes['tema 2'] = base_theme[1], base_theme[0], base_theme[3], base_theme[4], base_theme[2]
-themes['tema 3'] = base_theme[2], base_theme[1], base_theme[0], base_theme[3], base_theme[4]
+themes['Dark Purple'] = base_theme
+themes['Light Yellow'] = base_theme[4], base_theme[0], base_theme[1], base_theme[4], base_theme[0]
+themes['Medium Blue '] = base_theme[5], base_theme[1], base_theme[0], base_theme[3], base_theme[4]
 
 letter = dict()
 letter['title'] = ['Arial', 10, 'bold']

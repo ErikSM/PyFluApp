@@ -1,6 +1,6 @@
 from tkinter import Tk, Text, Frame, END, Scrollbar, W, E, N, S
 
-from app.executions import processing_but_other, configuring_buts
+from structure.buttons import processing_but_other, configuring_buts
 from data.content_configs import colr, letter, width, height
 from data.content_welcome import hello_string
 

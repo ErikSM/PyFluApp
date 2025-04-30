@@ -42,7 +42,7 @@ class AppMenu:
         edit.add_cascade(label='Redimensionar', menu=resize)
 
         appearance = Menu(edit, tearoff=0)
-        all_theme = 'tema 1', 'tema 2', 'tema 3'
+        all_theme = themes.keys()
         for i in all_theme:
             appearance.add_command(label=f'{i}', command=lambda choice=i: self.click_themes(choice))
 
