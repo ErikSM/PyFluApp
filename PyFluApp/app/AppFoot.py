@@ -17,11 +17,12 @@ class AppFoot:
         self.__center = self._config_center()
         self.__center.grid(row=1, column=1)
 
+        self.__foot.pack()
+
 
     def _foot_frame(self, main_window):
         self.__foot = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
 
-        self.__foot.pack()
         return self.__foot
 
     def _config_center(self):
@@ -72,7 +73,6 @@ class AppFoot:
         self.__text_note.config(font=new_letters['not'])
 
     def update_color(self, theme: list):
-
         self.__foot.config(bg=theme[0])
         self.__center.config(bg=theme[0])
 

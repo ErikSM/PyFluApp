@@ -28,16 +28,16 @@ class AppBody:
         self.__right = self._create_right()
         self.__right.grid(row=0, column=2)
 
+        self.__body.pack()
+
+
     def _body_frame(self, main_window):
         self.__body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
-        self.__body.pack()
 
         return self.__body
 
     def _create_left(self):
-        body = self.__body
-
-        left = Frame(body, bg=colr['purple'], width=30)
+        left = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__opt_str.set(value ='Selecione o Livro')
 
@@ -64,9 +64,7 @@ class AppBody:
         return left
 
     def _create_center(self):
-        body = self.__body
-
-        center = Frame(body, bg=colr['purple'], width=30)
+        center = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__buts_actions = configuring_buts(center, 'action', self.click_but_play)
 
@@ -77,12 +75,10 @@ class AppBody:
         return center
 
     def _create_right(self):
-        body = self.__body
-
-        right = Frame(body, bg=colr['purple'], width=30)
+        right = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__entry_path = Entry(right, textvariable=self.__path_str, font=letter['search'],
-                                  disabledbackground=colr['white grey'], disabledforeground=colr['purple'],
+                                  disabledbackground=colr['grey'], disabledforeground=colr['purple'],
                                   width=width['ent'], bd=5, state='disabled')
         self.__entry_path.grid(row=2, column=3, columnspan=4)
 
@@ -99,9 +95,7 @@ class AppBody:
         self.__text_screen.config(yscrollcommand=scr_text_y.set, xscrollcommand=scr_text_x.set)
         self.__text_screen.grid(row=3, column=3)
 
-
         self.__text_screen.insert(1.0, attention_string)
-
 
         return right
 
@@ -139,15 +133,12 @@ class AppBody:
         self.__text_screen.config(font=new_letters['screen'])
 
     def update_color(self, theme: list):
-
         self.__body.config(bg=theme[0])
 
         self.__left.config(bg=theme[0])
         self.__center.config(bg=theme[0])
         self.__right.config(bg=theme[0])
 
-        self.__list_summary.config(bg=theme[2])
-        self.__entry_path.config(bg=theme[3])
-        self.__text_screen.config(bg=theme[2])
-
-
+        self.__list_summary.config(bg=theme[2], fg=theme[1])
+        self.__entry_path.config(disabledbackground=theme[2], disabledforeground=theme[0])
+        self.__text_screen.config(bg=theme[2], fg=theme[4], selectbackground=theme[4])
