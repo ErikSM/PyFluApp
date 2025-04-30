@@ -1,5 +1,5 @@
 import webbrowser
-from tkinter import Button, Label, LEFT, Frame, Toplevel
+from tkinter import Button, Label, Frame, Toplevel
 
 
 def access_website_on_browser(url):
@@ -11,8 +11,8 @@ def access_website_on_browser(url):
     Label(tk, text=f'Deseja acessar: {url} \nem seu Browser Padrao???').pack()
 
     buts = Frame(tk)
-    Button(buts, text='Sim    ', command=lambda: _but_access_website(url, tk, True)).pack(side=LEFT)
-    Button(buts, text='    Nao', command=lambda: _but_access_website(url, tk, False)).pack(side=LEFT)
+    Button(buts, text='Sim    ', command=lambda: _but_access_website(url, tk, True)).pack(side='left')
+    Button(buts, text='    Nao', command=lambda: _but_access_website(url, tk, False)).pack(side='left')
     buts.pack()
 
     tk.mainloop()

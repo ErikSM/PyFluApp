@@ -11,7 +11,7 @@ class Config:
         self.__height = height
 
         self.__size_reference = 0
-        self.__calculation_values = {'plus': +5, 'less': -5}
+        self.__calculation_values = {'plus': (5 , 9, 3), 'less': (-5, -9, -3)}
         self.__not_edit_key = None
 
         self.__geometry = '1198x509+1+1', '1536x781+1+1'
@@ -28,47 +28,48 @@ class Config:
         self.__letter[witch] = (font, size, shape)
 
     def set_size_in_proportion(self, plus_or_less: str, width_or_height='both', geometry=''):
-            # print(geometry)
+            print(geometry)
 
             how_much = self.__calculation_values[plus_or_less]
             self.__not_edit_key = ['title', 'opt', 'ent', 'bt_act', 'bt_oth']
 
-            if self.__size_reference < -5:
-                self.__size_reference = -5
-            elif self.__size_reference > 10:
-                self.__size_reference = 10
+            self.__size_reference += how_much[0]
 
-            self.__size_reference += how_much
-            self._auto_letter_size_set()
+            if not  0 <= self.__size_reference <= 10 :
+                if self.__size_reference < 0:
+                    self.__size_reference = 0
+                elif self.__size_reference > 10:
+                    self.__size_reference = 10
 
-            if width_or_height == 'width' or width_or_height == 'both':
-                if  -5 <= self.__size_reference <= 10:
+            else:
+                self._auto_letter_size_set()
 
-                    for i in self.__width:
-                        if i not in self.__not_edit_key:
-                            self.__width[i] += how_much
 
-            if width_or_height == 'height' or width_or_height == 'both':
-                if  -5 <= self.__size_reference <= 5:
+                if width_or_height == 'width' or width_or_height == 'both':
+                        for i in self.__width:
+                                if i not in self.__not_edit_key:
+                                    self.__width[i] += how_much[1]
 
-                    for i in self.__height:
-                        if i not in self.__not_edit_key:
-                            self.__height[i] += how_much
+                if width_or_height == 'height' or width_or_height == 'both':
 
-            print(self.__size_reference)
+                        for i in self.__height:
+                            if i not in self.__not_edit_key:
+                                self.__height[i] += how_much[2]
+
+                print(self.__size_reference)
 
     def _auto_letter_size_set(self):
         self.__not_edit_key = ['title', 'list']
 
-        if self.__size_reference <= 0:
+        if self.__size_reference < 5:
             self.__letter = letter
 
-        if  0 <self.__size_reference > 5:
+        if  self.__size_reference == 5:
             for i in self.__letter:
                 if i not in self.__not_edit_key:
                     self.__letter[i][1] = 9
 
-        if 5 < self.__size_reference >= 10:
+        if self.__size_reference > 5:
             for i in self.__letter:
                 if i not in self.__not_edit_key:
                     self.__letter[i][1] = 10
