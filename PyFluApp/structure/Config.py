@@ -57,7 +57,7 @@ class Config:
                 print(self.__size_reference)
 
     def _auto_letter_size_set(self):
-        self.__not_edit_key = ['title', 'list']
+        self.__not_edit_key = ['title', 'note']
 
         if self.__size_reference < 5:
             self.__letter = letter
@@ -65,9 +65,17 @@ class Config:
         if  self.__size_reference == 5:
             for i in self.__letter:
                 if i not in self.__not_edit_key:
-                    self.__letter[i][1] = 9
+                    if i == 'list':
+                        size = 8
+                    else:
+                        size = 10
+                    self.__letter[i][1] = size
 
         if self.__size_reference > 5:
             for i in self.__letter:
                 if i not in self.__not_edit_key:
-                    self.__letter[i][1] = 10
+                    if i == 'list':
+                        size = 8
+                    else:
+                        size = 12
+                    self.__letter[i][1] = size

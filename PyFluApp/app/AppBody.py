@@ -43,7 +43,7 @@ class AppBody:
 
         self.__opt_menu_books= OptionMenu(left,
                                           self.__opt_str, *self.__opt_list,
-                                          command=lambda selected=self.__opt_str: self.click_opt_book(selected))
+                                          command=lambda selected=self.__opt_str: self._click_opt_book(selected))
 
         self.__opt_menu_books.config(font=letter['opt'], bg =colr['white grey'],
                                      width=width['opt'], bd=3, anchor='center', state='normal')
@@ -66,7 +66,7 @@ class AppBody:
     def _create_center(self):
         center = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__buts_actions = configuring_buts(center, 'action', self.click_but_play)
+        self.__buts_actions = configuring_buts(center, 'action', self._click_but_play)
 
         for i in self.__buts_actions[0]:
             i.pack()
@@ -99,13 +99,13 @@ class AppBody:
 
         return right
 
-    def click_opt_book(self, selected):
+    def _click_opt_book(self, selected):
         self.__list_summary.delete(0, END)
 
         self.__book = Book(selected)
         self.__list_summary.insert(END, *self.__book.summary())
 
-    def click_but_play(self):
+    def _click_but_play(self):
         self.__text_screen.delete(1.0, END)
 
         selected = self.__list_summary.get(ANCHOR)
@@ -142,3 +142,11 @@ class AppBody:
         self.__list_summary.config(bg=theme[2], fg=theme[1])
         self.__entry_path.config(disabledbackground=theme[2], disabledforeground=theme[0])
         self.__text_screen.config(bg=theme[2], fg=theme[4], selectbackground=theme[4])
+
+    def del_text(self, where='screen'):
+        if where == 'screen':
+            self.__text_screen.delete(1.0, END)
+
+    def insert_text(self, *args, where='screen'):
+        if where == 'screen':
+            self.__text_screen.insert(END, *args)

@@ -1,42 +1,32 @@
 
-
-colr = dict()
-colr['purple'] = '#03030E'
-colr['white'] = '#E5E4EA'
-colr['grey'] = '#1F2021'
-colr['white grey'] = '#494C51'
-colr['yellow'] = '#928339'
-colr['blue'] = '#2a4a6a'
+themes = dict()
+colr = {'purple': '#03030E', 'white': '#E5E4EA', 'grey': '#1F2021',
+        'white grey': '#494C51', 'yellow': '#928339', 'blue': '#2a4a6a'}
 
 base_theme = [colr[i] for i in colr]
 
-themes = dict()
 themes['Dark Purple'] = base_theme
 themes['Light Yellow'] = base_theme[4], base_theme[0], base_theme[1], base_theme[4], base_theme[0]
 themes['Medium Blue '] = base_theme[5], base_theme[1], base_theme[0], base_theme[3], base_theme[4]
 
+
 letter = dict()
-letter['title'] = ['Arial', 10, 'bold']
-letter['opt'] = ['Consolas', 9, 'bold']
-letter['list'] = ['Consolas', 8, 'bold']
-letter['search'] = ['Consolas', 9, 'bold']
-letter['screen'] = ['Ariel', 8, 'bold']
-letter['note'] = ['Consolas', 8, 'bold']
-letter['bt_act'] = ['Impact', 9, '']
-letter['bt_oth'] = ['Arial', 10, 'bold']
+font_letter = 'Arial', 'Consolas', 'Impact'
+font_mode = '', 'bold', 'italic', 'bold italic'
 
-width = dict()
-width['opt'] = 38
-width['lis'] = 65
-width['ent'] = 33
-width['tex'] = 110
-width['not'] = 140
-width['bt_act'] = 7
-width['bt_oth'] = 0
+letter['title'] = [font_letter[0], 10, font_mode[3]]
+letter['opt'] = [font_letter[1], 10, font_mode[1]]
+letter['list'] = [font_letter[1], 7, font_mode[2]]
+letter['search'] = [font_letter[1], 9, font_mode[0]]
+letter['screen'] = [font_letter[0], 8, font_mode[1]]
+letter['note'] = [font_letter[1], 8, font_mode[1]]
+letter['bt_act'] = [font_letter[2], 9, font_mode[0]]
+letter['bt_oth'] = [font_letter[0], 10, font_mode[1]]
 
-height = dict()
-height['lis'] = 11
-height['tex'] = 12
-height['not'] = 12
-height['bt_act'] = 0
-height['bt_oth'] = 0
+
+width = {'opt': 38, 'ent': 33,
+         'lis': 53,  'tex': 85, 'not': 120,
+         'bt_act': 7, 'bt_oth': 0}
+
+height = {'lis': 12, 'tex': 11, 'not': 10,
+          'bt_act': 0, 'bt_oth': 0}
