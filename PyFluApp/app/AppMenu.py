@@ -41,18 +41,13 @@ class AppMenu:
     def _config_menu_edit(self):
         edit = Menu(self.__menu, tearoff=0)
 
-        resize = Menu(edit, tearoff=0)
-        resize.add_command(label='maximizar', command=self.click_maximize)
-        resize.add_command(label='minimizar', command=self.click_minimize)
-        edit.add_cascade(label='Redimensionar', menu=resize)
-
         appearance = Menu(edit, tearoff=0)
         all_theme = themes.keys()
         for i in all_theme:
             appearance.add_command(label=f'{i}', command=lambda choice=i: self.click_themes(choice))
 
         edit.add_cascade(label='Aparência', menu=appearance)
-        self.__menu.add_cascade(label='Editar', menu=edit, compound='right')
+        self.__menu.add_cascade(label='Editar', menu=edit)
 
         return edit
 

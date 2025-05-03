@@ -6,7 +6,6 @@ from app.AppHead import AppHead
 from app.AppMenu import AppMenu
 from app.CentralControl import CentralControl
 from data.content_configs import colr
-from structure.Config import Config
 
 
 class AppMain:
