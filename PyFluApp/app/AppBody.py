@@ -83,7 +83,7 @@ class AppBody:
         self.__entry_path.grid(row=2, column=3, columnspan=4)
 
 
-        self.__text_screen = Text(right, font=letter['screen'],
+        self.__text_screen = Text(right, font=letter['screen'], insertunfocussed='hollow',
                                   bg=colr['grey'], fg=colr['yellow'], selectbackground=colr['yellow'] ,
                                   height=height['tex'], width=width['tex'], bd=10)
 
@@ -150,3 +150,5 @@ class AppBody:
     def insert_text(self, *args, where='screen'):
         if where == 'screen':
             self.__text_screen.insert(END, *args)
+
+

@@ -78,6 +78,6 @@ class AppFoot:
 
         self.__text_note.config(bg=theme[0], fg=theme[1])
 
-        self.__buts_others[1].config(bg=theme[0])
+        self.__buts_others[1].__config(bg=theme[0])
         for i in self.__buts_others[0]:
-            i.config(bg=theme[0], fg=theme[1])
+            i.__config(bg=theme[0], fg=theme[1])

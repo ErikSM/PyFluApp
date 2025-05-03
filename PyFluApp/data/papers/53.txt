@@ -1,0 +1,88 @@
+                            5.3. Tuplas nomeadas clássicas
+
+    A função collections.namedtuple é uma fábrica que cria subclasses de tuple, acrescidas de nomes de
+campos, um nome de classe, e um __repr__ informativo.
+
+    Classes criadas com namedtuple podem ser usadas onde quer que uma tupla seja necessária. Na verdade,
+muitas funções da biblioteca padrão, que antes devolviam tuplas agora devolvem, por conveniência, tuplas
+nomeadas, sem afetar de forma alguma o código do usuário.
+
+
+                    **      Cada instância de uma classe criada por namedtuple usa, EXATAMENTE,
+                        a mesma quantidade de memória usada por uma tupla, pois os nomes dos campos
+                        são armazenados na classe.
+
+
+    O Exemplo abaixo mostra como poderíamos definir uma tupla nomeada para manter informações sobre uma cidade.
+
+
+
+-----------------------------------------------------------------------------------------------
+Exemplo: Definindo e usando um tipo tupla nomeada
+-----------------------------------------------------------------------------------------------
+>>> from collections import namedtuple
+>>> City = namedtuple('City', 'name country population coordinates')  (1)
+>>> tokyo = City('Tokyo', 'JP', 36.933, (35.689722, 139.691667))  (2)
+>>> tokyo
+City(name='Tokyo', country='JP', population=36.933, coordinates=(35.689722,
+139.691667))
+>>> tokyo.population  (3)
+36.933
+>>> tokyo.coordinates
+(35.689722, 139.691667)
+>>> tokyo[1]
+'JP'
+-----------------------------------------------------------------------------------------------
+        1.São necessários dois parâmetros para criar uma tupla nomeada: um nome de classe e
+            uma lista de nomes de campos, que podem ser passados como um iterável de strings
+            ou como uma única string com os nomes delimitados por espaços.
+        2.Na inicialização de uma instância, os valores dos campos devem ser passados como
+            argumentos posicionais separados (uma tuple, por outro lado, é inicializada com
+            um único iterável)
+        3.É possível acessar os campos por nome ou por posição.
+
+
+    Como uma subclasse de tuple, City herda métodos úteis, tal como __eq__ e os métodos especiais para operadores
+de comparação—incluindo __lt__, que permite ordenar listas de instâncias de City.
+
+    Uma tupla nomeada oferece alguns "ATRIBUTOS E METODOS além daqueles herdados" de tuple. O outro Exemplo abaixo
+demonstra os mais úteis dentre eles: o atributo de classe _fields, o método de classe _make(iterable), e o método
+de instância _asdict().
+
+-------------------------------------------------------------------------------------------------------
+Exemplo: Atributos e métodos das tuplas nomeadas (continuando do exenplo anterior)
+-------------------------------------------------------------------------------------------------------
+>>> City._fields  (1)
+('name', 'country', 'population', 'location')
+>>> Coordinate = namedtuple('Coordinate', 'lat lon')
+>>> delhi_data = ('Delhi NCR', 'IN', 21.935, Coordinate(28.613889, 77.208889))
+>>> delhi = City._make(delhi_data)  (2)
+>>> delhi._asdict()  (3)
+{'name': 'Delhi NCR', 'country': 'IN', 'population': 21.935,
+'location': Coordinate(lat=28.613889, lon=77.208889)}
+>>> import json
+>>> json.dumps(delhi._asdict())  (4)
+'{"name": "Delhi NCR", "country": "IN", "population": 21.935,
+"location": [28.613889, 77.208889]}'
+-------------------------------------------------------------------------------------------------------
+        1. "._fields" é uma tupla com os nomes dos campos da classe.
+        2. "._make()" cria uma City a partir de um iterável; City(*delhi_data) faria o mesmo.
+        3. "._asdict()" devolve um dict criado a partir da instância de tupla nomeada.
+        4. "._asdict()" é útil para serializar os dados no formato JSON, por exemplo.
+
+    Desde o Python 3.7, a namedtuple aceita o argumento nomeado defaults, fornecendo um iterável de N valores
+default para cada um dos N campos mais à direita na definição da classe. O Exemplo 6 mostra como definir uma
+tupla nomeada Coordinate com um valor default para o campo reference.
+
+----------------------------------------------------------------------------------------------
+Exemplo: Atributos e métodos das tuplas nomeadas, continuando do Exemplo 5
+>>> Coordinate = namedtuple('Coordinate', 'lat lon reference', defaults=['WGS84'])
+>>> Coordinate(0, 0)
+Coordinate(lat=0, lon=0, reference='WGS84')
+>>> Coordinate._field_defaults
+{'reference': 'WGS84'}
+----------------------------------------------------------------------------------------------
+
+    Na Seção 5.2.1.2, mencionei que é mais fácil programar métodos com a sintaxe de classe suportada por
+typing.NamedTuple and @dataclass. Você também pode acrescentar métodos a uma namedtuple, mas é um remendo.
+

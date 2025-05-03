@@ -25,11 +25,12 @@ class Config:
     def set_some_type_letter(self, witch: str, font='Arial', size=8, shape='bold'):
         self.__letter[witch] = (font, size, shape)
 
+
     def set_size_in_proportion(self, plus_or_less: str, width_or_height='both', geometry=''):
             print(geometry)
 
             how_much = self.__calculation_values[plus_or_less]
-            self.__not_edit_key = ['title', 'opt', 'ent', 'bt_act', 'bt_oth']
+            self.__not_edit_key = ['title', 'opt', 'bt_act', 'bt_oth']
 
             self.__size_reference += how_much[0]
 
@@ -38,10 +39,8 @@ class Config:
                     self.__size_reference = 0
                 elif self.__size_reference > 10:
                     self.__size_reference = 10
-
             else:
                 self._auto_letter_size_set()
-
 
                 if width_or_height == 'width' or width_or_height == 'both':
                         for i in self.__width:
@@ -49,18 +48,24 @@ class Config:
                                     self.__width[i] += how_much[1]
 
                 if width_or_height == 'height' or width_or_height == 'both':
-
                         for i in self.__height:
                             if i not in self.__not_edit_key:
                                 self.__height[i] += how_much[2]
 
                 print(self.__size_reference)
 
+
     def _auto_letter_size_set(self):
         self.__not_edit_key = ['title', 'note']
 
         if self.__size_reference < 5:
-            self.__letter = letter
+            for i in self.__letter:
+                if i not in self.__not_edit_key:
+                    if i == 'list':
+                        size = 7
+                    else:
+                        size = 8
+                    self.__letter[i][1] = size
 
         if  self.__size_reference == 5:
             for i in self.__letter:
@@ -75,7 +80,7 @@ class Config:
             for i in self.__letter:
                 if i not in self.__not_edit_key:
                     if i == 'list':
-                        size = 8
+                        size = 9
                     else:
-                        size = 12
+                        size = 11
                     self.__letter[i][1] = size

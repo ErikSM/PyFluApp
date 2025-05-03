@@ -9,7 +9,9 @@ class AppMenu:
 
     def __init__(self, window: Tk, central: CentralControl):
         self.__window = window
-        self.__central = central
+        self.__central = central         # central: [0]=head, [1]=body, [2]=foot
+        self.__config = self.__central[3]
+        self.__geometry_sizes = ['932x518', '1171x631', '1494x765'], ['+188+47', '+187+23', '+2+2']
 
         self.__menu = self._config_menu()
 
@@ -19,6 +21,7 @@ class AppMenu:
 
         self.__window.config(menu=self.__menu)
 
+        self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
 
     def _config_menu(self):
         menu = Menu(self.__window, selectcolor=colr['purple'], type="menubar")
@@ -59,8 +62,10 @@ class AppMenu:
         report = Menu(info, tearoff=0)
         report.add_command(label='relatorio de erros', command=self.click_errors_report)
 
-        info.add_cascade(label='Relatorios', menu=report)
-        self.__menu.add_cascade(label='info', menu=info)
+        info.add_cascade(label='relatório', menu=report)
+        self.__menu.add_cascade(label='Informações', menu=info)
+
+        return info
 
     def click_start(self):
         self.__central[1].default()
@@ -72,18 +77,67 @@ class AppMenu:
     def click_maximize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__central[3].set_size_in_proportion('plus', geometry=geometry)
+        self.__config.set_size_in_proportion('plus', geometry=geometry)
 
-        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3][1])
-        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3][1])
+        self.__central[1].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__central[2].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+
+        self._max_geometry()
 
     def click_minimize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__central[3].set_size_in_proportion('less', geometry=geometry)
+        self.__config.set_size_in_proportion('less', geometry=geometry)
 
-        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3][1])
-        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3][1])
+        self.__central[1].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__central[2].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+
+        self._min_geometry()
+
+    def _max_geometry(self):
+        sizes = self.__geometry_sizes[0]
+        ext = self.__geometry_sizes[1]
+
+        geometry = self.__window.wm_geometry()
+
+        try:
+            position_found = sizes.index(f"{geometry[:geometry.find('+')]}")
+        except Exception as ex:
+            print(ex)
+        else:
+
+            result = position_found  + 1
+            if result == 4:
+                new_position = 3
+            else:
+                new_position = result
+
+            try:
+                self.__window.geometry(f'{sizes[new_position]}{ext[new_position]}')
+            except IndexError:
+                pass
+
+    def _min_geometry(self):
+        sizes = self.__geometry_sizes[0]
+        ext = self.__geometry_sizes[1]
+
+        geometry = self.__window.wm_geometry()
+
+        try:
+            position_found  = sizes.index(f"{geometry[:geometry.find('+')]}")
+        except Exception as ex:
+            print(ex)
+        else:
+            result = position_found - 1
+            if result == -1:
+                new_position = 0
+            else:
+                new_position = result
+
+            try:
+                self.__window.geometry(f'{sizes[new_position]}{ext[new_position]}')
+            except IndexError:
+                pass
 
     def click_themes(self, choice):
         theme = themes[choice]
@@ -98,9 +152,8 @@ class AppMenu:
         self.__central[1].del_text()
 
         if len(error_historic) == 0:
-            self.__central[1].insert_text(f'\n\n{' '*13} [ Nothing found ]\n\n{' '*18} No errors yet\n')
+            self.__central[1].insert_text(f'\n\n{' ' * 13} [ Nothing found ]\n\n{' ' * 18} No errors yet\n')
         else:
             for i in error_historic:
                 ex = f'\n\n{i}\n   {error_historic[i]}'
                 self.__central[1].insert_text(ex)
-

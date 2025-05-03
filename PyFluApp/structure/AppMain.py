@@ -6,6 +6,7 @@ from app.AppHead import AppHead
 from app.AppMenu import AppMenu
 from app.CentralControl import CentralControl
 from data.content_configs import colr
+from structure.Config import Config
 
 
 class AppMain:
@@ -25,7 +26,7 @@ class AppMain:
         self.__window.config(bg=colr['purple'])
 
         self.__window.resizable(False, False)
-        self.__window.geometry('+0+0')
+        self.__window.geometry('+188+47')
 
         self.__window.title('Fluent Python App Study (Não oficial)')
 

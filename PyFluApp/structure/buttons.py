@@ -32,7 +32,7 @@ def configuring_buts(container: Frame, type_buts: str, self_command: COMMAND):
         for i in buts:
             but_txt = all_buts[cont]
             i.config(text=f'{but_txt}',
-                     command=lambda selected=but_txt: self_command(selected))
+                       command=lambda selected=but_txt: self_command(selected))
             cont += 1
 
     return buts, buts_local
