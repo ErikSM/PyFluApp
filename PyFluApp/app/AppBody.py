@@ -1,4 +1,4 @@
-from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR
+from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR, Toplevel
 
 from structure.buttons import configuring_buts
 from data.all_errors import log_error
@@ -150,5 +150,3 @@ class AppBody:
     def insert_text(self, *args, where='screen'):
         if where == 'screen':
             self.__text_screen.insert(END, *args)
-
-

@@ -11,6 +11,7 @@ from data.content_configs import colr
 class AppMain:
 
     def __init__(self):
+
         self.__window = Tk()
 
         self.__app_head = AppHead(self.__window)

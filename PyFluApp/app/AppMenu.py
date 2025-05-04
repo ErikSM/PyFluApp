@@ -23,6 +23,7 @@ class AppMenu:
 
         self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
 
+
     def _config_menu(self):
         menu = Menu(self.__window, selectcolor=colr['purple'], type="menubar")
 
