@@ -7,8 +7,8 @@ from data.content_configs import colr, themes
 
 class AppMenu:
 
-    def __init__(self, window: Tk, central: CentralControl):
-        self.__window = window
+    def __init__(self, main_window: Tk, central: CentralControl):
+        self.__window = main_window
         self.__central = central         # central: [0]=head, [1]=body, [2]=foot
         self.__config = self.__central[3]
         self.__geometry_sizes = ['932x518', '1171x631', '1494x765'], ['+188+47', '+187+23', '+2+2']
@@ -21,6 +21,7 @@ class AppMenu:
 
         self.__window.config(menu=self.__menu)
 
+        #  from AppHead - menu 'max' end 'min'
         self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
 
 

@@ -24,7 +24,7 @@ letter['bt_act'] = [font_letter[2], 8, font_mode[0]]
 letter['bt_oth'] = [font_letter[0], 8, font_mode[1]]
 
 
-width = {'opt': 38, 'ent': 80,
+width = {'opt': 38, 'ent': 30,
          'lis': 53,  'tex': 85, 'not': 120,
          'bt_act': 7, 'bt_oth': 0}
 

@@ -1,4 +1,5 @@
-from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR, Toplevel
+from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, ANCHOR, Toplevel, \
+    Button
 
 from structure.buttons import configuring_buts
 from data.all_errors import log_error
@@ -80,20 +81,23 @@ class AppBody:
         self.__entry_path = Entry(right, textvariable=self.__path_str, font=letter['search'],
                                   disabledbackground=colr['grey'], disabledforeground=colr['purple'],
                                   width=width['ent'], bd=5, state='disabled')
-        self.__entry_path.grid(row=2, column=3, columnspan=4)
+        self.__entry_path.grid(row=2, column=2)
 
+        temp_but = Button(right, text=' < Expandir >b', command=self.screen_top_level)
+        temp_but.grid(row=2, column=4, columnspan=5)
 
+        #  grid base [ column=2 ~ columnspan=4 ]
         self.__text_screen = Text(right, font=letter['screen'], insertunfocussed='hollow',
                                   bg=colr['grey'], fg=colr['yellow'], selectbackground=colr['yellow'] ,
                                   height=height['tex'], width=width['tex'], bd=10)
 
         scr_text_x = Scrollbar(right, orient='horizontal', command=self.__text_screen.xview)
-        scr_text_x.grid(row=4, column=3, sticky=W + E)
+        scr_text_x.grid(row=4, column=2, columnspan=3, sticky=W + E)
         scr_text_y = Scrollbar(right, orient='vertical', command=self.__text_screen.yview)
-        scr_text_y.grid(row=3, rowspan=4, column=4, sticky=N + S)
+        scr_text_y.grid(row=3, rowspan=4, column=5, sticky=N + S)
 
         self.__text_screen.config(yscrollcommand=scr_text_y.set, xscrollcommand=scr_text_x.set)
-        self.__text_screen.grid(row=3, column=3)
+        self.__text_screen.grid(row=3, column=2, columnspan=3)  # grid base
 
         self.__text_screen.insert(1.0, attention_string)
 
@@ -111,8 +115,8 @@ class AppBody:
         selected = self.__list_summary.get(ANCHOR)
         try:
             file_content = self.__book[selected]
-        except TypeError as te:
-            file_content = log_error('AppMain _click_but_play', te, 'book not found')
+        except TypeError as type_error:
+            file_content = log_error('AppMain _click_but_play', type_error, 'book not found')
 
         self.__text_screen.insert(END, file_content)
 
@@ -150,3 +154,12 @@ class AppBody:
     def insert_text(self, *args, where='screen'):
         if where == 'screen':
             self.__text_screen.insert(END, *args)
+
+    def screen_top_level(self):
+        tl = Toplevel()
+        tl.geometry('+188+47')
+        temporary_screen = Text(tl)
+        temporary_screen.insert(1.0, self.__text_screen.get(1.0, END))
+        temporary_screen.pack(fill='both')
+        tl.mainloop()
+
