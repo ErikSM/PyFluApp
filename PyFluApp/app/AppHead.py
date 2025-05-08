@@ -6,38 +6,34 @@ from structure.Config import colr
 class AppHead:
 
     def __init__(self, main_window: Tk):
-
-        self.__window = main_window
-
-        self.__img_banner: PhotoImage
-        self.__but_max = None
-        self.__but_min = None
-
-        self.__head = self._head_frame(self.__window)
-
-        self.__center = self._config_head()
-        self.__center.pack(side='bottom' , anchor='center')
-
+        self.__head = self._head_frame(main_window)
+        self.__center = self._config_center()
         self.__right = self._config_right()
-        self.__right.pack(side='right', anchor='nw')
-
-        self.__head.pack(fill='both')
 
 
     def _head_frame(self, main_window):
         self.__head = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
+        self.__head.pack(fill='both')
 
         return self.__head
 
-    def _config_head(self):
+    def _config_center(self):
+        self.__img_banner = PhotoImage(file=r'assets\banner.PNG')
+        self.__banner: Label
+
         center = Frame(self.__head, bg=colr['purple'])
 
-        self.__img_banner = PhotoImage(file=r'assets\banner.PNG')
-        Label(center, image=self.__img_banner).pack(side='left')
+        self.__banner = Label(center, image=self.__img_banner)
+        self.__banner.pack(side='left')
+
+        center.pack(side='bottom', anchor='center')
 
         return center
 
     def _config_right(self):
+        self.__but_max: Button
+        self.__but_min: Button
+
         right = Frame(self.__head, bg=colr['purple'])
 
         self.__but_max = Button(right, text=' [+] Max')
@@ -45,6 +41,8 @@ class AppHead:
 
         self.__but_min = Button(right, text='Min [-] ')
         self.__but_min.pack(side='right', anchor='nw')
+
+        right.pack(side='right', anchor='nw')
 
         return right
 

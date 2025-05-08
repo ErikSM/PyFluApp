@@ -59,7 +59,8 @@ string_this_app = (
 
         Sendo assim, em caso de alguma queixa ou desagrado por parte do autor ou dono dos direitos do 
     conteúdo, o criador do app estará disposto a modificar ou eliminar o conteúdo do aplicativo ou até 
-    mesmo remove-lo (remover o app) do github e por um fim ao acesso a este aplicativo caso desejado.
+    mesmo remove-lo (remover o app) do github e por um fim ao desenvolvimento deste aplicativo caso 
+    desejado.
     """
 )
 

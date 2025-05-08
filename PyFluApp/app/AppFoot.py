@@ -8,24 +8,19 @@ from data.content_welcome import hello_string
 class AppFoot:
 
     def __init__(self, main_window: Tk):
-
-        self.__buts_others: None
-        self.__text_note: Text
-
         self.__foot = self._foot_frame(main_window)
-
         self.__center = self._config_center()
-        self.__center.grid(row=1, column=1)
-
-        self.__foot.pack()
 
 
     def _foot_frame(self, main_window):
         self.__foot = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
+        self.__foot.pack()
 
         return self.__foot
 
     def _config_center(self):
+        self.__buts_others = None
+        self.__text_note = None
 
         center = Frame(self.__foot, bg=colr['purple'])
 
@@ -38,17 +33,16 @@ class AppFoot:
         self.__text_note = Text(center, font=letter['note'],
                                 selectforeground='black', selectbackground='white', insertbackground='white',
                                 bg=colr['purple'], fg=colr['white'], bd=10, height=height['not'], width=width['not'])
-
-
         scr_note_x = Scrollbar(center, orient='horizontal', command=self.__text_note.xview)
         scr_note_x.grid(row=4, column=4, sticky=W + E)
         scr_note_y = Scrollbar(center, orient='vertical', command=self.__text_note.yview)
         scr_note_y.grid(row=3, rowspan=4, column=3, sticky=N + S)
-
         self.__text_note.config(yscrollcommand=scr_note_y.set, xscrollcommand=scr_note_x.set)
         self.__text_note.grid(row=3, column=4)
 
         self.__text_note.insert(1.0, hello_string)
+
+        center.grid(row=1, column=1)
 
         return center
 

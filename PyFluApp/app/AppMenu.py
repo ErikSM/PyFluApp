@@ -11,7 +11,6 @@ class AppMenu:
         self.__window = main_window
         self.__central = central         # central: [0]=head, [1]=body, [2]=foot
         self.__config = self.__central[3]
-        self.__geometry_sizes = ['932x518', '1171x631', '1494x765'], ['+188+47', '+187+23', '+2+2']
 
         self.__menu = self._config_menu()
 
@@ -92,8 +91,8 @@ class AppMenu:
         self._min_geometry()
 
     def _max_geometry(self):
-        sizes = self.__geometry_sizes[0]
-        ext = self.__geometry_sizes[1]
+        sizes = self.__config[4][0]
+        ext = self.__config[4][1]
 
         geometry = self.__window.wm_geometry()
 
@@ -115,8 +114,8 @@ class AppMenu:
                 pass
 
     def _min_geometry(self):
-        sizes = self.__geometry_sizes[0]
-        ext = self.__geometry_sizes[1]
+        sizes = self.__config[4][0]
+        ext = self.__config[4][1]
 
         geometry = self.__window.wm_geometry()
 

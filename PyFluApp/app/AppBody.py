@@ -12,35 +12,28 @@ from structure.Book import Book
 class AppBody:
 
     def __init__(self, main_window):
-
-        self.__book = None
-        self.__opt_str = StringVar()
-        self.__opt_list = python_books.keys()
-        self.__path_str = StringVar()
-
         self.__body = self._body_frame(main_window)
-
         self.__left = self._create_left()
-        self.__left.grid(row=0, column=0)
-
         self.__center = self._create_center()
-        self.__center.grid(row=0, column=1)
-
         self.__right = self._create_right()
-        self.__right.grid(row=0, column=2)
-
-        self.__body.pack()
 
 
     def _body_frame(self, main_window):
         self.__body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
 
+        self.__body.pack()
+
         return self.__body
 
     def _create_left(self):
+        self.__opt_str = StringVar(value ='Selecione o Livro')
+        self.__opt_list = python_books.keys()
+        self.__opt_menu_books: OptionMenu
+        self.__list_summary: Listbox
+
+
         left = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__opt_str.set(value ='Selecione o Livro')
 
         self.__opt_menu_books= OptionMenu(left,
                                           self.__opt_str, *self.__opt_list,
@@ -62,9 +55,13 @@ class AppBody:
         self.__list_summary.config(yscrollcommand=scr_list_y.set, xscrollcommand=scr_list_x.set)
         self.__list_summary.grid(row=3, column=1, columnspan=4)
 
+        left.grid(row=0, column=0)
+
         return left
 
     def _create_center(self):
+        self.__buts_actions = None
+
         center = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__buts_actions = configuring_buts(center, 'action', self._click_but_play)
@@ -73,9 +70,16 @@ class AppBody:
             i.pack()
         self.__buts_actions[1].pack()
 
+        center.grid(row=0, column=1)
+
         return center
 
     def _create_right(self):
+        self.__path_str = StringVar(value='..//')
+        self.__entry_path: Entry
+        self.__text_screen: Text
+        self.__but_notebook: Button
+
         right = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__entry_path = Entry(right, textvariable=self.__path_str, font=letter['search'],
@@ -83,8 +87,8 @@ class AppBody:
                                   width=width['ent'], bd=5, state='disabled')
         self.__entry_path.grid(row=2, column=2)
 
-        temp_but = Button(right, text=' < Expandir >b', command=self.screen_top_level)
-        temp_but.grid(row=2, column=4, columnspan=5)
+        self.__but_notebook = Button(right, text=' < Expandir >', command=self.screen_top_level)
+        self.__but_notebook.grid(row=2, column=4, columnspan=5)
 
         #  grid base [ column=2 ~ columnspan=4 ]
         self.__text_screen = Text(right, font=letter['screen'], insertunfocussed='hollow',
@@ -101,12 +105,14 @@ class AppBody:
 
         self.__text_screen.insert(1.0, attention_string)
 
+        right.grid(row=0, column=2)
+
         return right
 
     def _click_opt_book(self, selected):
-        self.__list_summary.delete(0, END)
-
         self.__book = Book(selected)
+
+        self.__list_summary.delete(0, END)
         self.__list_summary.insert(END, *self.__book.summary())
 
     def _click_but_play(self):
@@ -150,16 +156,21 @@ class AppBody:
     def del_text(self, where='screen'):
         if where == 'screen':
             self.__text_screen.delete(1.0, END)
+        elif where == 'list':
+            self.__list_summary.delete(0, END)
 
     def insert_text(self, *args, where='screen'):
         if where == 'screen':
             self.__text_screen.insert(END, *args)
+        elif where == 'list':
+            self.__list_summary.insert(END, *args)
 
     def screen_top_level(self):
         tl = Toplevel()
-        tl.geometry('+188+47')
-        temporary_screen = Text(tl)
+        tl.geometry('+300+47')
+
+        temporary_screen = Text(tl, width=130, height=40, bd=20)
         temporary_screen.insert(1.0, self.__text_screen.get(1.0, END))
         temporary_screen.pack(fill='both')
-        tl.mainloop()
 
+        tl.mainloop()

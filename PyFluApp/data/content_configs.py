@@ -14,6 +14,7 @@ letter = dict()
 font_letter = 'Arial', 'Consolas', 'Impact'
 font_mode = '', 'bold', 'italic', 'bold italic'
 
+
 letter['title'] = [font_letter[0], 10, font_mode[3]]
 letter['opt'] = [font_letter[1], 10, font_mode[1]]
 letter['list'] = [font_letter[1], 7, font_mode[2]]
@@ -30,3 +31,5 @@ width = {'opt': 38, 'ent': 30,
 
 height = {'lis': 12, 'tex': 11, 'not': 10,
           'bt_act': 0, 'bt_oth': 0}
+
+main_geometry = ['932x518', '1171x631', '1494x765'], ['+188+47', '+187+23', '+2+2']
