@@ -93,7 +93,8 @@ class AppBody:
         #  grid base [ column=2 ~ columnspan=4 ]
         self.__text_screen = Text(right, font=letter['screen'], insertunfocussed='hollow',
                                   bg=colr['grey'], fg=colr['yellow'], selectbackground=colr['yellow'] ,
-                                  height=height['tex'], width=width['tex'], bd=10)
+                                  height=height['tex'], width=width['tex'], bd=10,
+                                  tabstyle='wordprocessor', wrap='word')
 
         scr_text_x = Scrollbar(right, orient='horizontal', command=self.__text_screen.xview)
         scr_text_x.grid(row=4, column=2, columnspan=3, sticky=W + E)
@@ -167,12 +168,24 @@ class AppBody:
 
     def screen_top_level(self):
         tl = Toplevel()
-        tl.geometry('+300+47')
+        tl.geometry('+200+37')
 
-        temporary_screen = Text(tl, width=130, height=40, bd=20)
+        frame = Frame(tl)
+
+        temporary_screen = Text(frame, width=100, height=30, bd=20, font='12')
         temporary_screen.insert(1.0, self.__text_screen.get(1.0, END))
         temporary_screen.config(state='disabled', insertunfocussed='hollow')
         temporary_screen.configure(tabstyle='wordprocessor', wrap='word')
-        temporary_screen.pack(fill='both')
+
+        scr_text_x = Scrollbar(frame, orient='horizontal', command=temporary_screen.xview)
+        scr_text_x.grid(row=2, column=1, sticky=W + E)
+        scr_text_y = Scrollbar(frame, orient='vertical', command=temporary_screen.yview)
+        scr_text_y.grid(row=1, column=2, sticky=N + S)
+
+        temporary_screen.config(yscrollcommand=scr_text_y.set, xscrollcommand=scr_text_x.set)
+        temporary_screen.grid(row=1, column=1)
+
+
+        frame.pack(fill='both')
 
         tl.mainloop()
