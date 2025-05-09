@@ -9,20 +9,23 @@ class AppMenu:
 
     def __init__(self, main_window: Tk, central: CentralControl):
         self.__window = main_window
-        self.__central = central         # central: [0]=head, [1]=body, [2]=foot
-        self.__config = self.__central[3]
+        self.__central = central    # central = [0]=Head, [1]=Body, [2]=Foot, [3]=Config
 
         self.__menu = self._config_menu()
+        self.__bar = self._create_menu_bar()
 
+        #  from AppHead - menu: ['max' end 'min']
+        self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
+
+
+    def _create_menu_bar(self):
         self.__menu_file = self._config_menu_arquivo()
         self.__menu_edit = self._config_menu_edit()
         self.__menu_info = self._config_menu_info()
 
         self.__window.config(menu=self.__menu)
 
-        #  from AppHead - menu 'max' end 'min'
-        self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
-
+        return self.__menu_file, self.__menu_edit, self.__menu_info
 
     def _config_menu(self):
         menu = Menu(self.__window, selectcolor=colr['purple'], type="menubar")
@@ -73,26 +76,26 @@ class AppMenu:
     def click_maximize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__config.set_size_in_proportion('plus', geometry=geometry)
+        self.__central[3].set_size_in_proportion('plus', geometry=geometry)
 
-        self.__central[1].update_size(self.__config['2'], self.__config['3'], self.__config[1])
-        self.__central[2].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
 
         self._max_geometry()
 
     def click_minimize(self):
         geometry = self.__window.wm_geometry()
 
-        self.__config.set_size_in_proportion('less', geometry=geometry)
+        self.__central[3].set_size_in_proportion('less', geometry=geometry)
 
-        self.__central[1].update_size(self.__config['2'], self.__config['3'], self.__config[1])
-        self.__central[2].update_size(self.__config['2'], self.__config['3'], self.__config[1])
+        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
 
         self._min_geometry()
 
     def _max_geometry(self):
-        sizes = self.__config[4][0]
-        ext = self.__config[4][1]
+        sizes = self.__central[3][4][0]
+        ext = self.__central[3][4][1]
 
         geometry = self.__window.wm_geometry()
 
@@ -114,8 +117,8 @@ class AppMenu:
                 pass
 
     def _min_geometry(self):
-        sizes = self.__config[4][0]
-        ext = self.__config[4][1]
+        sizes = self.__central[3][4][0]
+        ext = self.__central[3][4][1]
 
         geometry = self.__window.wm_geometry()
 

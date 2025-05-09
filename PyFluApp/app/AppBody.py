@@ -171,6 +171,8 @@ class AppBody:
 
         temporary_screen = Text(tl, width=130, height=40, bd=20)
         temporary_screen.insert(1.0, self.__text_screen.get(1.0, END))
+        temporary_screen.config(state='disabled', insertunfocussed='hollow')
+        temporary_screen.configure(tabstyle='wordprocessor', wrap='word')
         temporary_screen.pack(fill='both')
 
         tl.mainloop()
