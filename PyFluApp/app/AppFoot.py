@@ -23,12 +23,10 @@ class AppFoot:
         self.__text_note = None
 
         center = Frame(self.__foot, bg=colr['purple'])
-
         self.__buts_others = configuring_buts(center, 'others', self.click_any_but_others)
         for i in self.__buts_others[0]:
             i.pack()
         self.__buts_others[1].grid(row=2, rowspan=3, column=1)
-
 
         self.__text_note = Text(center, font=letter['note'],
                                 selectforeground='black', selectbackground='white', insertbackground='white',
@@ -41,7 +39,6 @@ class AppFoot:
         self.__text_note.grid(row=3, column=4)
 
         self.__text_note.insert(1.0, hello_string)
-
         center.grid(row=1, column=1)
 
         return center

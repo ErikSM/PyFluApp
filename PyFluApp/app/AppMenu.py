@@ -66,33 +66,6 @@ class AppMenu:
 
         return info
 
-    def click_start(self):
-        self.__central[1].default()
-        self.__central[2].default()
-
-    def click_sair(self):
-        self.__window.destroy()
-
-    def click_maximize(self):
-        geometry = self.__window.wm_geometry()
-
-        self.__central[3].set_size_in_proportion('plus', geometry=geometry)
-
-        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
-        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
-
-        self._max_geometry()
-
-    def click_minimize(self):
-        geometry = self.__window.wm_geometry()
-
-        self.__central[3].set_size_in_proportion('less', geometry=geometry)
-
-        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
-        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
-
-        self._min_geometry()
-
     def _max_geometry(self):
         sizes = self.__central[3][4][0]
         ext = self.__central[3][4][1]
@@ -137,6 +110,33 @@ class AppMenu:
                 self.__window.geometry(f'{sizes[new_position]}{ext[new_position]}')
             except IndexError:
                 pass
+
+    def click_start(self):
+        self.__central[1].default()
+        self.__central[2].default()
+
+    def click_sair(self):
+        self.__window.destroy()
+
+    def click_maximize(self):
+        geometry = self.__window.wm_geometry()
+
+        self.__central[3].set_size_in_proportion('plus', geometry=geometry)
+
+        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+
+        self._max_geometry()
+
+    def click_minimize(self):
+        geometry = self.__window.wm_geometry()
+
+        self.__central[3].set_size_in_proportion('less', geometry=geometry)
+
+        self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+        self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
+
+        self._min_geometry()
 
     def click_themes(self, choice):
         theme = themes[choice]
