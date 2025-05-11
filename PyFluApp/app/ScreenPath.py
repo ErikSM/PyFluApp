@@ -3,7 +3,7 @@ from tkinter import Entry, StringVar, END
 from data.content_configs import letter, colr, width
 
 
-class PathScreen:
+class ScreenPath:
 
     def __init__(self, frame):
         self.__str_var = StringVar(value='..//')
