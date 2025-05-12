@@ -5,10 +5,6 @@ from data.content_configs import letter, colr, width
 from data.content_summary import python_books
 from structure.Book import Book
 
-
-#  //////////////   em desenvolvimento  /////////////////////////
-
-
 class SummaryOption:
 
     def __init__(self, frame, list_summary: Summary):
@@ -19,7 +15,7 @@ class SummaryOption:
         self.__options = python_books.keys()
 
         self.__summary_menu = OptionMenu(frame, self.__selected, *self.__options,
-                                         command=lambda str=self.__selected: self._click_menu(str))
+                                         command=lambda str_var=self.__selected: self._click_menu(str_var))
 
     def __str__(self):
         return self.__selected.get()
@@ -36,4 +32,7 @@ class SummaryOption:
 
     def config_widget(self, **kwargs):
         self.__summary_menu.config(**kwargs)
+
+    def default(self):
+        self.__selected.set(value='Selecione o Livro')
 

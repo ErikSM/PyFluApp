@@ -1,4 +1,4 @@
-from tkinter import Frame, OptionMenu, Text, StringVar, Scrollbar, E, W, N, S, END, Toplevel, Button
+from tkinter import Frame, Text, Scrollbar, E, W, N, S, END, Toplevel, Button
 
 from app.Screen import Screen
 from app.ScreenPath import ScreenPath
@@ -6,7 +6,6 @@ from app.Summary import Summary
 from app.SummaryOption import SummaryOption
 from data.all_errors import log_error
 from data.content_configs import colr, letter, width
-from data.content_summary import python_books
 from data.content_welcome import attention_string
 from structure.buttons import configuring_buts
 
@@ -15,10 +14,10 @@ class AppBody:
 
     def __init__(self, main_window):
         self.__body = self._body_frame(main_window)
+
         self.__left = self._create_left()
         self.__center = self._create_center()
         self.__right = self._create_right()
-
 
     def _body_frame(self, main_window):
         self.__body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
@@ -27,10 +26,6 @@ class AppBody:
         return self.__body
 
     def _create_left(self):
-        self.__opt_str = StringVar(value ='Selecione o Livro')
-        self.__opt_list = python_books.keys()
-        self.__opt_menu_books: OptionMenu
-
         left = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__list_summary = Summary(left)
@@ -48,12 +43,9 @@ class AppBody:
         return left
 
     def _create_center(self):
-        self.__buts_actions = None
-
         center = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__buts_actions = configuring_buts(center, 'action', self._click_but_play)
-
         for i in self.__buts_actions[0]:
             i.pack()
         self.__buts_actions[1].pack()
@@ -97,7 +89,7 @@ class AppBody:
         self.__list_summary.delete_option(0, END)
         self.__entry_path.delete_text(0, END)
 
-        self.__opt_str.set(value ='Selecione o Livro')
+        self.__opt_menu_books.default()
         self.__text_screen.write(1.0, attention_string)
 
     def update_size(self, new_w: dict, new_h: dict, new_l: dict):

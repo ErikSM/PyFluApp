@@ -10,7 +10,6 @@ class AppMenu:
     def __init__(self, main_window: Tk, central: CentralControl):
         self.__window = main_window
         self.__central = central    # central = [0]=Head, [1]=Body, [2]=Foot, [3]=Config
-
         self.__menu = self._config_menu()
         self.__bar = self._create_menu_bar()
 
