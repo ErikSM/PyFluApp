@@ -1,14 +1,14 @@
-from tkinter import Frame, OptionMenu, Listbox, Entry, Text, StringVar, Scrollbar, E, W, N, S, END, Toplevel, Button
+from tkinter import Frame, OptionMenu, Text, StringVar, Scrollbar, E, W, N, S, END, Toplevel, Button
 
-from app.PathScreen import PathScreen
 from app.Screen import Screen
+from app.ScreenPath import ScreenPath
 from app.Summary import Summary
-from structure.buttons import configuring_buts
+from app.SummaryOption import SummaryOption
 from data.all_errors import log_error
 from data.content_configs import colr, letter, width
 from data.content_summary import python_books
 from data.content_welcome import attention_string
-from structure.Book import Book
+from structure.buttons import configuring_buts
 
 
 class AppBody:
@@ -33,17 +33,15 @@ class AppBody:
 
         left = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__opt_menu_books= OptionMenu(left, self.__opt_str, *self.__opt_list,
-                                          command=lambda selected=self.__opt_str: self._click_opt_book(selected))
-
-        self.__opt_menu_books.config(font=letter['opt'], bg =colr['white grey'],
-                                     width=width['opt'], bd=3, anchor='center', state='normal')
-        self.__opt_menu_books.grid(row=2, column=1)
-
         self.__list_summary = Summary(left)
         self.__list_summary.grid_config('summary', row=3, column=1, columnspan=4)
         self.__list_summary.grid_config('scroll_x', row=4, column=1, columnspan=5, sticky=W + E)
         self.__list_summary.grid_config('scroll_y', row=3, rowspan=4, column=0, sticky=N + S)
+
+        self.__opt_menu_books = SummaryOption(left, self.__list_summary)
+        self.__opt_menu_books.config_widget(font=letter['opt'], bg=colr['white grey'], bd=3,
+                                            width=width['opt'], anchor='center', state='normal')
+        self.__opt_menu_books.grid_config(row=2, column=1)
 
         left.grid(row=0, column=0)
 
@@ -67,7 +65,7 @@ class AppBody:
     def _create_right(self):
         right = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__entry_path = PathScreen(right)
+        self.__entry_path = ScreenPath(right)
         self.__entry_path.grid_config(row=2, column=2)
 
         self.__but_notebook = Button(right, text=' < Expandir >', command=self.screen_top_level)
@@ -83,18 +81,12 @@ class AppBody:
 
         return right
 
-    def _click_opt_book(self, selected):
-        self.__book = Book(selected)
-
-        self.__list_summary.delete_option(0, END)
-        self.__list_summary.write(END, *self.__book.summary())
-
     def _click_but_play(self):
         self.__text_screen.delete_text(1.0, END)
 
         selected = self.__list_summary.get_selected()
         try:
-            file_content = self.__book[selected]
+            file_content = self.__opt_menu_books[selected]
         except TypeError as type_error:
             file_content = log_error('AppMain _click_but_play', type_error, 'book not found')
 

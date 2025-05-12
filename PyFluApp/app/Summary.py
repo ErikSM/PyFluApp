@@ -28,5 +28,9 @@ class Summary:
     def delete_option(self, param=0, end_param=END):
         self.__summary.delete(param, end_param)
 
+    def update_content(self, *summary_content):
+        self.__summary.delete(0, END)
+        self.__summary.insert(1, *summary_content)
+
     def get_selected(self):
         return self.__summary.get(ANCHOR)

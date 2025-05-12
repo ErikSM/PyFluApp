@@ -1,7 +1,9 @@
-from tkinter import StringVar, OptionMenu
+from tkinter import StringVar, OptionMenu, END
 
+from app.Summary import Summary
 from data.content_configs import letter, colr, width
 from data.content_summary import python_books
+from structure.Book import Book
 
 
 #  //////////////   em desenvolvimento  /////////////////////////
@@ -9,15 +11,29 @@ from data.content_summary import python_books
 
 class SummaryOption:
 
-    def __init__(self, left):
-        self.__opt_str = StringVar(value='Selecione o Livro')
-        self.__opt_list = python_books.keys()
+    def __init__(self, frame, list_summary: Summary):
+        self.__book = None
+        self.__listbox_summary = list_summary
 
+        self.__selected = StringVar(value='Selecione o Livro')
+        self.__options = python_books.keys()
 
-        self.__opt_menu_books = OptionMenu(left, self.__opt_str, *self.__opt_list,
-                                           command=lambda selected=self.__opt_str: self._click_opt_book(selected))
+        self.__summary_menu = OptionMenu(frame, self.__selected, *self.__options,
+                                         command=lambda str=self.__selected: self._click_menu(str))
 
-        self.__opt_menu_books.config(font=letter['opt'], bg=colr['white grey'],
-                                     width=width['opt'], bd=3, anchor='center', state='normal')
-        self.__opt_menu_books.grid(row=2, column=1)
+    def __str__(self):
+        return self.__selected.get()
+
+    def __getitem__(self, item):
+        return self.__book[item]
+
+    def _click_menu(self, str_var):
+        self.__book = Book(str_var)
+        self.__listbox_summary.update_content(*self.__book.summary())
+
+    def grid_config(self, **kwargs):
+        self.__summary_menu.grid(**kwargs)
+
+    def config_widget(self, **kwargs):
+        self.__summary_menu.config(**kwargs)
 
