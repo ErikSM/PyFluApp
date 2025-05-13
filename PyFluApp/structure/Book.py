@@ -3,7 +3,6 @@ from data.content_summary import python_books, open_file
 
 
 def prepare_file_name(selected: str):
-
     file_name = selected[:selected.find(')')]
 
     file_name = file_name.replace(' ', '')
@@ -16,7 +15,6 @@ class Book:
 
     def __init__(self, book: python_books):
         self.__name = book
-
         self.__chapters = python_books[self.__name]
 
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}

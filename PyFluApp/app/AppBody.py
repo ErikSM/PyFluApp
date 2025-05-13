@@ -1,7 +1,6 @@
 from tkinter import Frame, Text, Scrollbar, E, W, N, S, END, Toplevel, Button
-
 from app.Screen import Screen
-from app.ScreenPath import ScreenPath
+from app.ContentPath import ContentPath
 from app.Summary import Summary
 from app.SummaryOption import SummaryOption
 from data.all_errors import log_error
@@ -18,6 +17,7 @@ class AppBody:
         self.__left = self._create_left()
         self.__center = self._create_center()
         self.__right = self._create_right()
+
 
     def _body_frame(self, main_window):
         self.__body = Frame(main_window, bg=colr['purple'], width=100, height=100, bd=3)
@@ -57,13 +57,13 @@ class AppBody:
     def _create_right(self):
         right = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__entry_path = ScreenPath(right)
+        self.__entry_path = ContentPath(right)
         self.__entry_path.grid_config(row=2, column=2)
 
         self.__but_notebook = Button(right, text=' < Expandir >', command=self.screen_top_level)
         self.__but_notebook.grid(row=2, column=4, columnspan=5)
 
-        self.__text_screen = Screen(right)
+        self.__text_screen = Screen('notes', right)
         self.__text_screen.grid_config('screen', row=3, column=2, columnspan=3)
         self.__text_screen.grid_config('scroll_x', row=4, column=2, columnspan=3, sticky=W + E)
         self.__text_screen.grid_config('scroll_y', row=3, rowspan=4, column=5, sticky=N + S)
@@ -146,4 +146,3 @@ class AppBody:
         frame.pack(fill='both')
 
         tl.mainloop()
-

@@ -1,6 +1,4 @@
-from tkinter import Listbox, Scrollbar, END
-from tkinter.constants import ANCHOR
-
+from tkinter import Listbox, Scrollbar, END, ANCHOR
 from data.content_configs import letter, colr, height, width
 
 

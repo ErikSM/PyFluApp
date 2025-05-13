@@ -1,5 +1,4 @@
 from tkinter import Menu, Tk
-
 from app.CentralControl import CentralControl
 from data.all_errors import error_historic
 from data.content_configs import colr, themes
@@ -9,12 +8,11 @@ class AppMenu:
 
     def __init__(self, main_window: Tk, central: CentralControl):
         self.__window = main_window
-        self.__central = central    # central = [0]=Head, [1]=Body, [2]=Foot, [3]=Config
+
+        self.__central = central  # [0]=Head, [1]=Body, [2]=Foot, [3]=Config
+
         self.__menu = self._config_menu()
         self.__bar = self._create_menu_bar()
-
-        #  from AppHead - menu: ['max' end 'min']
-        self.__central[0].add_command_to_max_min_but(self.click_maximize, self.click_minimize)
 
 
     def _create_menu_bar(self):
@@ -118,9 +116,8 @@ class AppMenu:
         self.__window.destroy()
 
     def click_maximize(self):
-        geometry = self.__window.wm_geometry()
 
-        self.__central[3].set_size_in_proportion('plus', geometry=geometry)
+        self.__central[3].set_size_in_proportion('plus')
 
         self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
         self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
@@ -128,9 +125,8 @@ class AppMenu:
         self._max_geometry()
 
     def click_minimize(self):
-        geometry = self.__window.wm_geometry()
 
-        self.__central[3].set_size_in_proportion('less', geometry=geometry)
+        self.__central[3].set_size_in_proportion('less')
 
         self.__central[1].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])
         self.__central[2].update_size(self.__central[3]['2'], self.__central[3]['3'], self.__central[3]['1'])

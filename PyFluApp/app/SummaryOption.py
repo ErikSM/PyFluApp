@@ -1,15 +1,15 @@
-from tkinter import StringVar, OptionMenu, END
-
+from tkinter import StringVar, OptionMenu
 from app.Summary import Summary
-from data.content_configs import letter, colr, width
-from data.content_summary import python_books
 from structure.Book import Book
+from data.all_errors import log_error
+from data.content_summary import python_books
+
 
 class SummaryOption:
 
-    def __init__(self, frame, list_summary: Summary):
-        self.__book = None
-        self.__listbox_summary = list_summary
+    def __init__(self, frame, summary: Summary):
+        self.__book: Book
+        self.__listbox_summary = summary
 
         self.__selected = StringVar(value='Selecione o Livro')
         self.__options = python_books.keys()
@@ -21,7 +21,10 @@ class SummaryOption:
         return self.__selected.get()
 
     def __getitem__(self, item):
-        return self.__book[item]
+        try:
+            return self.__book[item]
+        except AttributeError as ae:
+            return log_error('SummaryOption __getitem__', ae, 'book not found')
 
     def _click_menu(self, str_var):
         self.__book = Book(str_var)

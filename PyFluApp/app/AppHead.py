@@ -1,5 +1,4 @@
 from tkinter import Tk, Frame, Label, PhotoImage, Button
-
 from structure.Config import colr
 
 
