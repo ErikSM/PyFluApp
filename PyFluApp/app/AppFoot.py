@@ -1,6 +1,7 @@
 from tkinter import Tk, Frame, END, W, E, N, S
+
+from app.CustomButton import CustomButton
 from app.Screen import Screen
-from structure.buttons import processing_but_other, configuring_buts
 from data.content_configs import colr
 from data.content_welcome import hello_string
 
@@ -19,13 +20,10 @@ class AppFoot:
         return self.__foot
 
     def _config_center(self):
-
         center = Frame(self.__foot, bg=colr['purple'])
 
-        self.__buts_others = configuring_buts(center, 'others', self.click_any_but_others)
-        for i in self.__buts_others[0]:
-            i.pack()
-        self.__buts_others[1].grid(row=2, rowspan=3, column=1)
+        self.__oth_buts = CustomButton(center, 'others', self.click_any_but_others)
+        self.__oth_buts.layout('grid', row=2, rowspan=3, column=1)
 
         self.__terminal = Screen('terminal', center)
         self.__terminal.grid_config('screen', row=3, column=4)
@@ -40,12 +38,12 @@ class AppFoot:
     def click_any_but_others(self, selected: str):
         self.__terminal.delete_text(0.0, END)
 
-        processed = processing_but_other(selected)
-        text_str, more_action, action = processed
+        processed = self.__oth_buts.processing_but_other(selected)
 
-        self.__terminal.write(END, text_str)
-        if more_action:
-            action()
+        self.__terminal.write(END, processed[0])
+        if processed[1]:
+            processed[2]()
+
 
     def default(self):
         self.__terminal.delete_text(0.0, END)
@@ -63,7 +61,4 @@ class AppFoot:
 
         self.__terminal.configure_widget('screen', bg=theme[0], fg=theme[1])
 
-        self.__buts_others[1].config(bg=theme[0])
-        for i in self.__buts_others[0]:
-            i.config(bg=theme[0], fg=theme[1])
-
+        self.__oth_buts.update_color(theme[0], theme[1])

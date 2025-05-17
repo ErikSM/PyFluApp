@@ -1,4 +1,6 @@
 from tkinter import Frame, Text, Scrollbar, E, W, N, S, END, Toplevel, Button
+
+from app.CustomButton import CustomButton
 from app.Screen import Screen
 from app.ContentPath import ContentPath
 from app.Summary import Summary
@@ -6,7 +8,6 @@ from app.SummaryOption import SummaryOption
 from data.all_errors import log_error
 from data.content_configs import colr, letter, width
 from data.content_welcome import attention_string
-from structure.buttons import configuring_buts
 
 
 class AppBody:
@@ -45,10 +46,8 @@ class AppBody:
     def _create_center(self):
         center = Frame(self.__body, bg=colr['purple'], width=30)
 
-        self.__buts_actions = configuring_buts(center, 'action', self._click_but_play)
-        for i in self.__buts_actions[0]:
-            i.pack()
-        self.__buts_actions[1].pack()
+        self.__act_buts = CustomButton(center, 'action' ,self._click_but_play)
+        self.__act_buts.layout('pack')
 
         center.grid(row=0, column=1)
 
@@ -137,6 +136,7 @@ class AppBody:
 
         scr_text_x = Scrollbar(frame, orient='horizontal', command=temporary_screen.xview)
         scr_text_x.grid(row=2, column=1, sticky=W + E)
+
         scr_text_y = Scrollbar(frame, orient='vertical', command=temporary_screen.yview)
         scr_text_y.grid(row=1, column=2, sticky=N + S)
 
@@ -146,3 +146,4 @@ class AppBody:
         frame.pack(fill='both')
 
         tl.mainloop()
+

@@ -17,6 +17,7 @@ class SummaryOption:
         self.__summary_menu = OptionMenu(frame, self.__selected, *self.__options,
                                          command=lambda str_var=self.__selected: self._click_menu(str_var))
 
+
     def __str__(self):
         return self.__selected.get()
 

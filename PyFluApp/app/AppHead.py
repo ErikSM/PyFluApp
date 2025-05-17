@@ -5,6 +5,7 @@ from structure.Config import colr
 class AppHead:
 
     def __init__(self, main_window: Tk):
+
         self.__head = self._head_frame(main_window)
         self.__center = self._config_center()
         self.__right = self._config_right()

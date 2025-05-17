@@ -1,0 +1,79 @@
+                            6.2. Variáveis não são caixas
+
+    Em 1997, fiz um curso de verão sobre Java no MIT. A professora, Lynn Stein, apontou que a metáfora
+comum, de “variáveis como caixas”, na verdade, atrapalha o entendimento de variáveis de referência em
+linguagens orientadas a objetos. As variáveis em Python são como variáveis de referência em Java; uma
+metáfora melhor é pensar em uma variável como um rótulo (ou etiqueta) que associa um nome a um objeto. O
+exemplo e a figura a seguir ajudam a entender o motivo disso.
+
+    Exemplo abaixo é uma interação simples que não pode ser explicada por “variáveis como caixas”. A Figura
+ilustra o motivo de metáfora da caixa estar errada em Python, enquanto etiquetas apresentam uma imagem mais
+útil para entender como variáveis funcionam.
+
+
+-------------------------------------------------------------------------------------------------------
+Exemplo: As variáveis a e b mantém referências para a mesma lista, não cópias da lista.
+-------------------------------------------------------------------------------------------------------
+a = [1, 2, 3]   (1)
+b = a           (2)
+a.append(4)     (3)
+print(a)        (4)
+[1, 2, 3, 4]
+-------------------------------------------------------------------------------------------------------
+        1.Cria uma lista [1, 2, 3] e a vincula à variável a.
+        2.Vincula a variável b ao mesmo valor referenciado por a.
+        3.Modifica a lista referenciada por a, anexando um novo item.
+        4.É possível ver o efeito através da variável b. Se você
+            pensar em b como uma caixa que guardava uma cópia
+            de [1, 2, 3] da caixa a, este comportamento não faz
+            sentido.
+
+------------------------------------------------------------------------------------------------------
+    Figura: Se você imaginar variáveis como caixas, não é possível entender a atribuição em
+Python; por outro lado, pense em variáveis como etiquetas autocolantes e Exemplo acima é
+facilmente explicável.
+Veja a figura aqui: ( https://pythonfluente.com/#ex_a_b_refs ).
+------------------------------------------------------------------------------------------------------
+
+    Assim, a instrução b = a não copia o conteúdo de uma caixa a para uma caixa b. Ela cola uma nova
+etiqueta b no objeto que já tem a etiqueta a.
+
+    A professora Stein também falava sobre atribuição de uma maneira bastante específica. Por exemplo,
+quando discutia sobre um objeto representando uma gangorra em uma simulação, ela dizia: “A variável g
+foi atribuída à gangorra”, mas nunca “A gangorra foi atribuída à variável g”. Com variáveis de referência,
+faz muito mais sentido dizer que a variável é atribuída a um objeto, não o contrário. Afinal, o objeto é
+criado antes da atribuição. Exemplo abaixo prova que o lado direito de uma atribuição é processado primeiro.
+
+    Já que o verbo “atribuir” é usado de diferentes maneiras, uma alternativa útil é “vincular”: a
+declaração de atribuição em Python x = … vincula o nome x ao objeto criado ou referenciado no lado
+direito. E o objeto precisa existir antes que um nome possa ser vinculado a ele, como demonstra Exemplo abaixo.
+
+
+---------------------------------------------------------------------------------------------------
+Exemplo: Variáveis são vinculadas a objetos somente após os objetos serem criados
+---------------------------------------------------------------------------------------------------
+class Gizmo:
+    def __int__(self):
+        print(f'gizmo id: {id(self)}')
+
+x = Gizmo()
+# Gizmo id: 4301489152  (1)
+y = Gizmo() * 10        (2)
+# Gizmo id 4301489432   (3)
+""" Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s) for *: 'Gizmo' and 'int' """
+dir()                   (4)
+['Gizmo', '__builtins__', '__doc__', '__loader__', '__name__', '__package__', '__spec__', 'x']
+---------------------------------------------------------------------------------------------------
+        1.A saída Gizmo id: … é um efeito colateral da criação de uma instância de Gizmo.
+        2.Multiplicar uma instância de Gizmo levanta uma exceção.
+        3.Aqui está a prova que um segundo Gizmo foi de fato instanciado antes que a
+            multiplicação fosse tentada.
+        4.Mas a variável y nunca foi criada, porque a exceção aconteceu enquanto a parte
+            direita da atribuição estava sendo executada.
+
+
+
+
+

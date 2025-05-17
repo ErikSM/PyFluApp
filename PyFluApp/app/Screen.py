@@ -4,19 +4,20 @@ from data.content_configs import letter, colr, width, height
 
 def choice_text(screen, frame):
     if screen == 'notes':
-        return Text(frame, font=letter['screen'], height=height['tex'], width=width['tex'], bd=10,
-                                bg=colr['grey'], fg=colr['yellow'], selectbackground=colr['yellow'],
-                                tabstyle='wordprocessor', wrap='word', insertunfocussed='hollow')
+        return Text(frame, bd=10,
+                    font=letter['screen'], height=height['tex'], width=width['tex'],bg=colr['grey'], fg=colr['yellow'],
+                    selectbackground=colr['yellow'], tabstyle='wordprocessor', wrap='word', insertunfocussed='hollow')
     elif screen == 'terminal':
-        return Text(frame, font=letter['note'],
-                            selectforeground='black', selectbackground='white', insertbackground='white',
-                            bg=colr['purple'], fg=colr['white'], bd=10, height=height['not'], width=width['not'])
+        return Text(frame,
+                    font=letter['note'], bg=colr['purple'], fg=colr['white'], height=height['not'], width=width['not'],
+                    selectforeground='black', selectbackground='white', insertbackground='white', bd=10)
     else:
         return Text(frame)
 
+
 class Screen:
-    screens = 'notes', 'terminal'
-    def __init__(self, screen:screens ,frame):
+
+    def __init__(self, screen ,frame):
 
         self.__txt_principal = choice_text(screen, frame)
 
@@ -24,6 +25,7 @@ class Screen:
         self.__scroll_y = Scrollbar(frame, orient='vertical', command=self.__txt_principal.yview)
 
         self.__widgets = {'screen': self.__txt_principal, 'scroll_x': self.__scroll_x, 'scroll_y':self.__scroll_y}
+
 
     def grid_config(self, widget, **kwargs):
         self.__widgets[widget].grid(**kwargs)

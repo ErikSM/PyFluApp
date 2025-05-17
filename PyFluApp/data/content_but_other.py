@@ -104,5 +104,5 @@ other_buts_dict = {'Acesse o Site Oficial': string_oficial_site,
                    'Para quem é o Livro': string_for_who_is_book,
                    'Este Aplicativo': string_this_app,
                    'Quem sou eu': string_who_am_i,
-                   'Contato-te me': string_contact_me}
+                   'Contate-me': string_contact_me}
 
