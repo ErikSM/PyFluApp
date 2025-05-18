@@ -1,0 +1,32 @@
+                    5. Fábricas de classes de dados
+
+
+    Classes de dados são como crianças. São boas como um ponto de partida mas, para
+participarem como um objeto adulto, precisam assumir alguma responsabilidade.
+(Martin Fowler and Kent Beck em Refactoring)
+
+    O Python oferece algumas formas de criar uma classe simples, apenas uma coleção de
+campos, com pouca ou nenhuma funcionalidade adicional. Esse padrão é conhecido como
+"classe de dados"—e dataclasses é um dos pacotes que suporta tal modelo. Este capítulo
+trata de três diferentes fábricas de classes que podem ser utilizadas como atalhos para
+escrever classes de dados:
+            - collections.namedtuple:
+                        A forma mais simples—disponível desde o Python 2.6.
+
+            - typing.NamedTuple
+                        Uma alternativa que requer dicas de tipo nos campos—desde
+                        o Python 3.5, com a sintaxe class adicionada no 3.6.
+
+            - @dataclasses.dataclass
+                        Um decorador de classe que permite mais personalização que
+                        as alternativas anteriores, acrescentando várias opções e,
+                        potencialmente, mais complexidade—desde o Python 3.7.
+
+
+
+
+            # Novidades
+
+    Este capítulo é novo, aparece nessa segunda edição do Python Fluente. A Seção 5.3 era parte do capítulo 2 da
+primeira edição, mas o restante do capítulo é inteiramente inédito.
+

@@ -1,4 +1,4 @@
-from tkinter import NORMAL, Frame, Button, Text
+from tkinter import NORMAL, Frame, Button
 
 from data.content_but_other import other_buts_dict
 from data.content_configs import colr, width, height, letter
@@ -12,8 +12,6 @@ class CustomButton:
         self.__type_buts = type_buts
         self.__app_click_command = command
 
-        self.__oth_content = other_buts_dict
-
         self.__buts = self._configuring_buts()
 
 
@@ -24,13 +22,13 @@ class CustomButton:
             buts[1].config(text='play      >', bg=colr['purple'], bd=3, command=self.__app_click_command)
 
         elif self.__type_buts == 'others':
-            all_buts = [i for i in other_buts_dict.keys()]
+            all_buts_names = [k for k in other_buts_dict.keys()]
+            
             cont = 0
-
             for i in buts:
-                but_txt = all_buts[cont]
-                i.config(text=f'{but_txt}',
-                         command=lambda selected=but_txt: self.__app_click_command(selected))
+                but_name = all_buts_names[cont]
+                i.config(text=f'{but_name}',
+                         command=lambda selected=f'{but_name}': self.__app_click_command(selected))
                 cont += 1
 
         return buts, buts_local
@@ -74,17 +72,16 @@ class CustomButton:
         for i in self.__buts[0]:
             i.config(bg=bg_theme, fg=fg_theme)
 
+    def processing_but(self, type_but, selected: str):
+        if self.__type_buts == 'others':
+            string = other_buts_dict[selected]
 
-    def processing_but_other(self, selected: str):
-        string = self.__oth_content[selected]
+            web_browser = WebAccess('https://pythonfluente.com/').url_open_on_browser
 
-        web_browser = WebAccess('https://pythonfluente.com/').url_open_on_browser
+            if selected == 'Acesse o Site Oficial':
+                return string, True, web_browser
+            else:
+                return string, False
 
-        if selected == 'Acesse o Site Oficial':
-            return string, True, web_browser
         else:
-            return string, False
-
-
-
-
+            return None

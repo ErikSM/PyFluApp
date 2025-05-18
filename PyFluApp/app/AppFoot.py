@@ -38,12 +38,10 @@ class AppFoot:
     def click_any_but_others(self, selected: str):
         self.__terminal.delete_text(0.0, END)
 
-        processed = self.__oth_buts.processing_but_other(selected)
-
+        processed = self.__oth_buts.processing_but('others', selected)
         self.__terminal.write(END, processed[0])
         if processed[1]:
             processed[2]()
-
 
     def default(self):
         self.__terminal.delete_text(0.0, END)

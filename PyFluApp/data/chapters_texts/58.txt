@@ -1,0 +1,193 @@
+                            5.8. Pattern Matching com instâncias de classes
+
+
+    Padrões de classe são projetados para "casar" com instâncias de classes por tipo e—opcionalmente—por
+atributos. O sujeito de um padrão de classe pode ser uma instância de qualquer classe, não apenas instâncias
+de classes de dados.
+    Há três variantes de padrões de classes: simples, nomeado e posicional.
+            * Vamos estudá-las nessa ordem: 1-Simples, 2-Nomeados e 3-Posicionais
+
+
+
+
+            # Padrões de classe simples
+
+
+    Já vimos um exemplo de padrões de classe simples usados como sub-padrões na Seção 2.6:
+
+----------------------------------------------------------------------
+        case [str(name), _, _, (float(lat), float(lon))]:
+----------------------------------------------------------------------
+
+    Aquele padrão "casa" com uma sequência de quatro itens, onde o primeiro item deve ser uma instância
+de str e o último item deve ser um tupla de dois elementos, com duas instâncias de float.
+
+    A sintaxe dos padrões de classe se parece com a invocação de um construtor. Abaixo temos um padrão de
+classe que "casa" com valores float sem vincular uma variável (o corpo do case pode ser referir a x
+diretamente, se necessário):
+
+-------------------------------------------------------------
+    match x:
+        case float():
+            do_something_with(x)
+
+-------------------------------------------------------------
+
+Mas isso aqui possivelmente será um bug no seu código:
+
+-------------------------------------------------------------
+    match x:
+        case float:  # DANGER!!!
+            do_something_with(x)
+-------------------------------------------------------------
+
+
+    No exemplo anterior, case float: "casa" com qualquer sujeito, pois o Python entende float como uma
+variável, que é então vinculada ao sujeito.
+
+    A sintaxe float(x) do padrão simples é um caso especial que se aplica apenas a onze tipos embutidos
+"abençoados", listados no final da seção "Class Patterns" (Padrões de Classe) (EN) da PEP 634—Structural
+Pattern Matching: Specification ((Pattern Matching Estrutural: Especificação):
+
+-----------------------------------------------------------------------------------------------
+bool   bytearray   bytes   dict   float   frozenset   int   list   set   str   tuple
+-----------------------------------------------------------------------------------------------
+
+    Nessas classes, a variável que parece um argumento do construtor—por exemplo, o x em float(x)—é
+vinculada a toda a instância do sujeito ou à parte do sujeito que "casa" com um sub-padrão, como
+exemplificado por str(name) no padrão de sequência que vimos antes:
+
+-----------------------------------------------------------------------------------------------
+        case [str(name), _, _, (float(lat), float(lon))]:
+-----------------------------------------------------------------------------------------------
+
+    Se a classe não de um daqueles onze tipos embutidos "abençoados", então essas variáveis parecidas com
+argumentos representam padrões a serem testados com atributos de uma instância daquela classe.
+
+
+
+
+
+            # Padrões de classe nomeados
+
+
+    Para entender como usar padrões de classe nomeados, observe a classe City e suas cinco instâncias no
+Exemplo abaixo.
+
+-----------------------------------------------------------
+Exemplo: A classe City e algumas instâncias
+-----------------------------------------------------------
+import typing
+
+class City(typing.NamedTuple):
+    continent: str
+    name: str
+    country: str
+
+
+cities = [
+    City('Asia', 'Tokyo', 'JP'),
+    City('Asia', 'Delhi', 'IN'),
+    City('North America', 'Mexico City', 'MX'),
+    City('North America', 'New York', 'US'),
+    City('South America', 'São Paulo', 'BR'),
+]
+-----------------------------------------------------------
+
+
+    Dadas essas definições, a seguinte função devolve uma lista de cidades asiáticas:
+
+
+-----------------------------------------------------------
+def match_asian_cities():
+    results = []
+    for city in cities:
+        match city:
+            case City(continent='Asia'):
+                results.append(city)
+    return results
+-----------------------------------------------------------
+
+    O padrão City(continent='Asia') encontra qualquer instância de City onde o atributo continent seja
+igual a 'Asia', independente do valor dos outros atributos.
+
+    Para coletar o valor do atributo country, você poderia escrever:
+
+-----------------------------------------------------------
+def match_asian_countries():
+    results = []
+    for city in cities:
+        match city:
+            case City(continent='Asia', country=cc):
+                results.append(cc)
+    return results
+-----------------------------------------------------------
+
+    O padrão City(continent='Asia', country=cc) encontra as mesmas cidades asiáticas, como antes, mas
+agora a variável cc está vinculada ao atributo country da instância. Isso inclusive funciona se a variável
+do padrão também se chamar country:
+
+-----------------------------------------------------------
+        match city:
+            case City(continent='Asia', country=country):
+                results.append(country)
+-----------------------------------------------------------
+
+    Padrões de classe nomeados são bastante legíveis, e funcionam com qualquer classe que possua atributos
+de instância públicos. Mas eles são um tanto prolixos.
+
+    Padrões de classe posicionais são mais convenientes em alguns casos, mas exigem suporte explícito da
+classe do sujeito, como veremos a seguir.
+
+
+
+
+
+            # Padrões de classe posicionais
+
+
+    Dadas as definições do Exemplo 22, a seguinte função devolveria uma lista de cidades asiáticas, usando
+um padrão de classe posicional:
+
+-------------------------------------------------------
+def match_asian_cities_pos():
+    results = []
+    for city in cities:
+        match city:
+            case City('Asia'):
+                results.append(city)
+    return results
+-------------------------------------------------------
+
+    O padrão City('Asia') encontra qualquer instância de City na qual o valor do primeiro atributo seja
+Asia, independente do valor dos outros atributos.
+
+    Se você quiser obter o valor do atributo country, poderia escrever:
+
+-------------------------------------------------------
+def match_asian_countries_pos():
+    results = []
+    for city in cities:
+        match city:
+            case City('Asia', _, country):
+                results.append(country)
+    return results
+-------------------------------------------------------
+
+    O padrão City('Asia', _, country) encontra as mesmas cidades de antes, mas agora variável country está
+vinculada ao terceiro atributo da instância.
+
+    Eu falei do "primeiro" ou do "terceiro" atributos, mas o quê isso realmente significa?
+
+    City (ou qualquer classe) funciona com padrões posicionais graças a um atributo de classe especial
+chamado __match_args__, que as fábricas de classe vistas nesse capítulo criam automaticamente. Esse é o
+valor de __match_args__ na classe City:
+
+-------------------------------------------------------
+>>> City.__match_args__
+('continent', 'name', 'country')
+-------------------------------------------------------
+
+    Como se vê, __match_args__ declara os nomes dos atributos na ordem em que eles serão usados em padrões
+posicionais.
+

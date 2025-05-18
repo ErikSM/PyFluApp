@@ -20,12 +20,14 @@ class Book:
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}
         self.__contents = self._dict_contents()
 
+
     def __getitem__(self, selected: str):
         file_name = prepare_file_name(selected)
         try:
             return self.__contents[file_name]
         except KeyError as ke:
             return log_error('book __getitem__', ke, 'chapter not found')
+
 
     def _generating_titles(self):
         try:
@@ -40,7 +42,6 @@ class Book:
 
         for i in self.__titles:
             key = str(i).replace('.', '')
-
             try:
                 text = open_file(key)
             except FileNotFoundError as ffe:
@@ -49,13 +50,6 @@ class Book:
             titles[key] = text
 
         return titles
-
-    def all_chapters(self):
-        return [i for i in self.__chapters.keys()]
-
-    def all_titles(self):
-        for i in self.__titles:
-            yield i, self.__titles[i]
 
     def summary(self):
         for i in self.__titles.items():

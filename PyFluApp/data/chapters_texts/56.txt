@@ -1,0 +1,294 @@
+                            5.6. Mais detalhes sobre @dataclass
+
+
+    Até agora, só vimos exemplos simples do uso de @dataclass. Esse decorador aceita vários
+argumentos nomeados. Esta é sua assinatura:
+
+------------------------------------------------------------------------
+@dataclass(*, init=True, repr=True, eq=True, order=False,
+              unsafe_hash=False, frozen=False)
+------------------------------------------------------------------------
+
+    O * na primeira posição significa que os parâmetros restantes são todos parâmetros
+nomeados. A tabela abaixo os descreve:
+
+----------------------------------------------------------------------------------------
+Tabela: Parâmetros nomeados aceitos pelo decorador:
+----------------------------------------------------------------------------------------
+                - init: gera o __init__
+                        > Default = True
+                        * Ignorado se o __init__for implementado pelo usuário
+
+                - repr: gera o __repr__
+                        > Default = True
+                        * Ignorado se o __repr__ for implementado pelo usuário.
+
+                - eq: gera o __eq__
+                        > Default = True
+                        * Ignorado se o __eq__ for implementado pelo usuário.
+
+
+                - order: gera os __it__, __le__, __gt__, __ge__
+                        > Default = False
+                        * Se True, causa uma exceção se eq=False, ou se qualquer dos
+                        métodos de comparação que seriam gerados estiver definido ou for herdado.
+
+                - unsafe_hash: gera o __hash__
+                        > Default = False
+                        * Semântica complexa e várias restrições—veja a: documentação
+                            de dataclass.
+
+                - frozen: cria instâncias "imutáveis"
+                        > Default = False
+                        * As instâncias estarão razoavelmente protegidas contra mudanças
+                        acidentais, mas não serão realmente imutáveis.
+----------------------------------------------------------------------------------------
+
+    Os defaults são, de fato, as configurações mais úteis para os casos de uso mais comuns. As opções mais
+prováveis de serem modificadas de seus defaults são:
+
+----------------------------------------------------------------------------
+frozen=True
+Protege as instâncias da classe de modificações acidentais.
+
+order=True
+Permite ordenar as instâncias da classe de dados.
+----------------------------------------------------------------------------
+
+
+
+            # Opções de campo
+
+    Já vimos a opção de campo mais básica: fornecer (ou não) um valor default junto com a dica de tipo. Os
+campos de instância declarados se tornarão parâmetros no __init__ gerado.
+    O Python não permite parâmetros sem um default após parâmetros com defaults. Então, após declarar um
+campo com um valor default, cada um dos campos seguintes deve também ter um default.
+
+    * Valores default mutáveis são a fonte mais comum de bugs entre desenvolvedores Python iniciantes.
+    Em definições de função, um valor default mutável é facilmente corrompido, quando uma invocação da
+função modifica o default, mudando o comportamento nas invocações posteriores.
+    Atributos de classe são frequentemente usados como valores default de atributos para instâncias,
+inclusive em classes de dados. E o @dataclass usa os valores default nas dicas de tipo para gerar parâmetros
+com defaults no __init__. Para prevenir bugs, o @dataclass rejeita a definição de classe que aparece no
+Exemplo Abaixo.
+
+---------------------------------------------------------------------------------------
+Exemplo: dataclass/club_wrong.py: essa classe gera um ValueError
+---------------------------------------------------------------------------------------
+@dataclass
+class ClubMember:
+    name: str
+    guests: list = []
+---------------------------------------------------------------------------------------
+
+    Se você carregar o módulo com aquela classe ClubMember, o resultado será esse:
+
+---------------------------------------------------------------------------------------
+$ python3 club_wrong.py
+Traceback (most recent call last):
+  File "club_wrong.py", line 4, in <module>
+    class ClubMember:
+  ...several lines omitted...
+ValueError: mutable default <class 'list'> for field guests is not allowed:
+use default_factory
+---------------------------------------------------------------------------------------
+
+    A mensagem do ValueError explica o problema e sugere uma solução: usar a default_factory. O Proximo
+Exemplo mostra como corrigir a ClubMember.
+
+---------------------------------------------------------------------------------------
+Exemplo: dataclass/club.py: essa definição de ClubMember funciona
+---------------------------------------------------------------------------------------
+from dataclasses import dataclass, field
+
+@dataclass
+class ClubMember:
+    name: str
+    guests: list = field(default_factory=list)
+---------------------------------------------------------------------------------------
+
+    No campo guests do Exemplo acima, em vez de uma lista literal, o valor default é definido chamando a
+função dataclasses.field com default_factory=list.
+
+    O parâmetro default_factory permite que você forneça uma função, classe ou qualquer outro invocável,
+que será chamado com zero argumentos, para gerar um valor default a cada vez que uma instância da classe
+de dados for criada. Dessa forma, cada instância de ClubMember terá sua própria list—ao invés de todas as
+instâncias compartilharem a mesma list da classe, que raramente é o que queremos, e muitas vezes é um bug.
+
+
+
+
+            # Processamento pós-inicialização
+
+
+    O método __init__ gerado por @dataclass apenas recebe os argumentos passados e os atribui—ou
+seus valores default, se o argumento não estiver presente—aos atributos de instância, que são campos
+da instância. Mas pode ser necessário fazer mais que isso para inicializar a instância. Se for esse o
+caso, você pode fornecer um método __post_init__. Quando esse método existir, @dataclass acrescentará
+código ao __init__ gerado para invocar __post_init__ como o último passo da inicialização.
+
+    Casos de uso comuns para __post_init__ são validação e o cálculo de valores de campos baseado em
+outros campos. Vamos estudar um exemplo simples, que usa __post_init__ pelos dois motivos.
+
+    Primeiro, dê uma olhada no comportamento esperado de uma subclasse de ClubMember, chamada
+HackerClubMember, como descrito por doctests no Exemplo abaixo.
+
+----------------------------------------------------------------------------------------------
+Exemplo: dataclass/hackerclub.py: doctests para HackerClubMember
+----------------------------------------------------------------------------------------------
+"""
+``HackerClubMember`` objects accept an optional ``handle`` argument::
+
+    >>> anna = HackerClubMember('Anna Ravenscroft', handle='AnnaRaven')
+    >>> anna
+    HackerClubMember(name='Anna Ravenscroft', guests=[], handle='AnnaRaven')
+
+If ``handle`` is omitted, it's set to the first part of the member's name::
+
+    >>> leo = HackerClubMember('Leo Rochael')
+    >>> leo
+    HackerClubMember(name='Leo Rochael', guests=[], handle='Leo')
+
+Members must have a unique handle. The following ``leo2`` will not be created,
+because its ``handle`` would be 'Leo', which was taken by ``leo``::
+
+    >>> leo2 = HackerClubMember('Leo DaVinci')
+    Traceback (most recent call last):
+      ...
+    ValueError: handle 'Leo' already exists.
+
+To fix, ``leo2`` must be created with an explicit ``handle``::
+
+    >>> leo2 = HackerClubMember('Leo DaVinci', handle='Neo')
+    >>> leo2
+    HackerClubMember(name='Leo DaVinci', guests=[], handle='Neo')
+"""
+----------------------------------------------------------------------------------------------
+
+
+    Observe que precisamos fornecer handle como um argumento nomeado, pois HackerClubMember herda
+name e guests de ClubMember, e acrescenta o campo handle. A docstring gerada para HackerClubMember
+mostra a ordem dos campos na chamada de inicialização:
+
+
+----------------------------------------------------------------------------------------------
+>>> HackerClubMember.__doc__
+"HackerClubMember(name: str, guests: list = <factory>, handle: str = '')"
+----------------------------------------------------------------------------------------------
+
+    Aqui <factory> é um caminho mais curto para dizer que algum invocável vai produzir o valor default
+para guests (no nosso caso, a fábrica é a classe list). O ponto é o seguinte: para fornecer um handle
+mas não um guests, precisamos passar handle como um argumento nomeado.
+
+    A seção "Herança na documentação do módulo dataclasses explica como a ordem dos campos é analisada
+quando existem vários níveis de herança.
+
+O Proximo Exemplo mostra a implementação.
+
+-------------------------------------------------------------------------------------------
+Exemplo: dataclass/hackerclub.py: código para HackerClubMember
+-------------------------------------------------------------------------------------------
+from dataclasses import dataclass
+from club import ClubMember
+
+@dataclass
+class HackerClubMember(ClubMember):                         # (1)
+    all_handles = set()                                     # (2)
+    handle: str = ''                                        # (3)
+
+    def __post_init__(self):
+        cls = self.__class__                                # (4)
+        if self.handle == '':                               # (5)
+            self.handle = self.name.split()[0]
+        if self.handle in cls.all_handles:                  # (6)
+            msg = f'handle {self.handle!r} already exists.'
+            raise ValueError(msg)
+        cls.all_handles.add(self.handle)                    # (7)
+-------------------------------------------------------------------------------------------
+    1.HackerClubMember estende ClubMember.
+    2.all_handles é um atributo de classe.
+    3.handle é um campo de instância do tipo str, com uma string vazia como valor default;
+        isso o torna opcional.
+    4.Obtém a classe da instância.
+    5.Se self.handle é a string vazia, a define como a primeira parte de name.
+    6.Se self.handle está em cls.all_handles, gera um ValueError.
+    7.Insere o novo handle em cls.all_handles
+
+
+
+
+            # Atributos de classe tipados
+
+    Se verificarmos os tipos de Exemplo anterior com o Mypy, seremos repreendidos:
+
+--------------------------------------------------------------------------------
+$ mypy hackerclub.py
+hackerclub.py:37: error: Need type annotation for "all_handles"
+(hint: "all_handles: Set[<type>] = ...")
+Found 1 error in 1 file (checked 1 source file)
+--------------------------------------------------------------------------------
+
+    Infelizmente, a dica fornecida pelo Mypy (versão 0.910 quando essa seção foi revisada) não é
+muito útil no contexto do uso de @dataclass. Primeiro, ele sugere usar Set, mas desde o Python 3.9
+podemos usar set—sem a necessidade de importar Set de typing. E mais importante, se acrescentarmos
+uma dica de tipo como set[…] a all_handles, @dataclass vai encontrar essa anotação e transformar
+all_handles em um campo de instância.
+
+        *   A forma de contornar esse problema definida na PEP 526—Syntax for
+        Variable Annotations (Sintaxe para Anotações de Variáveis) (EN) é horrível.
+        - PEP526: (https://peps.python.org/pep-0526/#class-and-instance-variable-annotations) -
+
+            Para criar uma variável de classe com uma dica de tipo, precisamos usar
+        um pseudo-tipo chamado typing.ClassVar, que aproveita a notação de tipos
+        genéricos ([]) para definir o tipo da variável e também para declará-la como
+        um atributo de classe.
+
+    Para fazer felizes tanto o verificador de tipos quando o @dataclass, deveríamos declarar o
+all_handles do Exemplo assim:
+
+------------------------------------------------------------------
+    all_handles: ClassVar[set[str]] = set()
+------------------------------------------------------------------
+
+        * Aquela dica de tipo está dizendo o seguinte:
+                - "all_handles é um atributo de classe do tipo set-de-str, com
+                um set vazio como valor default."
+
+    Para escrever aquela anotação precisamos também importar ClassVar do módulo typing.
+
+    O decorador @dataclass não se importa com os tipos nas anotações, exceto em dois casos, e este é
+um deles: se o tipo for ClassVar, um campo de instância não será gerado para aquele atributo.
+
+
+
+
+            # Variáveis de inicialização que não são campos
+
+    Algumas vezes pode ser necessário passar para __init__ argumentos que não são campos de instância.
+Tais argumentos são chamados "argumentos apenas de inicialização" (init-only variables) pela documentação de dataclasses. Para declarar um argumento desses, o módulo dataclasses oferece o pseudo-tipo InitVar, que usa a mesma sintaxe de typing.ClassVar. O exemplo dados na documentação é uma classe de dados com um campo inicializado a partir de um banco de dados, e o objeto banco de dados precisa ser passado para o __init__.
+
+O Exemplo abaixo mostra o código que ilustra a seção "Variáveis de inicialização apenas".
+
+--------------------------------------------------------------------
+Exemplo: Exemplo da documentação do módulo dataclasses
+--------------------------------------------------------------------
+@dataclass
+class C:
+    i: int
+    j: int | None = None
+    database: InitVar[DatabaseType | None] = None
+
+    def __post_init__(self, database):
+        if self.j is None and database is not None:
+            self.j = database.lookup('j')
+
+c = C(10, database=my_database)
+--------------------------------------------------------------------
+
+    Veja como o atributo database é declarado. InitVar vai evitar que @dataclass trate database como
+um campo regular. Ele não será definido como um atributo de instância, e a função dataclasses.fields
+não vai listá-lo. Entretanto, database será um dos argumentos aceitos pelo __init__ gerado, e também
+será passado para o __post_init__. Ao escrever aquele método é preciso adicionar o argumento
+correspondente à sua assinatura, como mostra o Exemplo acima.
+
+

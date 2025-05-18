@@ -74,10 +74,8 @@ python_books = {
     'V- Metaprogramação': None
 }
 
-def open_file(file_name, directory='data/papers'):
-
+def open_file(file_name, directory='data/chapters_texts'):
     file = io.open(f'{directory}/{file_name}.txt', 'r', encoding='utf8')
-
     text = file.read()
     file.close()
 

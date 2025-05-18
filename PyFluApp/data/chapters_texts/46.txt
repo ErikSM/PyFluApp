@@ -1,0 +1,69 @@
+                            4.6. Processando arquivos de texto
+
+    A melhor prática para lidar com E/S de texto é o "Sanduíche de Unicode" (Unicode sandwich).
+Isso significa que os bytes devem ser decodificados para str o mais cedo possível na entrada
+(por exemplo, ao abrir um arquivo para leitura).
+
+    O "recheio" do sanduíche é a lógica do negócio de seu programa, onde o tratamento do
+texto é realizado exclusivamente sobre objetos str. Você nunca deveria codificar ou
+decodificar no meio de outro processamento. Na saída, as str são codificadas para bytes o
+mais tarde possível.
+    A maioria dos frameworks web funciona assim, e raramente tocamos em bytes ao usá-los. No
+Django, por exemplo, suas views devem produzir str em Unicode; o próprio Django se encarrega
+de codificar a resposta para bytes, usando UTF-8 como default.
+
+    O Python 3 torna mais fácil seguir o conselho do sanduíche de Unicode, pois o
+embutido open() executa a decodificação necessária na leitura e a codificação ao escrever
+arquivos em modo texto. Dessa forma, tudo que você recebe de my_file.read() e passa para
+my_file.write(text) são objetos str.
+
+    Assim, usar arquivos de texto é aparentemente simples. Mas se você confiar nas
+codificações default, pode acabar levando uma mordida.
+
+
+        Na figura abaixo sanduíche de Unicode: melhores práticas atuais
+      para processamento de texto.
+    ------------------------------------------------------------------
+                The Unicode sandwich
+
+            bytes -> str        Decode bytes on input
+              100% str          Process text only
+            str -> bytes        Encode text on output
+    ------------------------------------------------------------------
+
+
+
+    Observe a sessão de console no Exemplo abaixo.
+Você consegue ver o erro ???
+
+
+------------------------------------------------------------------------------
+    Exemplo: Uma questão de plataforma na codificação (você pode ou não ver
+    o problema se tentar isso na sua máquina)
+------------------------------------------------------------------------------
+>>> open('cafe.txt', 'w', encoding='utf_8').write('café')
+4
+>>> open('cafe.txt').read()
+'cafÃ©'
+------------------------------------------------------------------------------
+
+    O erro: especifiquei a codificação UTF-8 ao escrever o arquivo, mas não fiz isso na
+leitura, então o Python assumiu a codificação de arquivo default do Windows—página de
+código 1252—e os bytes finais foram decodificados como os caracteres 'Ã©' ao invés de 'é'.
+
+    Executei o Exemplo 8 no Python 3.8.1, 64 bits, no Windows 10 (build 18363). Os
+mesmos comandos rodando em um GNU/Linux ou um macOS recentes funcionam perfeitamente,
+pois a codificação default desses sistemas é UTF-8, dando a FALSA IMPRESSÃO que tudo
+está bem.
+    Se o argumento de codificação fosse omitido ao abrir o arquivo para escrita,
+a codificação default do locale seria usada, e poderíamos ler o arquivo corretamente
+usando a mesma codificação. Mas aí o script geraria arquivos com conteúdo binário
+diferente dependendo da plataforma, ou mesmo das configurações do locale na mesma
+plataforma, criando problemas de compatibilidade.
+
+            **  Código que precisa rodar em múltiplas máquinas ou
+                múltiplas ocasiões não deveria jamais depender de
+                defaults de codificação. Sempre passe um argumento
+                encoding= explícito ao abrir arquivos de texto, pois
+                o default pode mudar de uma máquina para outra ou de
+                um dia para o outro.

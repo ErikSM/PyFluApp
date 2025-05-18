@@ -13,16 +13,17 @@ themes['Medium Blue '] = base_theme[5], base_theme[1], base_theme[0], base_theme
 letter = dict()
 font_letter = 'Arial', 'Consolas', 'Impact'
 font_mode = '', 'bold', 'italic', 'bold italic'
+font_size = 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
 
-letter['title'] = [font_letter[0], 10, font_mode[3]]
-letter['opt'] = [font_letter[1], 10, font_mode[1]]
-letter['list'] = [font_letter[1], 7, font_mode[2]]
-letter['search'] = [font_letter[1], 8, font_mode[0]]
-letter['screen'] = [font_letter[0], 8, font_mode[1]]
-letter['note'] = [font_letter[1], 8, font_mode[1]]
-letter['bt_act'] = [font_letter[2], 8, font_mode[0]]
-letter['bt_oth'] = [font_letter[0], 8, font_mode[1]]
+letter['title'] = [font_letter[0], font_size[10], font_mode[3]]
+letter['opt'] = [font_letter[1], font_size[10], font_mode[1]]
+letter['list'] = [font_letter[1], font_size[7], font_mode[2]]
+letter['search'] = [font_letter[1], font_size[8], font_mode[0]]
+letter['screen'] = [font_letter[0], font_size[8], font_mode[1]]
+letter['note'] = [font_letter[1], font_size[8], font_mode[1]]
+letter['bt_act'] = [font_letter[2], font_size[8], font_mode[0]]
+letter['bt_oth'] = [font_letter[0], font_size[8], font_mode[1]]
 
 
 width = {'opt': 38, 'ent': 30,

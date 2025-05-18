@@ -1,0 +1,31 @@
+                                        6. Referências, mutabilidade, e memória
+
+
+    “   Você está triste,” disse o Cavaleiro em um tom de voz ansioso: “deixe eu cantar para você uma canção
+    reconfortante. […] O nome da canção se chama ‘OLHOS DE HADOQUE’.”
+        “Oh, esse é o nome da canção?,” disse Alice, tentando parecer interessada.
+        “Não, você não entendeu,” retorquiu o Cavaleiro, um pouco irritado. “É assim que o nome É CHAMADO. O
+    nome na verdade é ‘O ENVELHECIDO HOMEM VELHO.‘”
+
+                — Adaptado de “Alice Através do Espelho e o que Ela Encontrou Lá” de Lewis Caroll
+
+
+    Alice e o Cavaleiro dão o tom do que veremos nesse capítulo. O tema é a distinção entre objetos e seus
+nomes; um nome não é o objeto; o nome é algo diferente.
+
+    Começamos o capítulo apresentando uma metáfora para variáveis em Python: variáveis são rótulos, não
+caixas. Se variáveis de referência não são novidade para você, a analogia pode ainda ser útil para ilustrar
+questões de aliasing (“apelidamento”) para alguém.
+
+    Depois discutimos os conceitos de identidade, valor e apelidamento de objetos. Uma característica
+surpreendente das tuplas é revelada: elas são imutáveis, mas seus valores podem mudar. Isso leva a uma
+discussão sobre cópias rasas e profundas. Referências e parâmetros de funções são o tema seguinte: o
+problema com parâmetros mutáveis por default e formas seguras de lidar com argumentos mutáveis passados
+para nossas funções por clientes.
+
+    As últimas seções do capítulo tratam de coleta de lixo (“garbage collection”), o comando del e de
+algumas peças que o Python prega com objetos imutáveis.
+
+            *   É um capítulo bastante árido, mas os tópicos tratados podem
+                causar muitos bugs sutis em programas reais em Python.
+

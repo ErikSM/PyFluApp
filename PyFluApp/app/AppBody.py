@@ -54,12 +54,13 @@ class AppBody:
         return center
 
     def _create_right(self):
+
         right = Frame(self.__body, bg=colr['purple'], width=30)
 
         self.__entry_path = ContentPath(right)
         self.__entry_path.grid_config(row=2, column=2)
 
-        self.__but_notebook = Button(right, text=' < Expandir >', command=self.screen_top_level)
+        self.__but_notebook = Button(right, text=' < Expandir caderno >', command=self.screen_top_level)
         self.__but_notebook.grid(row=2, column=4, columnspan=5)
 
         self.__text_screen = Screen('notes', right)
@@ -76,6 +77,8 @@ class AppBody:
         self.__text_screen.delete_text(1.0, END)
 
         selected = self.__list_summary.get_selected()
+        self.__entry_path['path_value'] = selected
+
         try:
             file_content = self.__opt_menu_books[selected]
         except TypeError as type_error:
@@ -86,14 +89,15 @@ class AppBody:
     def default(self):
         self.__text_screen.delete_text(0.0, END)
         self.__list_summary.delete_option(0, END)
-        self.__entry_path.delete_text(0, END)
+        self.__entry_path['path_value'] = '..//'
 
         self.__opt_menu_books.default()
         self.__text_screen.write(1.0, attention_string)
 
     def update_size(self, new_w: dict, new_h: dict, new_l: dict):
         self.__list_summary.configure_widget(width=new_w['lis'], height=new_h['lis'], font=new_l['list'])
-        self.__text_screen.configure_widget('screen', width=new_w['tex'], height=new_h['tex'], font=new_l['screen'])
+        self.__text_screen.configure_widget('screen', width=new_w['tex'], height=new_h['tex'],
+                                            font=new_l['screen'])
 
     def update_font(self, new_letters: dict):
         self.__list_summary.configure_widget(font=new_letters['list'])

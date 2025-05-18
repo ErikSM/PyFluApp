@@ -1,0 +1,37 @@
+                                             5.4. Tuplas nomeadas com tipo
+
+    A classe Coordinate com um campo default, do Primeiro Exemplo, pode ser escrita usando typing.NamedTuple, como se
+vê no Segundo Exemplo:
+
+--------------------------------------------------------------------------------------------
+Primeiro Exemplo: classe Coordinate com um campo default
+--------------------------------------------------------------------------------------------
+>>> Coordinate = namedtuple('Coordinate', 'lat lon reference', defaults=['WGS84'])
+>>> Coordinate(0, 0)
+Coordinate(lat=0, lon=0, reference='WGS84')
+>>> Coordinate._field_defaults
+{'reference': 'WGS84'}
+--------------------------------------------------------------------------------------------
+
+pode ser escrita usando...
+
+---------------------------------------------------------------------------------
+Exemplo: typing_namedtuple/coordinates2.py
+---------------------------------------------------------------------------------
+from typing import NamedTuple
+
+class Coordinate(NamedTuple):
+    lat: float                # (1)
+    lon: float
+    reference: str = 'WGS84'  # (2)
+---------------------------------------------------------------------------------
+    1.Todo campo de instância precisa ter uma anotação de tipo.
+    2.O campo de instância reference é anotado com um tipo e um valor default.
+
+    As classes criadas por typing.NamedTuple não tem qualquer método além daqueles que collections.namedtuple
+também gera—e aquele herdados de tuple. A única diferença é a presença do atributo de classe __annotations__—que
+o Python ignora completamente durante a execução do programa.
+
+    Dado que o principal recurso de typing.NamedTuple são as anotações de tipo, vamos dar uma rápida olhada nisso
+antes de continuar nossa exploração das fábricas de classes de dados.
+
