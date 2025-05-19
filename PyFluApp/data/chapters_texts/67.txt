@@ -1,10 +1,10 @@
                             6.7. Peças que Python prega com imutáveis
 
-                    *   Esta seção opcional discute alguns detalhes que, na verdade, não são muito
-                        importantes para usuários de Python, e que podem não se aplicar a outras
-                        implementações da linguagem ou mesmo a futuras versões de CPython. Entretanto,
-                        já vi muita gente tropeçar nesses casos laterais e daí passar a usar o
-                        operador is de forma incorreta, então acho que vale a pena mencionar esses detalhes.
+            *   Esta seção opcional discute alguns detalhes que, na verdade, não são muito
+                importantes para usuários de Python, e que podem não se aplicar a outras
+                implementações da linguagem ou mesmo a futuras versões de CPython. Entretanto,
+                já vi muita gente tropeçar nesses casos laterais e daí passar a usar o
+                operador is de forma incorreta, então acho que vale a pena mencionar esses detalhes.
 
     Eu fiquei surpreso em descobrir que, para uma tupla t, a chamada t[:] não cria uma cópia, mas devolve uma
 referência para o mesmo objeto. Da mesma forma, tuple(t) também retorna uma referência para a mesma tupla.

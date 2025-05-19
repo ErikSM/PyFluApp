@@ -16,10 +16,13 @@ class Book:
     def __init__(self, book: python_books):
         self.__name = book
         self.__chapters = python_books[self.__name]
+        print(self.__chapters)
 
         self.__titles = {i[0]: i[1] for i in self._generating_titles()}
         self.__contents = self._dict_contents()
 
+        """for i in self.__titles:
+            print(i, self.__titles[i])"""
 
     def __getitem__(self, selected: str):
         file_name = prepare_file_name(selected)
