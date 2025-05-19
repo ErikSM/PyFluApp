@@ -60,7 +60,7 @@ class AppBody:
         self.__entry_path = ContentPath(right)
         self.__entry_path.grid_config(row=2, column=2)
 
-        self.__but_notebook = Button(right, text=' < Expandir caderno >', command=self.screen_top_level)
+        self.__but_notebook = Button(right, text=' < Expandir >', command=self.screen_top_level)
         self.__but_notebook.grid(row=2, column=4, columnspan=5)
 
         self.__text_screen = Screen('notes', right)

@@ -1,0 +1,240 @@
+            6.5. Parâmetros de função como referências
+
+    O único modo de passagem de parâmetros em Python é a chamada por compartilhamento (call by sharing). É
+o mesmo modo usado na maioria das linguagens orientadas a objetos, incluindo Javascript, Ruby e Java (em
+Java isso se aplica aos tipos de referência; tipos primitivos usam a chamada por valor). Chamada por
+compartilhamento significa que cada parâmetro formal da função recebe uma cópia de cada referência nos
+argumentos. Em outras palavras, os parâmetros dentro da função se tornam apelidos dos argumentos.
+
+    O resultado desse esquema é que a função pode modificar qualquer objeto mutável passado a ela como
+parâmetro, mas não pode mudar a identidade daqueles objetos (isto é, ela não pode substituir integralmente
+um objeto por outro). Exemplo 11 mostra uma função simples usando += com um de seus parâmetros. Quando
+passamos números, listas e tuplas para a função, os argumentos originais são afetados de maneiras diferentes.
+
+----------------------------------------------------------------------------
+Exemplo: Uma função pode mudar qualquer objeto mutável que receba
+----------------------------------------------------------------------------
+>>> def f(a, b):
+...     a += b
+...     return a
+...
+>>> x = 1
+>>> y = 2
+>>> f(x, y)
+3
+>>> x, y  (1)
+(1, 2)
+>>> a = [1, 2]
+>>> b = [3, 4]
+>>> f(a, b)
+[1, 2, 3, 4]
+>>> a, b  (2)
+([1, 2, 3, 4], [3, 4])
+>>> t = (10, 20)
+>>> u = (30, 40)
+>>> f(t, u)  (3)
+(10, 20, 30, 40)
+>>> t, u
+((10, 20), (30, 40))
+----------------------------------------------------------------------------
+        1.O número x não se altera.
+        2.A lista a é alterada.
+        3.A tupla t não se altera.
+
+
+
+
+            # Porque evitar tipos mutáveis como default em parâmetros
+
+    Parâmetros opcionais com valores default são um ótimo recurso para definição de funções em Python,
+permitindo que nossas APIs evoluam mantendo a compatibilidade com versões anteriores. Entretanto, você
+deve evitar usar objetos mutáveis como valores default em parâmetros.
+
+    Para ilustrar esse ponto, no Exemplo abaixo, modificamos o método __init__ da classe Bus de Exemplo 8
+para criar HauntedBus. Tentamos ser espertos: em vez do valor default passengers=None, temos
+passengers=[], para evitar o if do __init__ anterior. Essa "esperteza" causa problemas.
+
+
+---------------------------------------------------------------------------------------
+Exemplo: Uma classe simples ilustrando o perigo de um default mutável
+---------------------------------------------------------------------------------------
+class HauntedBus:
+    """A bus model haunted by ghost passengers"""
+
+    def __init__(self, passengers=[]):  # (1)
+        self.passengers = passengers  # (2)
+
+    def pick(self, name):
+        self.passengers.append(name)  # (3)
+
+    def drop(self, name):
+        self.passengers.remove(name)
+---------------------------------------------------------------------------------------
+    1.Quando o argumento passengers não é passado, esse parâmetro é vinculado ao
+        objeto lista default, que inicialmente está vazio.
+    2.Essa atribuição torna self.passengers um apelido de passengers, que por sua
+        vez é um apelido para a lista default, quando um argumento passengers não
+        é passado para a função.
+    3.Quando os métodos .remove() e .append() são usados com self.passengers,
+        estamos, na verdade, mudando a lista default, que é um atributo do
+        objeto-função.
+
+
+Proximo Exemplo mostra o comportamento misterioso de HauntedBus.
+
+------------------------------------------------------------------------
+Exemplo: Ônibus assombrados por passageiros fantasmas
+------------------------------------------------------------------------
+>>> bus1 = HauntedBus(['Alice', 'Bill'])  (1)
+>>> bus1.passengers
+['Alice', 'Bill']
+>>> bus1.pick('Charlie')
+>>> bus1.drop('Alice')
+>>> bus1.passengers  (2)
+['Bill', 'Charlie']
+>>> bus2 = HauntedBus()  (3)
+>>> bus2.pick('Carrie')
+>>> bus2.passengers
+['Carrie']
+>>> bus3 = HauntedBus()  (4)
+>>> bus3.passengers  (5)
+['Carrie']
+>>> bus3.pick('Dave')
+>>> bus2.passengers  (6)
+['Carrie', 'Dave']
+>>> bus2.passengers is bus3.passengers  (7)
+True
+>>> bus1.passengers  (8)
+['Bill', 'Charlie']
+------------------------------------------------------------------------
+        1.bus1 começa com uma lista de dois passageiros.
+        2.Até aqui, tudo bem: nenhuma surpresa em bus1.
+        3.bus2 começa vazio, então a lista vazia default é vinculada
+            a self.passengers.
+        4.bus3 também começa vazio, e novamente a lista default é atribuída.
+        5.A lista default não está mais vazia!
+        6.Agora Dave, pego pelo bus3, aparece no bus2.
+        7.O problema: bus2.passengers e bus3.passengers se referem à mesma lista.
+        8.Mas bus1.passengers é uma lista diferente.
+
+
+    O problema é que instâncias de HauntedBus que não recebem uma lista de passageiros inicial acabam todas
+compartilhando a mesma lista de passageiros entre si.
+
+    Este tipo de bug pode ser muito sutil. Como Exemplo 13 demonstra, quando HauntedBus recebe uma lista com
+passageiros como parâmetro, ele funciona como esperado. As coisas estranhas acontecem somente quando HauntedBus
+começa vazio, pois aí self.passengers se torna um apelido para o valor default do parâmetro passengers. O
+problema é que cada valor default é processado quando a função é definida — i.e., normalmente quando o módulo é
+carregado — e os valores default se tornam atributos do objeto-função. Assim, se o valor default é um objeto
+mutável e você o altera, a alteração vai afetar todas as futuras chamadas da função.
+
+    Após executar as linhas do exemplo em Exemplo 13, você pode inspecionar o objeto HauntedBus.__init__ e ver
+os estudantes fantasma assombrando o atributo __defaults__:
+
+----------------------------------------------------------------------------------------
+>>> dir(HauntedBus.__init__)  # doctest: +ELLIPSIS
+['__annotations__', '__call__', ..., '__defaults__', ...]
+>>> HauntedBus.__init__.__defaults__
+(['Carrie', 'Dave'],)
+----------------------------------------------------------------------------------------
+
+
+    Por fim, podemos verificar que bus2.passengers é um apelido vinculado ao primeiro elemento do atributo
+HauntedBus.__init__.__defaults__:
+
+
+----------------------------------------------------------------------------------------
+>>> HauntedBus.__init__.__defaults__[0] is bus2.passengers
+True
+----------------------------------------------------------------------------------------
+
+
+
+
+                # Programação defensiva com argumentos mutáveis
+
+
+    Ao escrever uma função que recebe um argumento mutável, você deve considerar com cuidado se o cliente que
+chama sua função espera que o argumento passado seja modificado.
+
+    Por exemplo, se sua função recebe um dict e precisa modificá-lo durante seu processamento, esse efeito
+colateral deve ou não ser visível fora da função? A resposta, na verdade, depende do contexto. É tudo uma
+questão de alinhar as expectativas do autor da função com as do cliente da função.
+
+    O último exemplo com ônibus neste capítulo mostra como o TwilightBus viola as expectativas ao compartilhar
+sua lista de passageiros com seus clientes. Antes de estudar a implementação, veja como a classe TwilightBus
+funciona pela perspectiva de um cliente daquela classe, em Exemplo a seguir.
+
+-----------------------------------------------------------------------------------------------
+Exemplo: Passageiros desaparecem quando são deixados por um TwilightBus
+-----------------------------------------------------------------------------------------------
+>>> basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']  (1)
+>>> bus = TwilightBus(basketball_team)  (2)
+>>> bus.drop('Tina')  (3)
+>>> bus.drop('Pat')
+>>> basketball_team  (4)
+['Sue', 'Maya', 'Diana']
+-----------------------------------------------------------------------------------------------
+        1.basketball_team contém o nome de cinco estudantes.
+        2.Um TwilightBus é carregado com o time.
+        3.O bus deixa uma estudante, depois outra.
+        4.As passageiras desembarcadas desapareceram do time de basquete!
+
+    TwilightBus viola o "Princípio da Menor Surpresa Possível", uma boa prática do design de interfaces. É
+certamente espantoso que quando o ônibus deixa uma estudante, seu nome seja removido da escalação do time
+de basquete.
+
+
+Exemplo: é a implementação de TwilightBus e uma explicação do problema.
+
+--------------------------------------------------------------------------------
+Exemplo: Uma classe simples mostrando os perigos de mudar argumentos
+recebidos
+--------------------------------------------------------------------------------
+class TwilightBus:
+    """A bus model that makes passengers vanish"""
+
+    def __init__(self, passengers=None):
+        if passengers is None:
+            self.passengers = []  # (1)
+        else:
+            self.passengers = passengers  #(2)
+
+    def pick(self, name):
+        self.passengers.append(name)
+
+    def drop(self, name):
+        self.passengers.remove(name)  # (3)
+--------------------------------------------------------------------------------
+    1.Aqui nós cuidadosamente criamos uma lista vazia quando passengers é None.
+    2.Entretanto, esta atribuição transforma self.passengers em um apelido para passengers, que por sua
+        vez é um apelido para o argumento efetivamente passado para __init__ (i.e. basketball_team em Exemplo 14).
+    3.Quando os métodos .remove() e .append() são usados com self.passengers, estamos, na verdade, modificando a
+        lista original recebida como argumento pelo construtor.
+
+
+    O problema aqui é que o ônibus está apelidando a lista passada para o construtor. Ao invés disso, ele deveria
+manter sua própria lista de passageiros. A solução é simples: em __init__, quando o parâmetro passengers é
+fornecido, self.passengers deveria ser inicializado com uma cópia daquela lista, como fizemos, de forma correta,
+em Exemplo:
+
+---------------------------------------------------------------------------
+    def __init__(self, passengers=None):
+        if passengers is None:
+            self.passengers = []
+        else:
+            self.passengers = list(passengers) (1)
+--------------------------------------------------------------------------
+1.Cria uma cópia da lista passengers, ou converte o argumento
+    para list se ele não for uma lista.
+
+
+    Agora nossa manipulação interna da lista de passageiros não afetará o argumento usado para inicializar o
+ônibus. E com uma vantagem adicional, essa solução é mais flexível: agora o argumento passado no parâmetro
+passengers pode ser uma tupla ou qualquer outro tipo iterável, como set ou mesmo resultados de uma consulta a
+banco de dados, pois o construtor de list aceita qualquer iterável. Ao criar nossa própria lista, estamos
+também assegurando que ela suporta os métodos necessários, .remove() e .append(), operações que usamos nos
+métodos .pick() e .drop().
+
+
+

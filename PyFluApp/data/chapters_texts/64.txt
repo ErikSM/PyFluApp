@@ -1,0 +1,166 @@
+                            6.4. A princípio, cópias são rasas
+
+
+    A forma mais fácil de copiar uma lista (ou a maioria das coleções mutáveis nativas) é usando o
+construtor padrão do próprio tipo. Por exemplo:
+
+------------------------------------------------------------------------------------------
+>>> l1 = [3, [55, 44], (7, 8, 9)]
+>>> l2 = list(l1)  (1)
+>>> l2
+[3, [55, 44], (7, 8, 9)]
+>>> l2 == l1  (2)
+True
+>>> l2 is l1  (3)
+False
+------------------------------------------------------------------------------------------
+        1.list(l1) cria uma cópia de l1.
+        2.As cópias são iguais…
+        3…mas se referem a dois objetos diferentes.
+
+
+    Para listas e outras sequências mutáveis, o atalho l2 = l1[:] também cria uma cópia.
+    Contudo, tanto o construtor quanto [:] produzem uma cópia rasa (shallow copy). Isto é, o contêiner externo
+é duplicado, mas a cópia é preenchida com referências para os mesmos itens contidos no contêiner original. Isso
+economiza memória e não causa qualquer problema se todos os itens forem imutáveis. Mas se existirem itens
+mutáveis, isso pode gerar surpresas desagradáveis.
+
+    No Exemplo abaixo criamos uma lista contendo outra lista e uma tupla, e então fazemos algumas mudanças para
+ver como isso afeta os objetos referenciados.
+
+------------------------------------------------------------------------------------------
+Exemplo: Criando uma cópia rasa de uma lista contendo outra lista; copie e cole esse
+código para vê-lo animado no Online Python Tutor
+------------------------------------------------------------------------------------------
+l1 = [3, [66, 55, 44], (7, 8, 9)]
+l2 = list(l1)      # (1)
+l1.append(100)     # (2)
+l1[1].remove(55)   # (3)
+print('l1:', l1)
+print('l2:', l2)
+l2[1] += [33, 22]  # (4)
+l2[2] += (10, 11)  # (5)
+print('l1:', l1)
+print('l2:', l2)
+------------------------------------------------------------------------------------------
+    1.l2 é uma cópia rasa de l1. Este estado está representado em Figura 3.
+    2.Concatenar 100 a l1 não tem qualquer efeito sobre l2.
+    3.Aqui removemos 55 da lista interna l1[1]. Isso afeta l2, pois l2[1] está associado
+        à mesma lista em l1[1].
+    4.Para um objeto mutável como a lista referida por l2[1], o operador += altera a
+        lista diretamente. Essa mudança é visível em l1[1], que é um apelido para l2[1].
+    5.+= em uma tupla cria uma nova tupla e reassocia a variável l2[2] a ela. Isso é
+        equivalente a fazer l2[2] = l2[2] + (10, 11). Agora as tuplas na última posição
+        de l1 e l2 não são mais o mesmo objeto.
+
+
+------------------------------------------------------------------------------------------
+figura 3:  https://pythonfluente.com/#shallow_copy1
+------------------------------------------------------------------------------------------
+
+
+    A saída de Exemplo 6 é Exemplo 7, e o estado final dos objetos está representado em Figura 4.
+
+---------------------------------------------
+Exemplo 7. Saída de Exemplo 6
+---------------------------------------------
+l1: [3, [66, 44], (7, 8, 9), 100]
+l2: [3, [66, 44], (7, 8, 9)]
+l1: [3, [66, 44, 33, 22], (7, 8, 9), 100]
+l2: [3, [66, 44, 33, 22], (7, 8, 9, 10, 11)]
+---------------------------------------------
+
+
+---------------------------------------------------------
+figura 4: https://pythonfluente.com/#shallow_copy2
+---------------------------------------------------------
+
+
+
+
+            # Cópias profundas e cópias rasas
+
+
+    Trabalhar com cópias rasas nem sempre é um problema, mas algumas vezes você vai precisar criar cópias
+profundas (isto é, cópias que não compartilham referências de objetos internos). O módulo copy oferece as
+funções deepcopy e copy, que retornam cópias profundas e rasas de objetos arbitrários.
+
+    Para ilustrar o uso de copy() e deepcopy(), Exemplo 8 define uma classe simples, Bus, representando um
+ônibus escolar que é carregado com passageiros, e então pega ou deixa passageiros ao longo de sua rota.
+
+
+-------------------------------------------------------------------------
+Exemplo 8. Bus pega ou deixa passageiros
+-------------------------------------------------------------------------
+class Bus:
+
+    def __init__(self, passengers=None):
+        if passengers is None:
+            self.passengers = []
+        else:
+            self.passengers = list(passengers)
+
+    def pick(self, name):
+        self.passengers.append(name)
+
+    def drop(self, name):
+        self.passengers.remove(name)
+-------------------------------------------------------------------------
+
+
+    Agora, no Exemplo abaixo interativo, vamos criar um objeto bus (bus1) e dois clones—uma cópia
+rasa (bus2) e uma cópia profunda (bus3)—para ver o que acontece quando bus1 deixa um passageiro.
+
+
+--------------------------------------------------------------------------
+Exemplo: Os efeitos do uso de copy versus deepcopy
+--------------------------------------------------------------------------
+>>> import copy
+>>> bus1 = Bus(['Alice', 'Bill', 'Claire', 'David'])
+>>> bus2 = copy.copy(bus1)
+>>> bus3 = copy.deepcopy(bus1)
+>>> id(bus1), id(bus2), id(bus3)
+(4301498296, 4301499416, 4301499752)  (1)
+>>> bus1.drop('Bill')
+>>> bus2.passengers
+['Alice', 'Claire', 'David']          (2)
+>>> id(bus1.passengers), id(bus2.passengers), id(bus3.passengers)
+(4302658568, 4302658568, 4302657800)  (3)
+>>> bus3.passengers
+['Alice', 'Bill', 'Claire', 'David']  (4)
+--------------------------------------------------------------------------
+    1.Usando copy e deepcopy, criamos três instâncias distintas de Bus.
+    2.Após bus1 deixar 'Bill', ele também desaparece de bus2.
+    3.A inspeção do atributo dos passengers mostra que bus1 e bus2
+        compartilham o mesmo objeto lista, pois bus2 é uma cópia rasa de bus1.
+    4.bus3 é uma cópia profunda de bus1, então seu atributo passengers se
+        refere a outra lista.
+
+    Observe que, em geral, criar cópias profundas não é uma questão simples. Objetos podem conter
+referências cíclicas que fariam um algoritmo ingênuo entrar em um loop infinito. A função
+'deepcopy' lembra dos objetos já copiados, de forma a tratar referências cíclicas de modo
+elegante. Isso é demonstrado em Exemplo abaixo:
+
+
+---------------------------------------------------------------------------------------------
+Exemplo: Referências cíclicas: b tem uma referência para a e então é concatenado a a; ainda
+assim, deepcopy consegue copiar a.
+---------------------------------------------------------------------------------------------
+>>> a = [10, 20]
+>>> b = [a, 30]
+>>> a.append(b)
+>>> a
+[10, 20, [[...], 30]]
+>>> from copy import deepcopy
+>>> c = deepcopy(a)
+>>> c
+[10, 20, [[...], 30]]
+---------------------------------------------------------------------------------------------
+
+    Além disso, algumas vezes uma cópia profunda pode ser profunda demais. Por exemplo, objetos podem ter
+referências para recursos externos ou para singletons (objetos únicos) que não devem ser copiados. Você
+pode controlar o comportamento de copy e de deepcopy implementando os métodos especiais __copy__ e
+__deepcopy__, como descrito em https://docs.python.org/pt-br/3/library/copy.html [documentação do
+módulo copy]
+
+

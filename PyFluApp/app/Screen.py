@@ -18,7 +18,6 @@ def choice_text(screen, frame):
 class Screen:
 
     def __init__(self, screen ,frame):
-
         self.__txt_principal = choice_text(screen, frame)
 
         self.__scroll_x = Scrollbar(frame, orient='horizontal', command=self.__txt_principal.xview)

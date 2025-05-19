@@ -1,0 +1,64 @@
+                            6.7. Peças que Python prega com imutáveis
+
+                    *   Esta seção opcional discute alguns detalhes que, na verdade, não são muito
+                        importantes para usuários de Python, e que podem não se aplicar a outras
+                        implementações da linguagem ou mesmo a futuras versões de CPython. Entretanto,
+                        já vi muita gente tropeçar nesses casos laterais e daí passar a usar o
+                        operador is de forma incorreta, então acho que vale a pena mencionar esses detalhes.
+
+    Eu fiquei surpreso em descobrir que, para uma tupla t, a chamada t[:] não cria uma cópia, mas devolve uma
+referência para o mesmo objeto. Da mesma forma, tuple(t) também retorna uma referência para a mesma tupla.
+
+    O Exemplo demonstra esse fato.
+
+--------------------------------------------------------------------------------------------------------------
+Exemplo: Uma tupla construída a partir de outra é, na verdade, exatamente a mesma tupla.
+--------------------------------------------------------------------------------------------------------------
+>>> t1 = (1, 2, 3)
+>>> t2 = tuple(t1)
+>>> t2 is t1  (1)
+True
+>>> t3 = t1[:]
+>>> t3 is t1  (2)
+True
+--------------------------------------------------------------------------------------------------------------
+            1.t1 e t2 estão vinculadas ao mesmo objeto
+            2.Assim como t3.
+
+    O mesmo comportamento pode ser observado com instâncias de str, bytes e frozenset. Observe que frozenset não
+é uma sequência, então fs[:] não funciona se fs é um frozenset. Mas fs.copy() tem o mesmo efeito: ele trapaceia e
+retorna uma referência ao mesmo objeto, e não uma cópia, como mostra Exemplo o exemplo abixo:
+
+-----------------------------------------------------------------------------------------------
+Exemplo: Strings literais podem criar objetos compartilhados.
+-----------------------------------------------------------------------------------------------
+>>> t1 = (1, 2, 3)
+>>> t3 = (1, 2, 3)  # (1)
+>>> t3 is t1  # (2)
+False
+>>> s1 = 'ABC'
+>>> s2 = 'ABC'  # (3)
+>>> s2 is s1 # (4)
+True
+-----------------------------------------------------------------------------------------------
+            1.Criando uma nova tupla do zero.
+            2.t1 e t3 são iguais, mas não são o mesmo objeto.
+            3.Criando uma segunda str do zero.
+            4.Surpresa: a e b se referem à mesma str!
+
+
+    O compartilhamento de strings literais é uma técnica de otimização chamada internalização (interning). O
+CPython usa uma técnica similar com inteiros pequenos, para evitar a duplicação desnecessária de números que
+aparecem com muita frequência em programas, como 0, 1, -1, etc. Observe que o CPython não internaliza todas
+as strings e inteiros, e o critério pelo qual ele faz isso é um detalhe de implementação não documentado.
+
+                    *   Aviso:
+                    Nunca dependa da internalização de str ou int! Sempre use == em vez de is
+                    para verificar a igualdade de strings ou inteiros. A internalização é uma
+                    otimização para uso interno do interpretador Python.
+
+    Os truques discutidos nessa seção, incluindo o comportamento de frozenset.copy(), são mentiras inofensivas
+que economizam memória e tornam o interpretador mais rápido. Não se preocupe, elas não trarão nenhum problema,
+pois se aplicam apenas a tipos imutáveis. Provavelmente, o melhor uso para esse tipo de detalhe é ganhar
+apostas contra outros Pythonistas.
+

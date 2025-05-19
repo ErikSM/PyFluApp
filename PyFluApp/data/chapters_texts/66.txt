@@ -1,0 +1,101 @@
+                                    6.6. del e coleta de lixo
+
+
+    Os objetos nunca são destruídos explicitamente; no entanto, quando eles se tornam inacessíveis,
+eles podem ser coletados como lixo.
+
+
+— “Modelo de Dados” capítulo de A Referência da Linguagem Python
+A primeira estranheza sobre del é ele não ser uma função, mas um comando.
+
+    Escrevemos del x e não del(x) — apesar dessa última forma funcionar também, mas apenas porque as
+expressões x e (x) em geral terem o mesmo significado em Python.
+
+    O segundo aspecto surpreendente é que del apaga referências, não objetos. A coleta de lixo pode eliminar
+um objeto da memória como resultado indireto de del, se a variável apagada for a última referência ao objeto.
+Reassociar uma variável também pode reduzir a zero o número de referências a um objeto, causando sua
+destruição.
+
+-----------------------------------------------------------
+>>> a = [1, 2]  (1)
+>>> b = a       (2)
+>>> del a       (3)
+>>> b           (4)
+[1, 2]
+>>> b = [3]     (5)
+-----------------------------------------------------------
+    1.Cria o objeto [1, 2] e vincula a a ele.
+    2.Vincula b ao mesmo objeto [1, 2].
+    3.Apaga a referência a.
+    4.[1, 2] não é afetado, pois b ainda aponta para ele.
+    5.Reassociar b a um objeto diferente remove a última
+        referência restante a [1, 2]. Agora o coletor de
+        lixo pode descartar aquele objeto.
+
+    Em CPython, o algoritmo primário de coleta de lixo é a contagem de referências. Essencialmente, cada
+objeto mantém uma contagem do número de referências apontando para si. Assim que a contagem chega a zero,
+o objeto é imediatamente destruído: CPython invoca o método __del__ no objeto (se definido) e daí libera
+a memória alocada para aquele objeto. Em CPython 2.0, um algoritmo de coleta de lixo geracional foi
+acrescentado, para detectar grupos de objetos envolvidos em referências cíclicas — grupos que pode ser
+inacessíveis mesmo que existam referências restantes, quando todas as referências mútuas estão contidas
+dentro daquele grupo. Outras implementações de Python tem coletores de lixo mais sofisticados, que não se
+baseiam na contagem de referências, o que significa que o método __del__ pode não ser chamado imediatamente
+quando não existem mais referências ao objeto. Veja "PyPy, Garbage Collection, and a Deadlock" (EN) by A.
+Jesse Jiryu Davis para uma discussão sobre os usos próprios e impróprios de __del__.
+
+    Para demonstrar o fim da vida de um objeto, Exemplo abaixo usa weakref.finalize para registrar uma função
+callback a ser chamada quando o objeto é destruído.
+
+----------------------------------------------------------------------------------------------------
+Exemplo: Assistindo o fim de um objeto quando não resta nenhuma referência apontando para ele
+----------------------------------------------------------------------------------------------------
+>>> import weakref
+>>> s1 = {1, 2, 3}
+>>> s2 = s1         (1)
+>>> def bye():      (2)
+...     print('...like tears in the rain.')
+...
+>>> ender = weakref.finalize(s1, bye)  (3)
+>>> ender.alive  (4)
+True
+>>> del s1
+>>> ender.alive  (5)
+True
+>>> s2 = 'spam'  (6)
+...like tears in the rain.
+>>> ender.alive
+False
+----------------------------------------------------------------------------------------------------
+        1.s1 e s2 são apelidos do mesmo conjunto, {1, 2, 3}.
+        2.Essa função não deve ser um método associado ao objeto prestes a ser destruído,
+            nem manter uma referência para o objeto.
+        3.Registra o callback bye no objeto referenciado por s1.
+        4.O atributo .alive é True antes do objeto finalize ser chamado.
+        5.Como vimos, del não apaga o objeto, apenas a referência s1 a ele.
+        6.Reassociar a última referência, s2, torna {1, 2, 3} inacessível. Ele é destruído,
+            o callback bye é invocado, e ender.alive se torna False.
+
+    O ponto principal de Exemplo 16 é mostrar explicitamente que del não apaga objetos, mas que objetos podem
+ser apagados como uma consequência de se tornarem inacessíveis após o uso de del.
+
+    Você pode estar se perguntando porque o objeto {1, 2, 3} foi destruído em Exemplo acima. Afinal, a
+referência s1 foi passada para a função finalize, que precisa tê-la mantido para conseguir monitorar o
+objeto e invocar o callback. Isso funciona porque finalize mantém uma referência fraca (weak reference)
+para {1, 2, 3}. Referências fracas não aumentam a contagem de referências de um objeto. Assim, uma
+referência fraca não evita que o objeto alvo seja destruído pelo coletor de lixo. Referências fracas
+são úteis em cenários de caching, pois não queremos que os objetos "cacheados" sejam mantidos vivos
+apenas por terem uma referência no cache.
+
+    O ponto principal do Exemplo é mostrar explicitamente que del não apaga objetos, mas que objetos podem
+ser apagados como uma consequência de se tornarem inacessíveis após o uso de del.
+
+    Você pode estar se perguntando porque o objeto {1, 2, 3} foi destruído no Exemplo. Afinal, a referência
+s1 foi passada para a função finalize, que precisa tê-la mantido para conseguir monitorar o objeto e invocar
+o callback. Isso funciona porque finalize mantém uma referência fraca (weak reference) para {1, 2, 3}.
+Referências fracas não aumentam a contagem de referências de um objeto. Assim, uma referência fraca não
+evita que o objeto alvo seja destruído pelo coletor de lixo. Referências fracas são úteis em cenários de
+caching, pois não queremos que os objetos "cacheados" sejam mantidos vivos apenas por terem uma referência
+no cache.
+
+
+
